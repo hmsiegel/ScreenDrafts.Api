@@ -1,0 +1,77 @@
+version: '3.4'
+name: screendrafts
+
+services:
+  host:
+    image: ${DOCKER_REGISTRY-}host
+    container_name: screendrafts-api
+    networks:
+      - screendrafts
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:5100;http://+:5010
+      - ASPNETCORE_HTTPS_PORT=5100
+      - ASPNETCORE_Kestrel__Certificates__Default__Password=password!
+      - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/cert.pfx
+      - DatabaseSettings__ConnectionString=Server=postgres;Port=5433;Database=screendraftsdb;User Id=postgres;Password=12345Al0h@;
+      - DatabaseSettings__DBProvider=PostgreSQL
+    build:
+      context: .
+      dockerfile: src/Host/Dockerfile
+    volumes:
+      - ~/.aspnet/https:/https:ro
+    ports:
+      - "5100:5100"
+      - "5010:5010"
+    depends_on:
+      - postgres
+      - cache
+    restart: on-failure
+
+  postgres:
+    image: postgres:latest
+    container_name: screendrafts-db
+    networks:
+      - screendrafts
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=12345Al0h@
+      - POSTGRES_DB=screendraftsdb
+    volumes:
+      - postgres-data:/data/db
+    ports:
+      - 5433:5433
+
+  cache:
+    image: redis:latest
+    restart: always
+    container_name: screendrafts-cache
+    networks:
+      - screendrafts
+    ports:
+      - 6379:6379
+    command: redis-server --save 20 1 --loglevel warning
+    volumes:
+      - cache:/data 
+
+  screendrafts.mq:
+    image: rabbitmq:3-management
+    container_name: screendrafts-mq
+    hostname: screendrafts-mq
+    volumes:
+        - ./.containers/queue/data/:/var/lib/rabbitmq
+        - ./.containers/queue/log/:/var/log/rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+        RABBITMQ_DEFAULT_USER: guest
+        RABBITMQ_DEFAULT_PASS: guest
+
+volumes:
+  postgres-data:
+  cache:
+
+networks:
+  screendrafts:
+    name: screendrafts
