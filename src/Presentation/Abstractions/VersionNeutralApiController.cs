@@ -4,8 +4,4 @@
 [ApiVersionNeutral]
 public class VersionNeutralApiController : BaseApiController
 {
-    protected VersionNeutralApiController(ISender sender, IMapper mapper)
-        : base(sender, mapper)
-    {
-    }
 }

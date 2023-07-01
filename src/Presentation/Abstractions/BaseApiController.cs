@@ -1,17 +1,13 @@
 ﻿namespace Presentation.Abstractions;
 
-#pragma warning disable SA1401 // Fields should be private
 [ApiController]
 public class BaseApiController : ControllerBase
 {
-    protected readonly ISender Sender;
-    protected readonly IMapper Mapper;
+    private ISender _sender = null!;
+    private IMapper _mapper = null!;
 
-    protected BaseApiController(ISender sender, IMapper mapper)
-    {
-        Sender = sender;
-        Mapper = mapper;
-    }
+    protected ISender Sender => _sender ??= HttpContext.RequestServices.GetRequiredService<ISender>();
+    protected IMapper Mapper => _mapper ??= HttpContext.RequestServices.GetRequiredService<IMapper>();
 
     protected IActionResult HandleFailure(Result result)
     {
