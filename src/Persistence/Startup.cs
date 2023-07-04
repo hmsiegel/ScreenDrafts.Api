@@ -18,9 +18,19 @@ public static class Startup
             {
                 var dbSettings = p.GetRequiredService<IOptions<DatabaseSettings>>().Value;
                 m.UseDatabase(dbSettings.DBProvider, dbSettings.ConnectionString);
-            });
+            })
+            .AddTransient<IDatabaseInitializer, DatabaseInitializer>();
 
         return services;
+    }
+
+    public static async Task InitializeDatabasesAsync(this IServiceProvider services, CancellationToken cancellationToken = default!)
+    {
+        using var scope = services.CreateScope();
+
+        await scope.ServiceProvider
+            .GetRequiredService<IDatabaseInitializer>()
+            .InitializeDatabaseAsync(cancellationToken);
     }
 
     internal static DbContextOptionsBuilder UseDatabase(this DbContextOptionsBuilder builder, string dbProvider, string connectionString)

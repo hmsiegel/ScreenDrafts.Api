@@ -7,6 +7,11 @@ builder.Services.AddPersistence(builder.Configuration);
 
 var app = builder.Build();
 
+if (app.Environment.IsDevelopment())
+{
+    await app.Services.InitializeDatabasesAsync();
+}
+
 app.UsePresentation();
 app.MapEndpoints();
 
