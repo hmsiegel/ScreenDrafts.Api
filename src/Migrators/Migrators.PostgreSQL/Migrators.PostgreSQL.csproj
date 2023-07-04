@@ -4,9 +4,13 @@
 		<TargetFramework>net7.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<AssemblyName>$(SolutionName).$(MSBuildProjectName)</AssemblyName>
-		<RootNamespace>$(SolutionName).$(MSBuildProjectName)</RootNamespace>
+		<AssemblyName>$(MSBuildProjectName)</AssemblyName>
+		<RootNamespace>$(MSBuildProjectName)</RootNamespace>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\Persistence\Persistence.csproj" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Update="SonarAnalyzer.CSharp" Version="9.4.0.72892">

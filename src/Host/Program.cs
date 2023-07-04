@@ -3,6 +3,7 @@
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddPresentation(builder.Configuration);
+builder.Services.AddPersistence(builder.Configuration);
 
 var app = builder.Build();
 

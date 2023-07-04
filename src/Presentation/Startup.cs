@@ -1,8 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-
-using ScreenDrafts.Api.Presentation.OpenApi;
-
-namespace ScreenDrafts.Api.Presentation;
+﻿namespace ScreenDrafts.Api.Presentation;
 public static class Startup
 {
     public static IServiceCollection AddPresentation(this IServiceCollection services, IConfiguration config)

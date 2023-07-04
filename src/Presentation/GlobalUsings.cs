@@ -8,6 +8,7 @@ global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.AspNetCore.Mvc.ApiExplorer;
 global using Microsoft.AspNetCore.Routing;
+global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
 
 global using Presentation.Abstractions;
@@ -15,3 +16,4 @@ global using Presentation.Abstractions;
 global using ScreenDrafts.Api.Contracts.Authentication;
 global using ScreenDrafts.Api.Domain.Shared;
 global using ScreenDrafts.Api.Presentation.Abstractions;
+global using ScreenDrafts.Api.Presentation.OpenApi;

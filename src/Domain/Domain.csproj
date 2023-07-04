@@ -9,6 +9,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="MediatR" Version="12.0.1" />
+	  <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.8" />
+	  <PackageReference Include="NewId" Version="4.0.1" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Update="SonarAnalyzer.CSharp" Version="9.4.0.72892">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
