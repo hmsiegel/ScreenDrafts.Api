@@ -65,7 +65,7 @@ namespace Migrators.PostgreSQL.Migrations
                 table: "Users",
                 type: "text",
                 nullable: false,
-                defaultValue: "",
+                defaultValue: string.Empty,
                 oldClrType: typeof(string),
                 oldType: "text",
                 oldNullable: true);
@@ -75,7 +75,7 @@ namespace Migrators.PostgreSQL.Migrations
                 table: "Users",
                 type: "text",
                 nullable: false,
-                defaultValue: "",
+                defaultValue: string.Empty,
                 oldClrType: typeof(string),
                 oldType: "text",
                 oldNullable: true);
@@ -85,7 +85,7 @@ namespace Migrators.PostgreSQL.Migrations
                 table: "Users",
                 type: "text",
                 nullable: false,
-                defaultValue: "",
+                defaultValue: string.Empty,
                 oldClrType: typeof(string),
                 oldType: "text",
                 oldNullable: true);

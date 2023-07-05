@@ -1,20 +1,38 @@
 [assembly: ApiConventionType(typeof(ScreenDraftsApiConvention))]
 
-var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddApplication();
-builder.Services.AddInfrastructure();
-builder.Services.AddPresentation(builder.Configuration);
-builder.Services.AddPersistence(builder.Configuration);
-
-var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
+StaticLogger.EnsureInitialized();
+Log.Information("Server booting up...");
+try
 {
-    await app.Services.InitializeDatabasesAsync();
+    var builder = WebApplication.CreateBuilder(args);
+
+    builder.RegisterSerilog();
+
+    builder.Services.AddApplication();
+    builder.Services.AddInfrastructure();
+    builder.Services.AddPresentation(builder.Configuration);
+    builder.Services.AddPersistence(builder.Configuration);
+
+    var app = builder.Build();
+
+    if (app.Environment.IsDevelopment())
+    {
+        await app.Services.InitializeDatabasesAsync();
+    }
+
+    app.UsePresentation();
+    app.MapEndpoints();
+
+    app.Run();
 }
-
-app.UsePresentation();
-app.MapEndpoints();
-
-app.Run();
+catch (Exception ex) when (!ex.GetType().Name.Equals("StopTheHostException", StringComparison.Ordinal))
+{
+    StaticLogger.EnsureInitialized();
+    Log.Fatal(ex, "Unhandled exception.");
+}
+finally
+{
+    StaticLogger.EnsureInitialized();
+    Log.Information("Server shutting down...");
+    Log.CloseAndFlush();
+}

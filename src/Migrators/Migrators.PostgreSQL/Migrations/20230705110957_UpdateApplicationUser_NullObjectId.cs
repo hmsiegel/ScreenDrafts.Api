@@ -30,7 +30,7 @@ namespace Migrators.PostgreSQL.Migrations
                 type: "character varying(256)",
                 maxLength: 256,
                 nullable: false,
-                defaultValue: "",
+                defaultValue: string.Empty,
                 oldClrType: typeof(string),
                 oldType: "character varying(256)",
                 oldMaxLength: 256,
