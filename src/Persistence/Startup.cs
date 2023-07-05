@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-using ILogger = Serilog.ILogger;
+﻿using ILogger = Serilog.ILogger;
 
 namespace ScreenDrafts.Api.Persistence;
 public static class Startup

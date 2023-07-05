@@ -1,4 +1,8 @@
-﻿namespace ScreenDrafts.Api.Infrastructure.Identity;
+﻿using ScreenDrafts.Api.Application.Authentication.Users;
+using ScreenDrafts.Api.Contracts.Authentication.Users;
+using ScreenDrafts.Api.Shared.Authorization;
+
+namespace ScreenDrafts.Api.Infrastructure.Identity;
 public sealed class UserService : IUserService
 {
     private readonly UserManager<ApplicationUser> _userManager;
@@ -25,6 +29,8 @@ public sealed class UserService : IUserService
         {
             throw new InternalServerException("Validation errors occurred.", result.GetErrors());
         }
+
+        await _userManager.AddToRoleAsync(user, ScreenDraftsRoles.Basic);
 
         var messages = new List<string> { "Account registered. Please check your email for verification instructions." };
 

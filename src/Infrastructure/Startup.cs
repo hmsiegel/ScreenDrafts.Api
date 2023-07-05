@@ -2,9 +2,9 @@
 public static class Startup
 {
     public static readonly Assembly AssemblyReference = typeof(Startup).Assembly;
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services)
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config)
     {
-        services.AddAuth();
+        services.AddAuth(config);
         services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());

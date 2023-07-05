@@ -17,3 +17,4 @@ global using ScreenDrafts.Api.Persistence.Initialization;
 global using Serilog;
 
 global using System.ComponentModel.DataAnnotations;
+global using System.Reflection;

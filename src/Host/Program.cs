@@ -9,7 +9,7 @@ try
     builder.RegisterSerilog();
 
     builder.Services.AddApplication();
-    builder.Services.AddInfrastructure();
+    builder.Services.AddInfrastructure(builder.Configuration);
     builder.Services.AddPresentation(builder.Configuration);
     builder.Services.AddPersistence(builder.Configuration);
 

@@ -1,4 +1,4 @@
-﻿namespace ScreenDrafts.Api.Contracts.Authentication;
+﻿namespace ScreenDrafts.Api.Contracts.Authentication.Users;
 public sealed record UpdateUserRequest(
     string Id,
     string FirstName,

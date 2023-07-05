@@ -14,7 +14,9 @@
 
 	<ItemGroup>
 	  <PackageReference Include="Figgle" Version="0.5.1" />
+	  <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.8" />
 	  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+	  <PackageReference Include="Microsoft.Identity.Web" Version="2.12.4" />
 	  <PackageReference Include="Scrutor" Version="4.2.2" />
 	  <PackageReference Include="Serilog.Enrichers.Environment" Version="2.2.0" />
 	  <PackageReference Include="Serilog.Enrichers.Process" Version="2.0.2" />
@@ -31,6 +33,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Application\Application.csproj" />
 		<ProjectReference Include="..\Persistence\Persistence.csproj" />
+		<ProjectReference Include="..\Shared\Shared.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

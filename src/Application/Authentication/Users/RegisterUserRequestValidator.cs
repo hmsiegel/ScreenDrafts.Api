@@ -1,4 +1,6 @@
-﻿namespace ScreenDrafts.Api.Application.Authentication;
+﻿using ScreenDrafts.Api.Contracts.Authentication.Users;
+
+namespace ScreenDrafts.Api.Application.Authentication.Users;
 public class RegisterUserRequestValidator : AbstractValidator<RegisterRequest>
 {
     public RegisterUserRequestValidator(IUserService userService)
@@ -7,7 +9,7 @@ public class RegisterUserRequestValidator : AbstractValidator<RegisterRequest>
             .NotEmpty()
             .EmailAddress()
                 .WithMessage("Email is invalid")
-            .MustAsync(async(email, _) => !await userService.ExistsWithEmailAsync(email))
+            .MustAsync(async (email, _) => !await userService.ExistsWithEmailAsync(email))
                 .WithMessage("Email already exists");
 
         RuleFor(x => x.UserName).Cascade(CascadeMode.Stop)

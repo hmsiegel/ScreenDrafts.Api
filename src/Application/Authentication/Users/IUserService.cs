@@ -1,4 +1,6 @@
-﻿namespace ScreenDrafts.Api.Application.Authentication;
+﻿using ScreenDrafts.Api.Contracts.Authentication.Users;
+
+namespace ScreenDrafts.Api.Application.Authentication.Users;
 public interface IUserService
 {
     Task<bool> ExistsWithNameAsync(string name);
