@@ -5,7 +5,6 @@ public static class Startup
     {
         var assembly = Assembly.GetExecutingAssembly();
         return services
-            .AddBehaviors()
             .AddValidatorsFromAssembly(assembly, includeInternalTypes: true)
             .AddMediatR(cfg => cfg.RegisterServicesFromAssembly(assembly));
     }

@@ -13,8 +13,10 @@ public static class Startup
 
     public static IApplicationBuilder UsePresentation(this IApplicationBuilder app)
     {
-        app.UseOpenApiDocumentation();
-        app.UseHttpsRedirection();
+        app
+        .UseHttpsRedirection()
+        .UseOpenApiDocumentation()
+        .UseRouting();
 
         return app;
     }

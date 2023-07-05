@@ -1,4 +1,6 @@
-﻿namespace ScreenDrafts.Api.Infrastructure.Auth.Jwt;
+﻿using ValidationResult = System.ComponentModel.DataAnnotations.ValidationResult;
+
+namespace ScreenDrafts.Api.Infrastructure.Auth.Jwt;
 public class JwtSettings : IValidatableObject
 {
     public string Issuer { get; set; } = default!;

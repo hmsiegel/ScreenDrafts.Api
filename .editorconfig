@@ -292,6 +292,18 @@ dotnet_diagnostic.CS8601.severity = none
 # RCS1158: Static member in generic type should use a type parameter.
 dotnet_diagnostic.RCS1158.severity = none
 
+# SA1602: Enumeration items should be documented
+dotnet_diagnostic.SA1602.severity = none
+
+# RCS1141: Add 'param' element to documentation comment.
+dotnet_diagnostic.RCS1141.severity = none
+
+# SA1615: Element return value should be documented
+dotnet_diagnostic.SA1615.severity = none
+
+# SA1611: Element parameters should be documented
+dotnet_diagnostic.SA1611.severity = none
+
 [*.{cs,vb}]
 dotnet_style_operator_placement_when_wrapping = beginning_of_line
 tab_width = 4

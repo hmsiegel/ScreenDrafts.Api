@@ -1,6 +1,4 @@
-﻿using ScreenDrafts.Api.Contracts.Authentication.Users;
-
-namespace ScreenDrafts.Api.Application.Authentication.Users;
+﻿namespace ScreenDrafts.Api.Application.Authentication.Users;
 public class RegisterUserRequestValidator : AbstractValidator<RegisterRequest>
 {
     public RegisterUserRequestValidator(IUserService userService)

@@ -4,4 +4,6 @@ public sealed record UpdateUserRequest(
     string FirstName,
     string LastName,
     string Email,
-    string PhoneNumber);
+    string PhoneNumber,
+    FileUploadRequest? Image,
+    bool DeleteCurrentImage);

@@ -1,12 +1,13 @@
-﻿namespace ScreenDrafts.Api.Infrastructure.Auth.AzureAd;
+﻿using ILogger = Serilog.ILogger;
+
+namespace ScreenDrafts.Api.Infrastructure.Auth.AzureAd;
 
 internal class AzureAdJwtBearerEvents : JwtBearerEvents
 {
     private readonly ILogger _logger;
-    private readonly IConfiguration _config;
 
-    public AzureAdJwtBearerEvents(ILogger logger, IConfiguration config) =>
-        (_logger, _config) = (logger, config);
+    public AzureAdJwtBearerEvents(ILogger logger) =>
+        _logger = logger;
 
     public override Task AuthenticationFailed(AuthenticationFailedContext context)
     {

@@ -2,18 +2,33 @@
 public static class Startup
 {
     public static readonly Assembly AssemblyReference = typeof(Startup).Assembly;
+
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config)
     {
-        services.AddAuth(config);
-        services.AddMediatR(cfg =>
-        {
-            cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
-            cfg.AddBehavior(typeof(ValidationPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
-        });
-        services.AddScoped<IUserService, UserService>();
-        services.RegisterServices();
+        var applicationAssembly = typeof(Application.Startup).GetTypeInfo().Assembly;
+
+        services
+            .AddAuth(config)
+            .AddBehaviors(applicationAssembly)
+            .AddMediatR(cfg =>
+            {
+                cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+                cfg.AddBehavior(typeof(ValidationPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
+            })
+            .RegisterServices()
+            .AddServices();
 
         return services;
+    }
+
+    public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder builder)
+    {
+        builder
+            .UseFileStorage()
+            .UseAuthentication()
+            .UseAuthorization();
+
+        return builder;
     }
 
     private static IServiceCollection RegisterServices(this IServiceCollection services)

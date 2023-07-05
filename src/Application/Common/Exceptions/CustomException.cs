@@ -10,6 +10,7 @@ public class CustomException : Exception
         ErrorMessages = errors;
         StatusCode = statusCode;
     }
+
     public List<string>? ErrorMessages { get; }
 
     public HttpStatusCode StatusCode { get; }

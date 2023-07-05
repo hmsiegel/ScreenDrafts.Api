@@ -16,7 +16,7 @@ internal static class Startup
                 auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, null)
+            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, null!)
             .Services;
     }
 }
