@@ -24,6 +24,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Application\Application.csproj" />
+	  <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
 	  <ProjectReference Include="..\Migrators\Migrators.MSSQL\Migrators.MSSQL.csproj" />
 	  <ProjectReference Include="..\Migrators\Migrators.MySQL\Migrators.MySQL.csproj" />
 	  <ProjectReference Include="..\Migrators\Migrators.Oracle\Migrators.Oracle.csproj" />

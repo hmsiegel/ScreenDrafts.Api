@@ -1,5 +1,5 @@
 ﻿namespace ScreenDrafts.Api.Persistence;
-public class ApplicationDbContext : IdentityUserContext<ApplicationUser, DefaultIdType>
+public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, DefaultIdType>
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)

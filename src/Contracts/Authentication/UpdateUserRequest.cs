@@ -1,9 +1,7 @@
 ﻿namespace ScreenDrafts.Api.Contracts.Authentication;
-public sealed record RegisterRequest(
+public sealed record UpdateUserRequest(
+    string Id,
     string FirstName,
     string LastName,
     string Email,
-    string UserName,
-    string Password,
-    string ConfirmPassword,
     string PhoneNumber);
