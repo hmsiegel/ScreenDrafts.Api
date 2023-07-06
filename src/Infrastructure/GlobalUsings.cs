@@ -1,4 +1,6 @@
-﻿global using Figgle;
+﻿global using Ardalis.Specification.EntityFrameworkCore;
+
+global using Figgle;
 
 global using FluentValidation;
 
@@ -10,6 +12,7 @@ global using Microsoft.AspNetCore.Authentication.JwtBearer;
 global using Microsoft.AspNetCore.Builder;
 global using Microsoft.AspNetCore.Http;
 global using Microsoft.AspNetCore.Identity;
+global using Microsoft.AspNetCore.WebUtilities;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
@@ -25,8 +28,10 @@ global using ScreenDrafts.Api.Application.Authentication.Users;
 global using ScreenDrafts.Api.Application.Common.Events;
 global using ScreenDrafts.Api.Application.Common.Exceptions;
 global using ScreenDrafts.Api.Application.Common.FileStorage;
-global using ScreenDrafts.Api.Application.Common.Interfaces;
 global using ScreenDrafts.Api.Application.Common.Interfaces.Services;
+global using ScreenDrafts.Api.Application.Common.Models;
+global using ScreenDrafts.Api.Application.Common.Specifications;
+global using ScreenDrafts.Api.Contracts.Authentication.Password;
 global using ScreenDrafts.Api.Contracts.Authentication.Tokens;
 global using ScreenDrafts.Api.Contracts.Authentication.Users;
 global using ScreenDrafts.Api.Contracts.FileStorage;

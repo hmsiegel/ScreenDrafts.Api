@@ -1,16 +1,25 @@
-﻿global using FluentValidation;
+﻿global using Ardalis.Specification;
+
+global using FluentValidation;
 
 global using MediatR;
 
+global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.DependencyInjection;
 
-global using ScreenDrafts.Api.Application.Common.Interfaces;
+global using ScreenDrafts.Api.Application.Common.Exceptions;
+global using ScreenDrafts.Api.Application.Common.Models;
+global using ScreenDrafts.Api.Contracts.Authentication.Password;
+global using ScreenDrafts.Api.Contracts.Authentication.Roles;
 global using ScreenDrafts.Api.Contracts.Authentication.Tokens;
 global using ScreenDrafts.Api.Contracts.Authentication.Users;
 global using ScreenDrafts.Api.Contracts.FileStorage;
 global using ScreenDrafts.Api.Domain.Enums;
+global using ScreenDrafts.Api.Domain.Identity;
 global using ScreenDrafts.Api.Domain.Primitives;
 
+global using System.Linq.Expressions;
 global using System.Net;
 global using System.Reflection;
 global using System.Security.Claims;
+global using System.Text.Json;

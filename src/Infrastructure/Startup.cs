@@ -24,6 +24,7 @@ public static class Startup
     public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder builder)
     {
         builder
+            .UseCurrentUser()
             .UseFileStorage()
             .UseAuthentication()
             .UseAuthorization();

@@ -1,24 +1,23 @@
-﻿namespace ScreenDrafts.Api.Infrastructure.Identity;
-public sealed class UserService : IUserService
+﻿namespace ScreenDrafts.Api.Infrastructure.Identity.Users;
+internal sealed partial class UserService
 {
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly RoleManager<ApplicationRole> _roleManager;
-    private readonly SignInManager<ApplicationUser> _signInManager;
-    private readonly IFileStorageService _fileStorage;
-    private readonly IEventPublisher _events;
-
-    public UserService(
-        UserManager<ApplicationUser> userManager,
-        RoleManager<ApplicationRole> roleManager,
-        SignInManager<ApplicationUser> signInManager,
-        IFileStorageService fileStorage,
-        IEventPublisher events)
+    public async Task<string> GetOrCreateFromPrincipalAsync(ClaimsPrincipal principal)
     {
-        _userManager = userManager;
-        _roleManager = roleManager;
-        _signInManager = signInManager;
-        _fileStorage = fileStorage;
-        _events = events;
+        string? objectId = principal.GetObjectId();
+        if (string.IsNullOrWhiteSpace(objectId))
+        {
+            throw new InternalServerException("Invalid objectId");
+        }
+
+        var user = await _userManager.Users.Where(u => u.ObjectId == objectId).FirstOrDefaultAsync()
+            ?? await CreateOrUpdateFromPrincipalAsync(principal);
+
+        if (principal.FindFirstValue(ClaimTypes.Role) is string role && await _roleManager.RoleExistsAsync(role) && !await _userManager.IsInRoleAsync(user, role))
+        {
+            await _userManager.AddToRoleAsync(user, role);
+        }
+
+        return user.Id.ToString();
     }
 
     public async Task<string> CreateAsync(RegisterRequest request, string origin)
@@ -46,61 +45,6 @@ public sealed class UserService : IUserService
         await _events.PublishAsync(new ApplicationUserCreatedEvent(Guid.NewGuid(), user.Id));
 
         return string.Join(Environment.NewLine, messages);
-    }
-
-    public async Task<bool> ExistsWithEmailAsync(string email, string? exceptId = null)
-    {
-        return await _userManager.FindByEmailAsync(email.Normalize()) is ApplicationUser user && user.Id.ToString() != exceptId;
-    }
-
-    public async Task<bool> ExistsWithNameAsync(string name)
-    {
-        return await _userManager.FindByNameAsync(name) is not null;
-    }
-
-    public async Task<bool> ExistsWithPhoneNumberAsync(string phoneNumber, string? exceptId = null)
-    {
-        return await _userManager.Users
-            .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber) is ApplicationUser user && user.Id.ToString() != exceptId;
-    }
-
-    public async Task<UserDetailsResponse> GetAsync(string userId, CancellationToken cancellationToken)
-    {
-        var user = await _userManager.Users
-            .AsNoTracking()
-            .Where(u => u.Id.ToString() == userId)
-            .FirstOrDefaultAsync(cancellationToken);
-
-        _ = user ?? throw new NotFoundException("User not found.");
-
-        return user.Adapt<UserDetailsResponse>();
-    }
-
-    public async Task<List<UserDetailsResponse>> GetListAsync(CancellationToken cancellationToken)
-    {
-        return (await _userManager.Users
-            .AsNoTracking()
-            .ToListAsync(cancellationToken))
-        .Adapt<List<UserDetailsResponse>>();
-    }
-
-    public async Task<string> GetOrCreateFromPrincipalAsync(ClaimsPrincipal principal)
-    {
-        string? objectId = principal.GetObjectId();
-        if (string.IsNullOrWhiteSpace(objectId))
-        {
-            throw new InternalServerException("Invalid objectId");
-        }
-
-        var user = await _userManager.Users.Where(u => u.ObjectId == objectId).FirstOrDefaultAsync()
-            ?? await CreateOrUpdateFromPrincipalAsync(principal);
-
-        if (principal.FindFirstValue(ClaimTypes.Role) is string role && await _roleManager.RoleExistsAsync(role) && !await _userManager.IsInRoleAsync(user, role))
-        {
-            await _userManager.AddToRoleAsync(user, role);
-        }
-
-        return user.Id.ToString();
     }
 
     public async Task UpdateAsync(UpdateUserRequest request, string userId)
@@ -134,12 +78,29 @@ public sealed class UserService : IUserService
 
         await _signInManager.RefreshSignInAsync(user);
 
-        await _events.PublishAsync(new ApplicationUserUpdatedEvent(Guid.NewGuid(), user.Id));
+        await _events.PublishAsync(new ApplicationUserUpdatedEvent(DefaultIdType.NewGuid(), user.Id));
 
         if (!result.Succeeded)
         {
             throw new InternalServerException("Update profile failed.", result.GetErrors());
         }
+    }
+
+    public async Task ToggleStatusAsync(ToggleUserStatusRequest request, CancellationToken cancellationToken)
+    {
+        var user = await _userManager.Users.Where(u => u.Id.ToString() == request.UserId).FirstOrDefaultAsync(cancellationToken);
+
+        _ = user ?? throw new NotFoundException("User not found.");
+
+        bool isAdmin = await _userManager.IsInRoleAsync(user, ScreenDraftsRoles.Admin);
+        if (isAdmin)
+        {
+            throw new ConflictException("Administrator's status cannot be changed.");
+        }
+
+        user .IsActive = request.ActivateUser;
+        await _userManager.UpdateAsync(user);
+        await _events.PublishAsync(new ApplicationUserUpdatedEvent(DefaultIdType.NewGuid(), user.Id));
     }
 
     private async Task<ApplicationUser> CreateOrUpdateFromPrincipalAsync(ClaimsPrincipal principal)
@@ -172,7 +133,7 @@ public sealed class UserService : IUserService
             user.ObjectId = principal.GetObjectId();
             result = await _userManager.UpdateAsync(user);
 
-            await _events.PublishAsync(new ApplicationUserUpdatedEvent(Guid.NewGuid(), user.Id));
+            await _events.PublishAsync(new ApplicationUserUpdatedEvent(DefaultIdType.NewGuid(), user.Id));
         }
         else
         {
@@ -191,7 +152,7 @@ public sealed class UserService : IUserService
             };
             result = await _userManager.CreateAsync(user);
 
-            await _events.PublishAsync(new ApplicationUserCreatedEvent(Guid.NewGuid(), user.Id));
+            await _events.PublishAsync(new ApplicationUserCreatedEvent(DefaultIdType.NewGuid(), user.Id));
         }
 
         if (!result.Succeeded)

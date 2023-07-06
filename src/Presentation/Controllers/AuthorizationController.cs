@@ -27,6 +27,30 @@ public class AuthorizationController : VersionNeutralApiController
         return _tokenService.GetTokenAsync(request, GetIpAddress()!, cancellationToken);
     }
 
+    [HttpPost("refresh-token")]
+    [OpenApiOperation("Request an access token using a refresh token", "")]
+    [ApiConventionMethod(typeof(ScreenDraftsApiConvention), nameof(ScreenDraftsApiConvention.Search))]
+    public Task<TokenResponse> RefreshAsync(RefreshTokenRequest request)
+    {
+        return _tokenService.RefreshTokenAsync(request, GetIpAddress()!);
+    }
+
+    [HttpGet("forgot-password")]
+    [OpenApiOperation("Request a password reset email for a user", "")]
+    [ApiConventionMethod(typeof(ScreenDraftsApiConvention), nameof(ScreenDraftsApiConvention.Register))]
+    public Task<string> ForgotPasswordAsync(ForgotPasswordRequest request)
+    {
+        return _userService.ForgotPasswordAsync(request, GetOriginFromRequest());
+    }
+
+    [HttpGet("reset-password")]
+    [OpenApiOperation("Reset a user's password", "")]
+    [ApiConventionMethod(typeof(ScreenDraftsApiConvention), nameof(ScreenDraftsApiConvention.Register))]
+    public Task<string> ResetPasswordAsync(ResetPasswordRequest request)
+    {
+        return _userService.ResetPasswordAsync(request, GetOriginFromRequest());
+    }
+
     private string GetOriginFromRequest()
     {
         return $"{Request.Scheme}://{Request.Host.Value}{Request.PathBase.Value}";
