@@ -3,7 +3,7 @@
 public abstract class AggregateRoot : Entity
 {
     private readonly List<IDomainEvent> _domainEvents = new();
-    protected AggregateRoot(DefaultIdType id)
+    protected AggregateRoot(string id)
     : base(id)
     {
     }

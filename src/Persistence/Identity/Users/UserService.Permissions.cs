@@ -1,4 +1,4 @@
-﻿namespace ScreenDrafts.Api.Infrastructure.Identity.Users;
+﻿namespace ScreenDrafts.Api.Persistence.Identity.Users;
 internal sealed partial class UserService
 {
     public Task<bool> HasPermissionAsync(string userId, string permission, CancellationToken cancellationToken)

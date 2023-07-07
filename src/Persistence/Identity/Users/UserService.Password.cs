@@ -1,4 +1,4 @@
-﻿namespace ScreenDrafts.Api.Infrastructure.Identity.Users;
+﻿namespace ScreenDrafts.Api.Persistence.Identity.Users;
 internal sealed partial class UserService
 {
     public async Task ChangePasswordAsync(ChangePasswordRequest request, string userId)

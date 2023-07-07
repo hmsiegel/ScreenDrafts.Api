@@ -1,7 +1,4 @@
-﻿using ScreenDrafts.Api.Application.Authentication.Roles;
-using ScreenDrafts.Api.Contracts.Authentication.Roles;
-
-namespace ScreenDrafts.Api.Infrastructure.Identity;
+﻿namespace ScreenDrafts.Api.Persistence.Identity;
 internal class RoleService : IRoleService
 {
     private readonly RoleManager<ApplicationRole> _roleManager;
@@ -37,7 +34,7 @@ internal class RoleService : IRoleService
                 throw new InternalServerException("Failed to create role");
             }
 
-            await _events.PublishAsync(new ApplicationRoleCreatedEvent(Guid.NewGuid(), role.Id.ToString(), role.Name!));
+            await _events.PublishAsync(new ApplicationRoleCreatedEvent(DefaultIdType.NewGuid(), role.Id.ToString(), role.Name!));
 
             return string.Format(string.Format("Role {0} created", request.Name));
         }
@@ -62,7 +59,7 @@ internal class RoleService : IRoleService
                 throw new InternalServerException("Failed to update role", result.GetErrors());
             }
 
-            await _events.PublishAsync(new ApplicationRoleUpdatedEvent(Guid.NewGuid(), role.Id.ToString(), role.Name!));
+            await _events.PublishAsync(new ApplicationRoleUpdatedEvent(DefaultIdType.NewGuid(), role.Id.ToString(), role.Name!));
 
             return string.Format(string.Format("Role {0} updated", role.Name));
         }
@@ -85,7 +82,7 @@ internal class RoleService : IRoleService
 
         await _roleManager.DeleteAsync(role);
 
-        await _events.PublishAsync(new ApplicationRoleDeletedEvent(Guid.NewGuid(), role.Id.ToString(), role.Name!, false));
+        await _events.PublishAsync(new ApplicationRoleDeletedEvent(DefaultIdType.NewGuid(), role.Id.ToString(), role.Name!, false));
 
         return string.Format(string.Format("Role {0} deleted", role.Name));
     }
@@ -158,7 +155,7 @@ internal class RoleService : IRoleService
             }
         }
 
-        await _events.PublishAsync(new ApplicationRoleUpdatedEvent(Guid.NewGuid(), role.Id.ToString(), role.Name!, true));
+        await _events.PublishAsync(new ApplicationRoleUpdatedEvent(DefaultIdType.NewGuid(), role.Id.ToString(), role.Name!, true));
 
         return "Permissions Updated.";
     }

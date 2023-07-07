@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-
-namespace ScreenDrafts.Api.Presentation.OpenApi;
+﻿namespace ScreenDrafts.Api.Presentation.OpenApi;
 internal static class Startup
 {
     internal static IServiceCollection AddOpenApiDocumentation(this IServiceCollection services, IConfiguration config)

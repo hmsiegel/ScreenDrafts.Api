@@ -2,7 +2,7 @@
 public sealed class Drafter : Entity, IAuditableEntity
 {
     private Drafter(
-        DefaultIdType id,
+        string id,
         bool hasRolloverVeto = false,
         bool hasRolloverVetooverride = false)
         : base(id)
@@ -22,7 +22,7 @@ public sealed class Drafter : Entity, IAuditableEntity
     public DateTime CreatedOnUtc { get; set; }
     public DateTime? ModifiedOnUtc { get; set; }
 
-    public static Drafter Create(DefaultIdType id)
+    public static Drafter Create(string id)
     {
         return new Drafter(id);
     }

@@ -29,21 +29,4 @@ public class ValidationPipelineBehavior<TRequest, TResponse>
 
         return await next();
     }
-
-    //private static TResult CreateValidationResult<TResult>(Error[] errors)
-    //     where TResult : Result
-    //{
-    //    if (typeof(TRequest) == typeof(Result))
-    //    {
-    //        return (ValidationResult.WithErrors(errors) as TResult)!;
-    //    }
-
-    //    var validationResult = typeof(ValidationResult<>)
-    //        .GetGenericTypeDefinition()
-    //        .MakeGenericType(typeof(TRequest).GenericTypeArguments[0])
-    //        .GetMethod(nameof(ValidationResult.WithErrors))!
-    //        .Invoke(null, new object[] { errors })!;
-
-    //    return (TResult)validationResult;
-    //}
 }

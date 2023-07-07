@@ -1,4 +1,6 @@
-﻿using ILogger = Serilog.ILogger;
+﻿using Microsoft.Extensions.DependencyInjection;
+
+using ILogger = Serilog.ILogger;
 
 namespace ScreenDrafts.Api.Persistence;
 public static class Startup
@@ -14,13 +16,24 @@ public static class Startup
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
+        services.AddOptions<AdminSettings>()
+            .BindConfiguration(nameof(AdminSettings))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
         services
+            .AddIdentity()
             .AddDbContext<ApplicationDbContext>((p, m) =>
             {
                 var dbSettings = p.GetRequiredService<IOptions<DatabaseSettings>>().Value;
                 m.UseDatabase(dbSettings.DBProvider, dbSettings.ConnectionString);
             })
-            .AddTransient<IDatabaseInitializer, DatabaseInitializer>();
+            .AddTransient<IDatabaseInitializer, DatabaseInitializer>()
+            .AddTransient<ApplicationDbSeeder>()
+            .AddServices(typeof(ICustomSeeder), ServiceLifetime.Transient)
+            .AddTransient<CustomSeederRunner>()
+            .AddTransient<IConnectionStringSecurer, ConnectionStringSecurer>()
+            .AddTransient<IConnectionStringValidator, ConnectionStringValidator>();
 
         return services;
     }
@@ -54,7 +67,7 @@ public static class Startup
             DbProviderKeys.SqLite => builder.UseSqlite(connectionString, e =>
                      e.MigrationsAssembly("Migrators.SqLite"))
                     .UseSnakeCaseNamingConvention(),
-            _ => throw new InvalidOperationException($"DB Provider {dbProvider} is not supported."),
+            _ => throw new InvalidOperationException($"Database Provider {dbProvider} is not supported."),
         };
     }
 }

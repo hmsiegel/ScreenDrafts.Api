@@ -2,7 +2,7 @@
 public sealed class Host : Entity, IAuditableEntity
 {
     private Host(
-        DefaultIdType id)
+        string id)
         : base(id)
     {
     }
@@ -12,7 +12,7 @@ public sealed class Host : Entity, IAuditableEntity
     public DateTime CreatedOnUtc { get; set; }
     public DateTime? ModifiedOnUtc { get; set; }
 
-    public static Host Create(DefaultIdType id)
+    public static Host Create(string id)
     {
         return new Host(id);
     }

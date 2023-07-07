@@ -1,12 +1,12 @@
 ﻿namespace ScreenDrafts.Api.Infrastructure.Common;
-internal static class Startup
+public static class Startup
 {
-    internal static IServiceCollection AddServices(this IServiceCollection services) =>
+    public static IServiceCollection AddServices(this IServiceCollection services) =>
         services
             .AddServices(typeof(ITransientService), ServiceLifetime.Transient)
             .AddServices(typeof(IScopedService), ServiceLifetime.Scoped);
 
-    internal static IServiceCollection AddServices(this IServiceCollection services, Type interfaceType, ServiceLifetime lifetime)
+    public static IServiceCollection AddServices(this IServiceCollection services, Type interfaceType, ServiceLifetime lifetime)
     {
         var interfaceTypes =
             AppDomain.CurrentDomain.GetAssemblies()

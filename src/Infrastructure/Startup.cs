@@ -15,7 +15,6 @@ public static class Startup
                 cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
                 cfg.AddBehavior(typeof(ValidationPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
             })
-            .RegisterServices()
             .AddServices();
 
         return services;
@@ -30,21 +29,5 @@ public static class Startup
             .UseAuthorization();
 
         return builder;
-    }
-
-    private static IServiceCollection RegisterServices(this IServiceCollection services)
-    {
-        services
-            .Scan(
-            scan => scan
-               .FromAssemblies(
-                   AssemblyReference,
-                   Persistence.Startup.AssemblyReference)
-               .AddClasses(false)
-               .UsingRegistrationStrategy(RegistrationStrategy.Skip)
-               .AsMatchingInterface()
-               .WithScopedLifetime());
-
-        return services;
     }
 }

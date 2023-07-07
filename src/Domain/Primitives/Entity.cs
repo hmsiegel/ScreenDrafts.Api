@@ -1,7 +1,7 @@
 ﻿namespace ScreenDrafts.Api.Domain.Primitives;
 public abstract class Entity : IEqualityComparer<Entity>
 {
-    protected Entity(DefaultIdType id)
+    protected Entity(string id)
     {
         Id = id;
     }
@@ -10,7 +10,7 @@ public abstract class Entity : IEqualityComparer<Entity>
     {
     }
 
-    public DefaultIdType Id { get; protected init; }
+    public string Id { get; protected init; }
 
     public override bool Equals(object? obj)
     {
@@ -34,7 +34,7 @@ public abstract class Entity : IEqualityComparer<Entity>
 
     public override int GetHashCode()
     {
-        return Id.GetHashCode() * 41;
+        return Id.GetHashCode(StringComparison.InvariantCultureIgnoreCase) * 41;
     }
 
     public bool Equals(Entity? x, Entity? y)
@@ -54,6 +54,6 @@ public abstract class Entity : IEqualityComparer<Entity>
 
     public int GetHashCode([DisallowNull] Entity obj)
     {
-        return obj.Id.GetHashCode() * 41;
+        return obj.Id.GetHashCode(StringComparison.InvariantCultureIgnoreCase) * 41;
     }
 }

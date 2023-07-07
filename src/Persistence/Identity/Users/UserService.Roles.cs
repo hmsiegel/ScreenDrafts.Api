@@ -1,4 +1,4 @@
-﻿namespace ScreenDrafts.Api.Infrastructure.Identity.Users;
+﻿namespace ScreenDrafts.Api.Persistence.Identity.Users;
 internal sealed partial class UserService
 {
     public async Task<string> AssignRolesAsync(string userId, UserRolesRequest request, CancellationToken cancellationToken)

@@ -72,7 +72,7 @@ public static class Extensions
                 AutoRegisterTemplate = true,
                 IndexFormat = indexFormat,
                 MinimumLogEventLevel = LogEventLevel.Information,
-            })).Enrich.WithProperty("Environment", builder.Environment.EnvironmentName);
+            })).Enrich.WithProperty("Environment", builder.Environment.EnvironmentName!);
         }
     }
 

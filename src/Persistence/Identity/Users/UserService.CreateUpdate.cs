@@ -1,4 +1,4 @@
-﻿namespace ScreenDrafts.Api.Infrastructure.Identity.Users;
+﻿namespace ScreenDrafts.Api.Persistence.Identity.Users;
 internal sealed partial class UserService
 {
     public async Task<string> GetOrCreateFromPrincipalAsync(ClaimsPrincipal principal)
@@ -17,7 +17,7 @@ internal sealed partial class UserService
             await _userManager.AddToRoleAsync(user, role);
         }
 
-        return user.Id.ToString();
+        return user.Id;
     }
 
     public async Task<string> CreateAsync(RegisterRequest request, string origin)
@@ -42,7 +42,7 @@ internal sealed partial class UserService
 
         var messages = new List<string> { string.Format("User {0} registered.", user.UserName) };
 
-        await _events.PublishAsync(new ApplicationUserCreatedEvent(Guid.NewGuid(), user.Id));
+        await _events.PublishAsync(new ApplicationUserCreatedEvent(DefaultIdType.NewGuid(), DefaultIdType.Parse(user.Id)));
 
         return string.Join(Environment.NewLine, messages);
     }
@@ -78,7 +78,7 @@ internal sealed partial class UserService
 
         await _signInManager.RefreshSignInAsync(user);
 
-        await _events.PublishAsync(new ApplicationUserUpdatedEvent(DefaultIdType.NewGuid(), user.Id));
+        await _events.PublishAsync(new ApplicationUserUpdatedEvent(DefaultIdType.NewGuid(), DefaultIdType.Parse(user.Id)));
 
         if (!result.Succeeded)
         {
@@ -88,7 +88,7 @@ internal sealed partial class UserService
 
     public async Task ToggleStatusAsync(ToggleUserStatusRequest request, CancellationToken cancellationToken)
     {
-        var user = await _userManager.Users.Where(u => u.Id.ToString() == request.UserId).FirstOrDefaultAsync(cancellationToken);
+        var user = await _userManager.Users.Where(u => u.Id == request.UserId).FirstOrDefaultAsync(cancellationToken);
 
         _ = user ?? throw new NotFoundException("User not found.");
 
@@ -100,7 +100,7 @@ internal sealed partial class UserService
 
         user .IsActive = request.ActivateUser;
         await _userManager.UpdateAsync(user);
-        await _events.PublishAsync(new ApplicationUserUpdatedEvent(DefaultIdType.NewGuid(), user.Id));
+        await _events.PublishAsync(new ApplicationUserUpdatedEvent(DefaultIdType.NewGuid(), DefaultIdType.Parse(user.Id)));
     }
 
     private async Task<ApplicationUser> CreateOrUpdateFromPrincipalAsync(ClaimsPrincipal principal)
@@ -133,7 +133,7 @@ internal sealed partial class UserService
             user.ObjectId = principal.GetObjectId();
             result = await _userManager.UpdateAsync(user);
 
-            await _events.PublishAsync(new ApplicationUserUpdatedEvent(DefaultIdType.NewGuid(), user.Id));
+            await _events.PublishAsync(new ApplicationUserUpdatedEvent(DefaultIdType.NewGuid(), DefaultIdType.Parse(user.Id)));
         }
         else
         {
@@ -152,7 +152,7 @@ internal sealed partial class UserService
             };
             result = await _userManager.CreateAsync(user);
 
-            await _events.PublishAsync(new ApplicationUserCreatedEvent(DefaultIdType.NewGuid(), user.Id));
+            await _events.PublishAsync(new ApplicationUserCreatedEvent(DefaultIdType.NewGuid(), DefaultIdType.Parse(user.Id)));
         }
 
         if (!result.Succeeded)

@@ -15,9 +15,11 @@ global using NSwag.Annotations;
 
 global using Presentation.Abstractions;
 
+global using ScreenDrafts.Api.Application.Authentication.Roles;
 global using ScreenDrafts.Api.Application.Authentication.Tokens;
 global using ScreenDrafts.Api.Application.Authentication.Users;
 global using ScreenDrafts.Api.Contracts.Authentication.Password;
+global using ScreenDrafts.Api.Contracts.Authentication.Roles;
 global using ScreenDrafts.Api.Contracts.Authentication.Tokens;
 global using ScreenDrafts.Api.Contracts.Authentication.Users;
 global using ScreenDrafts.Api.Domain.Shared;

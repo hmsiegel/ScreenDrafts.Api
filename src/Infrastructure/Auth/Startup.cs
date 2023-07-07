@@ -4,8 +4,7 @@ internal static class Startup
     internal static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration config)
     {
         services
-            .AddCurrentUser()
-            .AddIdentity();
+            .AddCurrentUser();
         services.Configure<SecuritySettings>(config.GetSection(nameof(SecuritySettings)));
         return config["SecuritySettings:Provider"]!.Equals("AzureAd", StringComparison.OrdinalIgnoreCase)
             ? services.AddAzureAdAuth(config)
@@ -24,5 +23,4 @@ internal static class Startup
         
         return services;
     }
-
 }

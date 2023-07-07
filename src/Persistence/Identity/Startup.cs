@@ -1,7 +1,7 @@
-﻿namespace ScreenDrafts.Api.Infrastructure.Identity;
+﻿namespace ScreenDrafts.Api.Persistence.Identity;
 internal static class Startup
 {
-    internal static IServiceCollection AddIdentity(this IServiceCollection services) => 
+    internal static IServiceCollection AddIdentity(this IServiceCollection services) =>
         services
                 .AddIdentity<ApplicationUser, ApplicationRole>(options =>
                 {

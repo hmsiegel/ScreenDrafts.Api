@@ -1,4 +1,4 @@
-﻿namespace ScreenDrafts.Api.Infrastructure.Identity;
+﻿namespace ScreenDrafts.Api.Persistence.Identity;
 internal static class IdentityResultExtensions
 {
     public static List<string> GetErrors(this IdentityResult result) =>

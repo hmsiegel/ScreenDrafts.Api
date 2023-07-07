@@ -5,7 +5,7 @@ Log.Information("Server booting up...");
 var builder = WebApplication.CreateBuilder(args);
 
 builder.RegisterSerilog();
-
+builder.Services.RegisterServices();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddPresentation(builder.Configuration);

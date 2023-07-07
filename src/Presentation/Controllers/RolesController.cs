@@ -1,7 +1,4 @@
-﻿using ScreenDrafts.Api.Application.Authentication.Roles;
-using ScreenDrafts.Api.Contracts.Authentication.Roles;
-
-namespace ScreenDrafts.Api.Presentation.Controllers;
+﻿namespace ScreenDrafts.Api.Presentation.Controllers;
 public sealed class RolesController : VersionNeutralApiController
 {
     private readonly IRoleService _roleService;

@@ -1,5 +1,5 @@
 ﻿namespace ScreenDrafts.Api.Domain.Identity;
-public class ApplicationUser : IdentityUser< DefaultIdType>
+public class ApplicationUser : IdentityUser
 {
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
