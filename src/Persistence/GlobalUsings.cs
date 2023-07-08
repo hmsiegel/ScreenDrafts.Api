@@ -27,6 +27,7 @@ global using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 global using ScreenDrafts.Api.Application.Authentication.Roles;
 global using ScreenDrafts.Api.Application.Authentication.Tokens;
 global using ScreenDrafts.Api.Application.Authentication.Users;
+global using ScreenDrafts.Api.Application.Common.Caching;
 global using ScreenDrafts.Api.Application.Common.Events;
 global using ScreenDrafts.Api.Application.Common.Exceptions;
 global using ScreenDrafts.Api.Application.Common.FileStorage;

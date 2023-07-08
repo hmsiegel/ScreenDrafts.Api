@@ -1,15 +1,19 @@
 ﻿namespace ScreenDrafts.Api.Persistence.Identity.Users;
 internal sealed partial class UserService
 {
-    public Task<bool> HasPermissionAsync(string userId, string permission, CancellationToken cancellationToken)
+    public async Task<bool> HasPermissionAsync(string userId, string permission, CancellationToken cancellation = default)
     {
-        throw new NotImplementedException();
+        var permissions = await _cache.GetOrSetAsync(
+            _cacheKey.GetCacheKey(ScreenDraftsClaims.Permission, userId),
+            () => GetPermissionsAsync(userId, cancellation),
+            TimeSpan.FromMinutes(5),
+            cancellation);
+
+        return permissions?.Contains(permission) ?? false;
     }
 
-    public Task InvalidatePermissionCacheAsync(string userId, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
+    public Task InvalidatePermissionCacheAsync(string userId, CancellationToken cancellationToken) =>
+        _cache.RemoveAsync(_cacheKey.GetCacheKey(ScreenDraftsClaims.Permission, userId), cancellationToken);
 
     public async Task<List<string>> GetPermissionsAsync(string userId, CancellationToken cancellationToken)
     {

@@ -7,6 +7,8 @@ internal sealed partial class UserService : IUserService
     private readonly IFileStorageService _fileStorage;
     private readonly IEventPublisher _events;
     private readonly ApplicationDbContext _dbContext;
+    private readonly ICacheService _cache;
+    private readonly ICacheKeyService _cacheKey;
 
     public UserService(
         UserManager<ApplicationUser> userManager,
@@ -14,7 +16,9 @@ internal sealed partial class UserService : IUserService
         SignInManager<ApplicationUser> signInManager,
         IFileStorageService fileStorage,
         IEventPublisher events,
-        ApplicationDbContext dbContext)
+        ApplicationDbContext dbContext,
+        ICacheService cache,
+        ICacheKeyService cacheKey)
     {
         _userManager = userManager;
         _roleManager = roleManager;
@@ -22,6 +26,8 @@ internal sealed partial class UserService : IUserService
         _fileStorage = fileStorage;
         _events = events;
         _dbContext = dbContext;
+        _cache = cache;
+        _cacheKey = cacheKey;
     }
 
     public async Task<bool> ExistsWithEmailAsync(string email, string? exceptId = null)

@@ -1,13 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-using ILogger = Serilog.ILogger;
+﻿using ILogger = Serilog.ILogger;
 
 namespace ScreenDrafts.Api.Persistence;
 public static class Startup
 {
     public static readonly Assembly AssemblyReference = typeof(Startup).Assembly;
     private static readonly ILogger _logger = Log.ForContext(typeof(Startup));
-    public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration config)
+    public static IServiceCollection AddPersistence(this IServiceCollection services)
     {
         services.AddOptions<DatabaseSettings>()
             .BindConfiguration(nameof(DatabaseSettings))

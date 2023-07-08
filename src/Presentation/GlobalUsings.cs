@@ -11,6 +11,7 @@ global using Microsoft.AspNetCore.Routing;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
 
+global using NSwag;
 global using NSwag.Annotations;
 
 global using Presentation.Abstractions;
@@ -23,5 +24,7 @@ global using ScreenDrafts.Api.Contracts.Authentication.Roles;
 global using ScreenDrafts.Api.Contracts.Authentication.Tokens;
 global using ScreenDrafts.Api.Contracts.Authentication.Users;
 global using ScreenDrafts.Api.Domain.Shared;
+global using ScreenDrafts.Api.Infrastructure.Auth.Permissions;
 global using ScreenDrafts.Api.Presentation.Abstractions;
 global using ScreenDrafts.Api.Presentation.OpenApi;
+global using ScreenDrafts.Api.Shared.Authorization;

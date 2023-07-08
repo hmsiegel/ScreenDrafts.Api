@@ -2,7 +2,7 @@
 public sealed class CurrentUserService : ICurrentUserService, ICurrentUserInitializer
 {
     private ClaimsPrincipal? _user;
-    private Guid _userId = DefaultIdType.Empty;
+    private DefaultIdType _userId = DefaultIdType.Empty;
 
     public string? Name => _user?.Identity?.Name;
 

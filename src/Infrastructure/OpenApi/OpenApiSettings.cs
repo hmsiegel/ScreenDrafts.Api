@@ -1,4 +1,4 @@
-﻿namespace ScreenDrafts.Api.Presentation.OpenApi;
+﻿namespace ScreenDrafts.Api.Infrastructure.OpenApi;
 public class OpenApiSettings
 {
     public bool Enable { get; set; }

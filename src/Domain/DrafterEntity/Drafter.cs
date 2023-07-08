@@ -16,6 +16,7 @@ public sealed class Drafter : Entity, IAuditableEntity
     }
 
     public ApplicationUser? User { get; set; }
+    public string? UserId { get; set; }
     public bool HasRolloverVeto { get; private set; }
     public bool HasRolloverVetooverride { get; private set; }
 

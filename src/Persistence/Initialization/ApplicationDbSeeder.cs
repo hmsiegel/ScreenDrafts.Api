@@ -47,7 +47,8 @@ internal sealed class ApplicationDbSeeder
             };
 
             _logger.LogInformation("Creating admin user '{UserName}'", adminUser.UserName);
-            adminUser.PasswordHash = new PasswordHasher<ApplicationUser>().HashPassword(adminUser, _adminSettings.Password);
+            var password = new PasswordHasher<ApplicationUser>();
+            adminUser.PasswordHash = password.HashPassword(adminUser, _adminSettings.Password);
             await _userManager.CreateAsync(adminUser);
         }
 

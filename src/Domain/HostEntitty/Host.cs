@@ -8,6 +8,7 @@ public sealed class Host : Entity, IAuditableEntity
     }
 
     public ApplicationUser? User { get; set; }
+    public string? UserId { get; set; }
     public int PredictionPoints { get; private set; }
     public DateTime CreatedOnUtc { get; set; }
     public DateTime? ModifiedOnUtc { get; set; }

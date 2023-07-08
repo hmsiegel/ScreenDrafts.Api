@@ -8,8 +8,8 @@ builder.RegisterSerilog();
 builder.Services.RegisterServices();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
-builder.Services.AddPresentation(builder.Configuration);
-builder.Services.AddPersistence(builder.Configuration);
+builder.Services.AddPersistence();
+builder.Services.AddPresentation();
 
 var app = builder.Build();
 
@@ -18,8 +18,7 @@ if (app.Environment.IsDevelopment())
     await app.Services.InitializeDatabasesAsync();
 }
 
-app.UseInfrastructure();
-app.UsePresentation();
+app.UseInfrastructure(builder.Configuration);
 app.MapEndpoints();
 
 app.Run();

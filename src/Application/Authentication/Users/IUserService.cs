@@ -27,7 +27,7 @@ public interface IUserService
 
     // Permissions
     Task<List<string>> GetPermissionsAsync(string userId, CancellationToken cancellationToken);
-    Task<bool> HasPermissionAsync(string userId, string permission, CancellationToken cancellationToken);
+    Task<bool> HasPermissionAsync(string userId, string permission, CancellationToken cancellation = default);
     Task InvalidatePermissionCacheAsync(string userId, CancellationToken cancellationToken);
 
     // Roles
