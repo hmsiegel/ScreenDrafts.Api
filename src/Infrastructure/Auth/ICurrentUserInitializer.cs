@@ -2,5 +2,5 @@
 public interface ICurrentUserInitializer
 {
     void SetCurrentUser(ClaimsPrincipal user);
-    void SetCurrentUserId(DefaultIdType userId);
+    void SetCurrentUserId(string userId);
 }

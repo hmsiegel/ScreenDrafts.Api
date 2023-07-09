@@ -29,7 +29,11 @@ internal sealed partial class UserService
         var endpointUri = new Uri(string.Concat($"{origin}/", route));
         string passwordResetUri = QueryHelpers.AddQueryString(endpointUri.ToString(), "token", code);
 
-        // Add Mail Service and Job to send email
+        var mailRequest = new MailRequest(
+            new List<string> { request.Email },
+            "Reset Password",
+            $"Your password reset token is: {code}. You can reset your password using the {passwordResetUri} Endpoint.");
+        _jobService.Enqueue(() => _mailService.SendAsync(mailRequest, CancellationToken.None));
         return "Password reset email has been sent to your email address.";
     }
 

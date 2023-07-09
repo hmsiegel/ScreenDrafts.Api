@@ -4,7 +4,7 @@ internal sealed partial class UserService
     public async Task<string> ConfirmEmailAsync(string userId, string code, CancellationToken cancellationToken)
     {
         var user = await _userManager.Users
-            .Where(u => u.Id.ToString() == userId && !u.EmailConfirmed)
+            .Where(u => u.Id == userId && !u.EmailConfirmed)
             .FirstOrDefaultAsync(cancellationToken);
 
         _ = user ?? throw new InternalServerException("An error occurred while confirming E-Mail.");
@@ -52,7 +52,7 @@ internal sealed partial class UserService
         string code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
         code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
         var endpointUri = new Uri(string.Concat($"{origin}/", route));
-        string verificationUri = QueryHelpers.AddQueryString(endpointUri.ToString(), QueryStringKeys.UserId, user.Id.ToString());
+        string verificationUri = QueryHelpers.AddQueryString(endpointUri.ToString(), QueryStringKeys.UserId, user.Id);
         return QueryHelpers.AddQueryString(verificationUri, QueryStringKeys.Code, code);
     }
 }

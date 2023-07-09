@@ -1,4 +1,6 @@
-﻿namespace ScreenDrafts.Api.Persistence.Identity.Users;
+﻿using ScreenDrafts.Api.Contracts.Mailing;
+
+namespace ScreenDrafts.Api.Persistence.Identity.Users;
 internal sealed partial class UserService
 {
     public async Task<string> GetOrCreateFromPrincipalAsync(ClaimsPrincipal principal)
@@ -41,6 +43,22 @@ internal sealed partial class UserService
         await _userManager.AddToRoleAsync(user, ScreenDraftsRoles.Basic);
 
         var messages = new List<string> { string.Format("User {0} registered.", user.UserName) };
+
+        if (_securitySettings.RequireConfirmedAccount && !string.IsNullOrEmpty(user.Email))
+        {
+            string emailVerificationUri = await GetEmailVerificationUriAsync(user, origin);
+            RegisterUserEmailModel emailModel = new(
+                user.UserName,
+                user.Email,
+                emailVerificationUri);
+
+            var mailRequest = new MailRequest(
+                new List<string> { user.Email },
+                "Confirm your registration",
+                _templateService.GenericEmailTemplate("email-confirmation", emailModel));
+            _jobService.Enqueue(() => _mailService.SendAsync(mailRequest, CancellationToken.None));
+            messages.Add("Please check your email to verify your account.");
+        }
 
         await _events.PublishAsync(new ApplicationUserCreatedEvent(DefaultIdType.NewGuid(), DefaultIdType.Parse(user.Id)));
 

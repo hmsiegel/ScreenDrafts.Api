@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
-
-using ScreenDrafts.Api.Presentation.OpenApi;
-
-namespace ScreenDrafts.Api.Infrastructure;
+﻿namespace ScreenDrafts.Api.Infrastructure;
 public static class Startup
 {
     public static readonly Assembly AssemblyReference = typeof(Startup).Assembly;
@@ -15,12 +10,14 @@ public static class Startup
         services
             .AddApiVersioning()
             .AddAuth(config)
+            .AddBackgroundJobs(config)
             .AddBehaviors(applicationAssembly)
             .AddCaching(config)
+            .AddMailing(config)
             .AddMediatR(cfg =>
             {
                 cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
-                cfg.AddBehavior(typeof(ValidationPipelineBehavior<,>), typeof(ValidationPipelineBehavior<,>));
+                cfg.AddBehavior(typeof(ValidationPipelineBehavior<,>));
             })
             .AddOpenApiDocumentation(config)
             .AddRouting(options => options.LowercaseUrls = true)
@@ -36,6 +33,7 @@ public static class Startup
             .UseAuthorization()
             .UseCurrentUser()
             .UseFileStorage()
+            .UseHangfireDashboard()
             .UseSecurityHeaders(config)
             .UseOpenApiDocumentation(config)
             .UseRouting();

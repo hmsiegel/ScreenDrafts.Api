@@ -45,7 +45,7 @@ public sealed class CurrentUserService : ICurrentUserService, ICurrentUserInitia
         _user = user;
     }
 
-    public void SetCurrentUserId(DefaultIdType userId)
+    public void SetCurrentUserId(string userId)
     {
         if (_userId != DefaultIdType.Empty)
         {

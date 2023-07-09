@@ -9,6 +9,10 @@ internal sealed partial class UserService : IUserService
     private readonly ApplicationDbContext _dbContext;
     private readonly ICacheService _cache;
     private readonly ICacheKeyService _cacheKey;
+    private readonly SecuritySettings _securitySettings;
+    private readonly IEmailTemplateService _templateService;
+    private readonly IMailService _mailService;
+    private readonly IJobService _jobService;
 
     public UserService(
         UserManager<ApplicationUser> userManager,
@@ -18,7 +22,11 @@ internal sealed partial class UserService : IUserService
         IEventPublisher events,
         ApplicationDbContext dbContext,
         ICacheService cache,
-        ICacheKeyService cacheKey)
+        ICacheKeyService cacheKey,
+        IOptions<SecuritySettings> securitySettings,
+        IEmailTemplateService templateService,
+        IMailService mailService,
+        IJobService jobService)
     {
         _userManager = userManager;
         _roleManager = roleManager;
@@ -28,11 +36,15 @@ internal sealed partial class UserService : IUserService
         _dbContext = dbContext;
         _cache = cache;
         _cacheKey = cacheKey;
+        _securitySettings = securitySettings.Value;
+        _templateService = templateService;
+        _mailService = mailService;
+        _jobService = jobService;
     }
 
     public async Task<bool> ExistsWithEmailAsync(string email, string? exceptId = null)
     {
-        return await _userManager.FindByEmailAsync(email.Normalize()) is ApplicationUser user && user.Id.ToString() != exceptId;
+        return await _userManager.FindByEmailAsync(email.Normalize()) is ApplicationUser user && user.Id != exceptId;
     }
 
     public async Task<bool> ExistsWithNameAsync(string name)
@@ -43,14 +55,14 @@ internal sealed partial class UserService : IUserService
     public async Task<bool> ExistsWithPhoneNumberAsync(string phoneNumber, string? exceptId = null)
     {
         return await _userManager.Users
-            .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber) is ApplicationUser user && user.Id.ToString() != exceptId;
+            .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber) is ApplicationUser user && user.Id != exceptId;
     }
 
     public async Task<UserDetailsResponse> GetAsync(string userId, CancellationToken cancellationToken)
     {
         var user = await _userManager.Users
             .AsNoTracking()
-            .Where(u => u.Id.ToString() == userId)
+            .Where(u => u.Id == userId)
             .FirstOrDefaultAsync(cancellationToken);
 
         _ = user ?? throw new NotFoundException("User not found.");

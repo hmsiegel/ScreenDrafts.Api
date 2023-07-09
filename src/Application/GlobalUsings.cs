@@ -15,6 +15,7 @@ global using ScreenDrafts.Api.Contracts.Authentication.Roles;
 global using ScreenDrafts.Api.Contracts.Authentication.Tokens;
 global using ScreenDrafts.Api.Contracts.Authentication.Users;
 global using ScreenDrafts.Api.Contracts.FileStorage;
+global using ScreenDrafts.Api.Contracts.Mailing;
 global using ScreenDrafts.Api.Domain.Enums;
 global using ScreenDrafts.Api.Domain.Identity;
 global using ScreenDrafts.Api.Domain.Primitives;

@@ -1,5 +1,5 @@
-﻿namespace ScreenDrafts.Api.Persistence.Common;
-internal static class DbProviderKeys
+﻿namespace ScreenDrafts.Api.Shared.Common;
+public static class DbProviderKeys
 {
     public const string Npgsql = "postgresql";
     public const string SqlServer = "mssql";
