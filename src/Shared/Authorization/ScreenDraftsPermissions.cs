@@ -26,7 +26,8 @@ public static class ScreenDraftsResource
 
 public static class ScreenDraftsPermissions
 {
-    private static readonly ScreenDraftsPermission[] _all = {
+    private static readonly ScreenDraftsPermission[] _all =
+    {
         new(Description: "View Hangfire", Action: ScreenDraftsAction.View, Resource: ScreenDraftsResource.Hangfire),
         new(Description: "View Users", Action: ScreenDraftsAction.View, Resource: ScreenDraftsResource.Users),
         new(Description: "Search Users", Action: ScreenDraftsAction.Search, Resource: ScreenDraftsResource.Users, IsHost: true),

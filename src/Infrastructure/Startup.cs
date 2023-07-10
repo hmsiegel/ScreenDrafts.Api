@@ -1,6 +1,4 @@
-﻿using ScreenDrafts.Api.Infrastructure.Cors;
-
-namespace ScreenDrafts.Api.Infrastructure;
+﻿namespace ScreenDrafts.Api.Infrastructure;
 public static class Startup
 {
     public static readonly Assembly AssemblyReference = typeof(Startup).Assembly;
@@ -23,6 +21,7 @@ public static class Startup
                 cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
                 cfg.AddBehavior(typeof(ValidationPipelineBehavior<,>));
             })
+            .AddNotifications(config)
             .AddOpenApiDocumentation(config)
             .AddRequestLogging(config)
             .AddRouting(options => options.LowercaseUrls = true)
@@ -51,7 +50,8 @@ public static class Startup
 
     public static IEndpointRouteBuilder MapEndpoints(this IEndpointRouteBuilder endpoints)
     {
-        endpoints.MapControllers();
+        endpoints.MapControllers().RequireAuthorization();
+        endpoints.MapNotifications();
 
         return endpoints;
     }

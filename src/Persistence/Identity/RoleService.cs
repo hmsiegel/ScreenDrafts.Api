@@ -34,7 +34,7 @@ internal class RoleService : IRoleService
                 throw new InternalServerException("Failed to create role");
             }
 
-            await _events.PublishAsync(new ApplicationRoleCreatedEvent(DefaultIdType.NewGuid(), role.Id.ToString(), role.Name!));
+            await _events.PublishAsync(new ApplicationRoleCreatedEvent(DefaultIdType.NewGuid(), role.Id, role.Name!));
 
             return string.Format(string.Format("Role {0} created", request.Name));
         }
@@ -59,7 +59,7 @@ internal class RoleService : IRoleService
                 throw new InternalServerException("Failed to update role", result.GetErrors());
             }
 
-            await _events.PublishAsync(new ApplicationRoleUpdatedEvent(DefaultIdType.NewGuid(), role.Id.ToString(), role.Name!));
+            await _events.PublishAsync(new ApplicationRoleUpdatedEvent(DefaultIdType.NewGuid(), role.Id, role.Name!));
 
             return string.Format(string.Format("Role {0} updated", role.Name));
         }
@@ -82,7 +82,7 @@ internal class RoleService : IRoleService
 
         await _roleManager.DeleteAsync(role);
 
-        await _events.PublishAsync(new ApplicationRoleDeletedEvent(DefaultIdType.NewGuid(), role.Id.ToString(), role.Name!, false));
+        await _events.PublishAsync(new ApplicationRoleDeletedEvent(DefaultIdType.NewGuid(), role.Id, role.Name!, false));
 
         return string.Format(string.Format("Role {0} deleted", role.Name));
     }
@@ -91,12 +91,12 @@ internal class RoleService : IRoleService
     {
         return await _roleManager.FindByNameAsync(roleName)
             is ApplicationRole existingRole
-            && existingRole.Id.ToString() != excludeId;
+            && existingRole.Id != excludeId;
     }
 
     public async Task<RoleResponse> GetByIdAsync(string id)
     {
-        return await _dbContext.Roles.SingleOrDefaultAsync(x => x.Id.ToString() == id) is { } role
+        return await _dbContext.Roles.SingleOrDefaultAsync(x => x.Id == id) is { } role
             ? role.Adapt<RoleResponse>()
             : throw new NotFoundException("Role not found");
     }
@@ -106,7 +106,7 @@ internal class RoleService : IRoleService
         var role = await GetByIdAsync(roleId);
 
         role.Permissions = await _dbContext.RoleClaims
-            .Where(x => x.RoleId.ToString() == roleId && x.ClaimType == ScreenDraftsClaims.Permission)
+            .Where(x => x.RoleId == roleId && x.ClaimType == ScreenDraftsClaims.Permission)
             .Select(x => x.ClaimValue!)
             .ToListAsync(cancellationToken);
 
@@ -155,7 +155,7 @@ internal class RoleService : IRoleService
             }
         }
 
-        await _events.PublishAsync(new ApplicationRoleUpdatedEvent(DefaultIdType.NewGuid(), role.Id.ToString(), role.Name!, true));
+        await _events.PublishAsync(new ApplicationRoleUpdatedEvent(DefaultIdType.NewGuid(), role.Id, role.Name!, true));
 
         return "Permissions Updated.";
     }

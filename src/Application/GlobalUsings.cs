@@ -20,6 +20,7 @@ global using ScreenDrafts.Api.Contracts.Mailing;
 global using ScreenDrafts.Api.Domain.Enums;
 global using ScreenDrafts.Api.Domain.Identity;
 global using ScreenDrafts.Api.Domain.Primitives;
+global using ScreenDrafts.Api.Shared.Notifications;
 
 global using System.Linq.Expressions;
 global using System.Net;
