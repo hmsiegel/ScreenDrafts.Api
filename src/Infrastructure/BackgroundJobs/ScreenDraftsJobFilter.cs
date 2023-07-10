@@ -11,12 +11,12 @@ public class ScreenDraftsJobFilter : IClientFilter
     {
         ArgumentNullException.ThrowIfNull(filterContext);
 
-        _logger.InfoFormat("Set TenantId and UserId parameters to job {0}.{1}...", filterContext.Job.Method.ReflectedType?.FullName, filterContext.Job.Method.Name);
+        _logger.InfoFormat("Set UserId parameters to job {0}.{1}...", filterContext.Job.Method.ReflectedType?.FullName, filterContext.Job.Method.Name);
 
         using var scope = _services.CreateScope();
 
         var httpContext = scope.ServiceProvider.GetRequiredService<IHttpContextAccessor>()?.HttpContext;
-        _ = httpContext ?? throw new InvalidOperationException("Can't create a TenantJob without HttpContext.");
+        _ = httpContext ?? throw new InvalidOperationException("Can't create a job without HttpContext.");
 
         string? userId = httpContext.User.GetUserId();
         filterContext.SetJobParameter(QueryStringKeys.UserId, userId);

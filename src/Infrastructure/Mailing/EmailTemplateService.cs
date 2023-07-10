@@ -15,7 +15,7 @@ public sealed class EmailTemplateService : IEmailTemplateService
     private static string GetTemplate(string templateName)
     {
         string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-        string templateFolder = Path.Combine(baseDirectory, "EmailTemplates");
+        string templateFolder = Path.Combine(baseDirectory, "Email Templates");
         string filePath = Path.Combine(templateFolder, $"{templateName}.cshtml");
 
         using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);

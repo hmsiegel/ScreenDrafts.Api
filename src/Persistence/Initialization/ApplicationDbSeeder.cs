@@ -30,7 +30,7 @@ internal sealed class ApplicationDbSeeder
 
     private async Task SeedAdminUserAsync()
     {
-        if (await _userManager.Users.FirstOrDefaultAsync(u => u.Email == _adminSettings.Email) is not ApplicationUser adminUser)
+        if (await _userManager.Users.FirstOrDefaultAsync(u => u.Email == _adminSettings.Email) is not { } adminUser)
         {
             string adminUserName = $"{_adminSettings.FirstName} {_adminSettings.LastName}".ToLowerInvariant();
             adminUser = new ApplicationUser
@@ -65,7 +65,7 @@ internal sealed class ApplicationDbSeeder
         foreach (string roleName in ScreenDraftsRoles.DefaultRoles)
         {
             if (await _roleManager.Roles.SingleOrDefaultAsync(r => r.Name == roleName)
-                is not ApplicationRole role)
+                is not { } role)
             {
                 // Create the role
                 _logger.LogInformation("Creating role '{role}'", roleName);

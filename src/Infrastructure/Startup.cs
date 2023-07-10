@@ -13,6 +13,7 @@ public static class Startup
             .AddBackgroundJobs(config)
             .AddBehaviors(applicationAssembly)
             .AddCaching(config)
+            .AddExceptionMiddleware()
             .AddMailing(config)
             .AddMediatR(cfg =>
             {
@@ -20,6 +21,7 @@ public static class Startup
                 cfg.AddBehavior(typeof(ValidationPipelineBehavior<,>));
             })
             .AddOpenApiDocumentation(config)
+            .AddRequestLogging(config)
             .AddRouting(options => options.LowercaseUrls = true)
             .AddServices();
 
@@ -29,14 +31,17 @@ public static class Startup
     public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder builder, IConfiguration config)
     {
         builder
-            .UseAuthentication()
-            .UseAuthorization()
             .UseCurrentUser()
+            .UseExceptionMiddleware()
             .UseFileStorage()
             .UseHangfireDashboard()
+            .UseHttpsRedirection()
+            .UseRequestLogging(config)
             .UseSecurityHeaders(config)
             .UseOpenApiDocumentation(config)
-            .UseRouting();
+            .UseRouting()
+            .UseAuthentication()
+            .UseAuthorization();
 
         return builder;
     }

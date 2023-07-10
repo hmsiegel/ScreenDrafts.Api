@@ -32,15 +32,6 @@ public sealed class ConfigureJwtBearerOptions : IConfigureNamedOptions<JwtBearer
 
         options.Events = new JwtBearerEvents
         {
-            OnAuthenticationFailed = context =>
-            {
-                if (context.Exception is SecurityTokenExpiredException)
-                {
-                    context.Response.Headers.Add("Token-Expired", "true");
-                }
-
-                return Task.CompletedTask;
-            },
             OnChallenge = context =>
             {
                 context.HandleResponse();

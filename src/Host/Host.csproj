@@ -45,4 +45,10 @@
 	  <Folder Include="Files\" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Content Update="Email Templates\*.cshtml">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
+
 </Project>

@@ -1,8 +1,8 @@
 ﻿namespace ScreenDrafts.Api.Presentation.Controllers;
-public sealed class UserController : VersionNeutralApiController
+public sealed class UsersController : VersionNeutralApiController
 {
     private readonly IUserService _userService;
-    public UserController(IUserService userService)
+    public UsersController(IUserService userService)
     {
         _userService = userService;
     }
@@ -40,7 +40,7 @@ public sealed class UserController : VersionNeutralApiController
         return _userService.AssignRolesAsync(id, request, cancellationToken);
     }
 
-    [ HttpPost("{id}/toggle-status")]
+    [HttpPost("{id}/toggle-status")]
     [ApiConventionMethod(typeof(ScreenDraftsApiConvention), nameof(ScreenDraftsApiConvention.Register))]
     [HasPermission(ScreenDraftsAction.Update, ScreenDraftsResource.Users)]
     [OpenApiOperation("Toggle a user's active status", "")]
@@ -56,7 +56,7 @@ public sealed class UserController : VersionNeutralApiController
         return Ok();
     }
 
-    [HttpGet("confim-email")]
+    [HttpGet("confirm-email")]
     [AllowAnonymous]
     [OpenApiOperation("Confirm a user's email address", "")]
     [ApiConventionMethod(typeof(ScreenDraftsApiConvention), nameof(ScreenDraftsApiConvention.Search))]

@@ -42,7 +42,7 @@ internal sealed partial class UserService
 
         await _userManager.AddToRoleAsync(user, ScreenDraftsRoles.Basic);
 
-        var messages = new List<string> { string.Format("User {0} registered.", user.UserName) };
+        var messages = new List<string> { $"User {user.UserName} registered." };
 
         if (_securitySettings.RequireConfirmedAccount && !string.IsNullOrEmpty(user.Email))
         {

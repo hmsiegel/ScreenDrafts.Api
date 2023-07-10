@@ -22,7 +22,7 @@ internal static class Startup
             .AddScoped<CurrentUserMiddleware>()
             .AddScoped<ICurrentUserService, CurrentUserService>()
             .AddScoped(sp => (ICurrentUserInitializer)sp.GetRequiredService<ICurrentUserService>());
-        
+            
         return services;
     }
 

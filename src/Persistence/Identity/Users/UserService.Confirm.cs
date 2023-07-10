@@ -13,8 +13,8 @@ internal sealed partial class UserService
         var result = await _userManager.ConfirmEmailAsync(user, code);
 
         return result.Succeeded
-            ? string.Format("Account Confirmed for E-Mail {0}. You can now use the /api/tokens endpoint to generate JWT.", user.Email)
-            : throw new InternalServerException(string.Format("An error occurred while confirming {0}", user.Email));
+            ? $"Account Confirmed for E-Mail {user.Email}. You can now use the /api/tokens endpoint to generate JWT."
+            : throw new InternalServerException($"An error occurred while confirming {user.Email}");
     }
 
     public async Task<string> ConfirmPhoneNumberAsync(string userId, string code)
@@ -31,18 +31,13 @@ internal sealed partial class UserService
 
         if (result.Succeeded)
         {
-            if (user.PhoneNumberConfirmed)
-            {
-                return string.Format("Account Confirmed for Phone Number {0}. You can now use the /api/tokens endpoint to generate JWT.", user.PhoneNumber);
-            }
-            else
-            {
-                return string.Format("Account Confirmed for Phone Number {0}. You should confirm your E-mail before using the /api/tokens endpoint to generate JWT.", user.PhoneNumber);
-            }
+            return user.PhoneNumberConfirmed
+                ? $"Account Confirmed for Phone Number {user.PhoneNumber}. You can now use the /api/tokens endpoint to generate JWT."
+                : $"Account Confirmed for Phone Number {user.PhoneNumber}. You should confirm your E-mail before using the /api/tokens endpoint to generate JWT.";
         }
         else
         {
-            throw new InternalServerException(string.Format("An error occurred while confirming {0}", user.PhoneNumber));
+            throw new InternalServerException($"An error occurred while confirming {user.PhoneNumber}");
         }
     }
 
