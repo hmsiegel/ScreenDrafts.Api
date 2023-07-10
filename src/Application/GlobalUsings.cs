@@ -10,6 +10,7 @@ global using Microsoft.Extensions.DependencyInjection;
 global using ScreenDrafts.Api.Application.Common.Exceptions;
 global using ScreenDrafts.Api.Application.Common.Interfaces.Services;
 global using ScreenDrafts.Api.Application.Common.Models;
+global using ScreenDrafts.Api.Application.Common.Persistence;
 global using ScreenDrafts.Api.Contracts.Auditing;
 global using ScreenDrafts.Api.Contracts.Authentication.Password;
 global using ScreenDrafts.Api.Contracts.Authentication.Roles;
@@ -20,6 +21,7 @@ global using ScreenDrafts.Api.Contracts.Mailing;
 global using ScreenDrafts.Api.Domain.Enums;
 global using ScreenDrafts.Api.Domain.Identity;
 global using ScreenDrafts.Api.Domain.Primitives;
+global using ScreenDrafts.Api.Domain.Shared;
 global using ScreenDrafts.Api.Shared.Notifications;
 
 global using System.Linq.Expressions;

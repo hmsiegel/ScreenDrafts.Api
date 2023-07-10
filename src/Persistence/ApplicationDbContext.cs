@@ -6,7 +6,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser,
     IdentityUserRole<string>,
     IdentityUserLogin<string>,
     ApplicationRoleClaim,
-    IdentityUserToken<string>>
+    IdentityUserToken<string>>, IUnitOfWork
 {
     private readonly ICurrentUserService _currentUser;
     private readonly ISerializerService _serializer;
