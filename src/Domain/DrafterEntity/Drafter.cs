@@ -22,6 +22,8 @@ public sealed class Drafter : Entity, IAuditableEntity
 
     public DateTime CreatedOnUtc { get; set; }
     public DateTime? ModifiedOnUtc { get; set; }
+    public DefaultIdType CreatedBy { get; set; }
+    public DefaultIdType ModifiedBy { get; set; }
 
     public static Drafter Create(string id)
     {

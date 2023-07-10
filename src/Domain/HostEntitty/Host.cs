@@ -12,6 +12,8 @@ public sealed class Host : Entity, IAuditableEntity
     public int PredictionPoints { get; private set; }
     public DateTime CreatedOnUtc { get; set; }
     public DateTime? ModifiedOnUtc { get; set; }
+    public DefaultIdType CreatedBy { get; set; }
+    public DefaultIdType ModifiedBy { get; set; }
 
     public static Host Create(string id)
     {

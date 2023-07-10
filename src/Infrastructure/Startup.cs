@@ -1,4 +1,6 @@
-﻿namespace ScreenDrafts.Api.Infrastructure;
+﻿using ScreenDrafts.Api.Infrastructure.Cors;
+
+namespace ScreenDrafts.Api.Infrastructure;
 public static class Startup
 {
     public static readonly Assembly AssemblyReference = typeof(Startup).Assembly;
@@ -13,6 +15,7 @@ public static class Startup
             .AddBackgroundJobs(config)
             .AddBehaviors(applicationAssembly)
             .AddCaching(config)
+            .AddCorsPolicy(config)
             .AddExceptionMiddleware()
             .AddMailing(config)
             .AddMediatR(cfg =>
