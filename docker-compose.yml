@@ -13,10 +13,12 @@ services:
       - ASPNETCORE_HTTPS_PORT=5100
       - ASPNETCORE_Kestrel__Certificates__Default__Password=password!
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/https/cert.pfx
-      #- DatabaseSettings__ConnectionString=Server=postgres;Port=5433;Database=screendraftsdb;User Id=postgres;Password=12345Al0h@;
-      - DatabaseSettings__ConnectionString=Server=mssql;Database=screendraftsdb;User=sa;Password=12345Al0h@;MultipleActiveResultSets=true;Encrypt=false
-      #- DatabaseSettings__ConnectionString=Data Source=MONDAYNEUROSIS\\MSSQLSERVER2022;Initial Catalog=screendrafts;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False
+      - DatabaseSettings__ConnectionString=Server=postgres;Port=5433;Database=screendraftsdb;User Id=postgres;Password=12345Al0h@;
+      - HangfireSettings__Storage__ConnectionString=Server=postgres;Port=5433;Database=screendraftsdb;User Id=postgres;Password=12345Al0h@;
       - DatabaseSettings__DBProvider=postgresql
+      - HangfireSettings__Storage__StorageProvider=postgresql
+      #- DatabaseSettings__ConnectionString=Server=mssql;Database=screendraftsdb;User=sa;Password=12345Al0h@;MultipleActiveResultSets=true;Encrypt=false
+      #- DatabaseSettings__ConnectionString=Data Source=MONDAYNEUROSIS\\MSSQLSERVER2022;Initial Catalog=screendrafts;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False
     build:
       context: .
       dockerfile: src/Host/Dockerfile
@@ -26,37 +28,37 @@ services:
       - "5100:5100"
       - "5010:5010"
     depends_on:
-      - mssql
+      - postgres
       - cache
     restart: on-failure
 
-  #postgres:
-  #  image: postgres:latest
-  #  container_name: screendrafts-db
-  #  networks:
-  #    - screendrafts
-  #  environment:
-  #    - POSTGRES_USER=postgres
-  #    - POSTGRES_PASSWORD=12345Al0h@
-  #    - POSTGRES_DB=screendraftsdb
-  #  volumes:
-  #    - postgres-data:/data/db
-  #  ports:
-  #    - 5433:5433
-
-  mssql:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+  postgres:
+    image: postgres:latest
     container_name: screendrafts-db
     networks:
       - screendrafts
     environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=12345Al0h@
-      - MSSQL_PID=Developer
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=12345Al0h@
+      - POSTGRES_DB=screendraftsdb
     volumes:
-      - ./mssql:/var/opt/mssql
+      - postgres-data:/data/db
     ports:
-      - 1433:1433
+      - 5433:5433
+
+  #mssql:
+  #  image: mcr.microsoft.com/mssql/server:2022-latest
+  #  container_name: screendrafts-db
+  #  networks:
+  #    - screendrafts
+  #  environment:
+  #    - ACCEPT_EULA=Y
+  #    - SA_PASSWORD=12345Al0h@
+  #    - MSSQL_PID=Developer
+  #  volumes:
+  #    - ./mssql:/var/opt/mssql
+  #  ports:
+  #    - 1433:1433
 
   cache:
     image: redis:latest

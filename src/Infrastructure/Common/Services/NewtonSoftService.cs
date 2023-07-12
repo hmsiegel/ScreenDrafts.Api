@@ -14,7 +14,7 @@ public sealed class NewtonSoftService : ISerializerService
             NullValueHandling = NullValueHandling.Ignore,
             Converters = new List<JsonConverter>
             {
-                new StringEnumConverter() { CamelCaseText = true },
+                new StringEnumConverter(namingStrategy: new CamelCaseNamingStrategy()),
             },
         });
     }

@@ -13,6 +13,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="Ardalis.SmartEnum.EFCore" Version="7.0.0" />
 	  <PackageReference Include="EFCore.NamingConventions" Version="7.0.2" />
 	  <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.8" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.8" />

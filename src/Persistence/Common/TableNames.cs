@@ -12,4 +12,6 @@ internal static class TableNames
     public const string Hosts = nameof(Hosts);
     public const string UserLogins = nameof(UserLogins);
     public const string UserTokens = nameof(UserTokens);
+    public const string Drafts = nameof(Drafts);
+    public const string Movies = nameof(Movies);
 }

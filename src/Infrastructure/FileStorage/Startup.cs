@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace ScreenDrafts.Api.Infrastructure.FileStorage;
+﻿namespace ScreenDrafts.Api.Infrastructure.FileStorage;
 internal static class Startup
 {
     internal static IApplicationBuilder UseFileStorage(this IApplicationBuilder app)

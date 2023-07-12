@@ -9,11 +9,14 @@ public sealed class Host : Entity, IAuditableEntity
 
     public ApplicationUser? User { get; set; }
     public string? UserId { get; set; }
-    public int PredictionPoints { get; private set; }
+    public int? PredictionPoints { get; private set; }
+    public string? DraftId { get; private set; }
+    public Draft? Draft { get; private set; }
+
     public DateTime CreatedOnUtc { get; set; }
     public DateTime? ModifiedOnUtc { get; set; }
     public DefaultIdType CreatedBy { get; set; }
-    public DefaultIdType ModifiedBy { get; set; }
+    public DefaultIdType? ModifiedBy { get; set; }
 
     public static Host Create(string id)
     {

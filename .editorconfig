@@ -313,6 +313,9 @@ dotnet_diagnostic.S3267.severity = none
 # S1121: Assignments should not be made from within sub-expressions
 dotnet_diagnostic.S1121.severity = none
 
+# RCS1170: Use read-only auto-implemented property.
+dotnet_diagnostic.RCS1170.severity = none
+
 [*.{cs,vb}]
 dotnet_style_operator_placement_when_wrapping = beginning_of_line
 tab_width = 4

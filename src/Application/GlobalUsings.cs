@@ -2,6 +2,8 @@
 
 global using FluentValidation;
 
+global using IMDbApiLib.Models;
+
 global using MediatR;
 
 global using Microsoft.EntityFrameworkCore;

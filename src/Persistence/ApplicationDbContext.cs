@@ -31,6 +31,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser,
     }
 
     public DbSet<Trail> AuditTrails => Set<Trail>();
+    public DbSet<Host> Hosts => Set<Host>();
+    public DbSet<Draft> Drafts => Set<Draft>();
+    public DbSet<Movie> Movies => Set<Movie>();
+    public DbSet<Drafter> Drafters => Set<Drafter>();
+    public DbSet<SelectedMovie> SelectedMovies => Set<SelectedMovie>();
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
@@ -43,6 +48,12 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser,
         await SendDomainEventsAsync();
 
         return result;
+    }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        configurationBuilder.ConfigureSmartEnum();
+        base.ConfigureConventions(configurationBuilder);
     }
 
     protected override void OnModelCreating(ModelBuilder builder)

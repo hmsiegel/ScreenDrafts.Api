@@ -16,6 +16,9 @@ global using Hangfire.SqlServer;
 global using Hangfire.States;
 global using Hangfire.Storage;
 
+global using IMDbApiLib;
+global using IMDbApiLib.Models;
+
 global using MailKit.Net.Smtp;
 global using MailKit.Security;
 
@@ -79,6 +82,7 @@ global using ScreenDrafts.Api.Infrastructure.Common;
 global using ScreenDrafts.Api.Infrastructure.Common.Extensions;
 global using ScreenDrafts.Api.Infrastructure.Cors;
 global using ScreenDrafts.Api.Infrastructure.FileStorage;
+global using ScreenDrafts.Api.Infrastructure.Imdb;
 global using ScreenDrafts.Api.Infrastructure.Mailing;
 global using ScreenDrafts.Api.Infrastructure.Middleware;
 global using ScreenDrafts.Api.Infrastructure.Notifications;

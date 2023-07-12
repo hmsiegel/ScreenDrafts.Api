@@ -43,11 +43,15 @@ global using ScreenDrafts.Api.Contracts.Authentication.Roles;
 global using ScreenDrafts.Api.Contracts.Authentication.Tokens;
 global using ScreenDrafts.Api.Contracts.Authentication.Users;
 global using ScreenDrafts.Api.Contracts.Mailing;
+global using ScreenDrafts.Api.Domain.DraftAggregate;
+global using ScreenDrafts.Api.Domain.DraftAggregate.Entities;
+global using ScreenDrafts.Api.Domain.DraftAggregate.Enums;
 global using ScreenDrafts.Api.Domain.DrafterEntity;
 global using ScreenDrafts.Api.Domain.Enums;
 global using ScreenDrafts.Api.Domain.HostEntitty;
 global using ScreenDrafts.Api.Domain.Identity;
 global using ScreenDrafts.Api.Domain.Identity.DomainEvents;
+global using ScreenDrafts.Api.Domain.MovieAggregate;
 global using ScreenDrafts.Api.Domain.Primitives;
 global using ScreenDrafts.Api.Infrastructure.Auth;
 global using ScreenDrafts.Api.Infrastructure.Auth.Jwt;
@@ -61,6 +65,8 @@ global using ScreenDrafts.Api.Shared.Authorization;
 global using ScreenDrafts.Api.Shared.Common;
 
 global using Serilog;
+
+global using SmartEnum.EFCore;
 
 global using System.ComponentModel.DataAnnotations;
 global using System.IdentityModel.Tokens.Jwt;

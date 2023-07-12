@@ -10,7 +10,7 @@ public sealed class AuditTrail
     }
 
     public EntityEntry Entry { get; }
-    public Guid UserId { get; set; }
+    public DefaultIdType UserId { get; set; }
     public string? TableName { get; set; }
     public Dictionary<string, object?>? KeyValues { get; set; }
     public Dictionary<string, object?>? OldValues { get; set; }
