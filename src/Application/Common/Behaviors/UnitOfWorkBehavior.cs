@@ -1,4 +1,6 @@
-﻿namespace ScreenDrafts.Api.Application.Common.Behaviors;
+﻿using System.Transactions;
+
+namespace ScreenDrafts.Api.Application.Common.Behaviors;
 public sealed class UnitOfWorkBehavior<TRequest, TResponse>
     : IPipelineBehavior<TRequest, TResponse>
     where TRequest : notnull
@@ -8,9 +10,12 @@ public sealed class UnitOfWorkBehavior<TRequest, TResponse>
     public UnitOfWorkBehavior(IUnitOfWork unitOfWork) =>
         _unitOfWork = unitOfWork;
 
-    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+    public async Task<TResponse> Handle(
+        TRequest request,
+        RequestHandlerDelegate<TResponse> next,
+        CancellationToken cancellationToken)
     {
-        if (UnitOfWorkBehavior<TRequest, TResponse>.IsNotCommand())
+        if (IsNotCommand())
         {
             return await next();
         }
@@ -22,6 +27,6 @@ public sealed class UnitOfWorkBehavior<TRequest, TResponse>
 
     private static bool IsNotCommand()
     {
-        return typeof(TRequest).Name.EndsWith("Command");
+        return !typeof(TRequest).Name.EndsWith("Command");
     }
 }

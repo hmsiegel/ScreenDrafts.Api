@@ -1,4 +1,6 @@
-﻿global using MapsterMapper;
+﻿global using Mapster;
+
+global using MapsterMapper;
 
 global using MediatR;
 
@@ -17,7 +19,6 @@ global using Presentation.Abstractions;
 global using ScreenDrafts.Api.Application.Authentication.Roles;
 global using ScreenDrafts.Api.Application.Authentication.Tokens;
 global using ScreenDrafts.Api.Application.Authentication.Users;
-global using ScreenDrafts.Api.Application.Common.Interfaces.Services;
 global using ScreenDrafts.Api.Contracts.Authentication.Password;
 global using ScreenDrafts.Api.Contracts.Authentication.Roles;
 global using ScreenDrafts.Api.Contracts.Authentication.Tokens;
@@ -26,3 +27,5 @@ global using ScreenDrafts.Api.Domain.Shared;
 global using ScreenDrafts.Api.Infrastructure.Auth.Permissions;
 global using ScreenDrafts.Api.Presentation.Abstractions;
 global using ScreenDrafts.Api.Shared.Authorization;
+
+global using System.Reflection;

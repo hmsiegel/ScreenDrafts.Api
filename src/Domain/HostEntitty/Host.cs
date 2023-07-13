@@ -2,9 +2,13 @@
 public sealed class Host : Entity, IAuditableEntity
 {
     private Host(
-        string id)
+        string id,
+        ApplicationUser user,
+        string userId)
         : base(id)
     {
+        User = user;
+        UserId = userId;
     }
 
     public ApplicationUser? User { get; set; }
@@ -18,9 +22,9 @@ public sealed class Host : Entity, IAuditableEntity
     public DefaultIdType CreatedBy { get; set; }
     public DefaultIdType? ModifiedBy { get; set; }
 
-    public static Host Create(string id)
+    public static Host Create(ApplicationUser user, string userId)
     {
-        return new Host(id);
+        return new Host(NewId.NextGuid().ToString(), user, userId);
     }
 
     public void AddPredictionPoints(int predictionPoints) => PredictionPoints += predictionPoints;

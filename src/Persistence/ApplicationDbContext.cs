@@ -121,6 +121,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser,
                 case EntityState.Added:
                     entry.Entity.CreatedBy = userId;
                     entry.Entity.ModifiedBy = userId;
+                    entry.Entity.CreatedOnUtc = _dateTime.UtcNow;
+                    entry.Entity.ModifiedOnUtc = _dateTime.UtcNow;
                     break;
 
                 case EntityState.Modified:
@@ -164,7 +166,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser,
                 string propertyName = property.Metadata.Name;
                 if (property.Metadata.IsPrimaryKey())
                 {
-                    trailEntry.KeyValues![propertyName] = property.CurrentValue;
+                    trailEntry.KeyValues[propertyName] = property.CurrentValue;
                     continue;
                 }
 

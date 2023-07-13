@@ -34,6 +34,7 @@ public static class Startup
     public static IApplicationBuilder UseInfrastructure(this IApplicationBuilder builder, IConfiguration config)
     {
         builder
+            .UseAuthentication()
             .UseCurrentUser()
             .UseExceptionMiddleware()
             .UseFileStorage()
@@ -43,7 +44,6 @@ public static class Startup
             .UseSecurityHeaders(config)
             .UseOpenApiDocumentation(config)
             .UseRouting()
-            .UseAuthentication()
             .UseAuthorization();
 
         return builder;

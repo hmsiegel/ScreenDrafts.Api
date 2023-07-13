@@ -32,7 +32,7 @@ internal sealed class ApplicationDbSeeder
     {
         if (await _userManager.Users.FirstOrDefaultAsync(u => u.Email == _adminSettings.Email) is not { } adminUser)
         {
-            string adminUserName = $"{_adminSettings.FirstName} {_adminSettings.LastName}".ToLowerInvariant();
+            string adminUserName = $"{_adminSettings.FirstName}.{_adminSettings.LastName}".ToLowerInvariant();
             adminUser = new ApplicationUser
             {
                 Email = _adminSettings.Email,

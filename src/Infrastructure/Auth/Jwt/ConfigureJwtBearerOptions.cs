@@ -49,7 +49,7 @@ public sealed class ConfigureJwtBearerOptions : IConfigureNamedOptions<JwtBearer
                 var token = context.Request.Query["access_token"];
 
                 if (!string.IsNullOrEmpty(token) &&
-                    context.HttpContext.Request.Path.StartsWithSegments("/notifications", StringComparison.OrdinalIgnoreCase))
+                    context.HttpContext.Request.Path.StartsWithSegments("/notifications", StringComparison.CurrentCultureIgnoreCase))
                 {
                     context.Token = token;
                 }

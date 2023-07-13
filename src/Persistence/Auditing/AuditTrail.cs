@@ -12,13 +12,13 @@ public sealed class AuditTrail
     public EntityEntry Entry { get; }
     public DefaultIdType UserId { get; set; }
     public string? TableName { get; set; }
-    public Dictionary<string, object?>? KeyValues { get; set; }
-    public Dictionary<string, object?>? OldValues { get; set; }
-    public Dictionary<string, object?>? NewValues { get; set; }
-    public List<PropertyEntry>? TemporaryProperties { get; set; }
+    public Dictionary<string, object?> KeyValues { get; set; } = new();
+    public Dictionary<string, object?> OldValues { get; set; } = new();
+    public Dictionary<string, object?> NewValues { get; set; } = new();
+    public List<PropertyEntry> TemporaryProperties { get; set; } = new();
     public TrailType TrailType { get; set; }
-    public List<string> ChangedColumns { get; set; }
-    public bool HasTemporaryProperties => TemporaryProperties?.Any() == true;
+    public List<string> ChangedColumns { get; set; } = new();
+    public bool HasTemporaryProperties => TemporaryProperties.Any();
 
     public Trail ToAuditTrail() =>
     new()
@@ -28,8 +28,8 @@ public sealed class AuditTrail
         TableName = TableName,
         CreatedAt = DateTime.UtcNow,
         PrimaryKey = _serializer.Serialize(KeyValues),
-        OldValues = OldValues?.Count == 0 ? null : _serializer.Serialize(OldValues),
-        NewValues = NewValues?.Count == 0 ? null : _serializer.Serialize(NewValues),
+        OldValues = OldValues.Count == 0 ? null : _serializer.Serialize(OldValues),
+        NewValues = NewValues.Count == 0 ? null : _serializer.Serialize(NewValues),
         AffectedColumns = ChangedColumns.Count == 0 ? null : _serializer.Serialize(ChangedColumns),
     };
 }

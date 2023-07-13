@@ -102,8 +102,13 @@ public sealed class TokenService : ITokenService
     {
         return new List<Claim>
         {
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+            new Claim(ClaimTypes.NameIdentifier, user.Id),
+            new Claim(ClaimTypes.Email, user.Email!),
+            new Claim (ClaimTypes.Name, user.FirstName ?? string.Empty),
+            new Claim(ClaimTypes.Surname, user.LastName ?? string.Empty),
+            new Claim(ClaimTypes.MobilePhone, user.PhoneNumber ?? string.Empty),
+            new Claim(JwtRegisteredClaimNames.Jti, DefaultIdType.NewGuid().ToString()),
+            new Claim(JwtRegisteredClaimNames.Sub, user.Id),
             new Claim(JwtRegisteredClaimNames.Email, user.Email!),
             new Claim(ScreenDraftsClaims.Fullname, $"{user.FirstName} {user.LastName}"),
             new Claim(JwtRegisteredClaimNames.GivenName, user.FirstName ?? string.Empty),

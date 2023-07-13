@@ -2,6 +2,8 @@
 
 global using Mapster;
 
+global using MassTransit;
+
 global using Microsoft.AspNetCore.Identity;
 global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 global using Microsoft.AspNetCore.WebUtilities;
@@ -48,11 +50,13 @@ global using ScreenDrafts.Api.Domain.DraftAggregate.Entities;
 global using ScreenDrafts.Api.Domain.DraftAggregate.Enums;
 global using ScreenDrafts.Api.Domain.DrafterEntity;
 global using ScreenDrafts.Api.Domain.Enums;
+global using ScreenDrafts.Api.Domain.Errors;
 global using ScreenDrafts.Api.Domain.HostEntitty;
 global using ScreenDrafts.Api.Domain.Identity;
 global using ScreenDrafts.Api.Domain.Identity.DomainEvents;
 global using ScreenDrafts.Api.Domain.MovieAggregate;
 global using ScreenDrafts.Api.Domain.Primitives;
+global using ScreenDrafts.Api.Domain.Repositories;
 global using ScreenDrafts.Api.Infrastructure.Auth;
 global using ScreenDrafts.Api.Infrastructure.Auth.Jwt;
 global using ScreenDrafts.Api.Infrastructure.Common;

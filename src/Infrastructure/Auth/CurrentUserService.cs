@@ -52,9 +52,9 @@ public sealed class CurrentUserService : ICurrentUserService, ICurrentUserInitia
             throw new InternalServerException("Method reserved for in-scope initialization only");
         }
 
-        if (!string.IsNullOrEmpty(userId.ToString()))
+        if (!string.IsNullOrEmpty(userId))
         {
-            _userId = DefaultIdType.Parse(userId.ToString());
+            _userId = DefaultIdType.Parse(userId);
         }
     }
 }
