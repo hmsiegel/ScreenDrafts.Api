@@ -7,7 +7,8 @@ public interface IUserService
     Task<bool> ExistsWithEmailAsync(string email, string? exceptId = null);
     Task<bool> ExistsWithPhoneNumberAsync(string phoneNumber, string? exceptId = null);
     Task<List<UserDetailsResponse>> GetListAsync(CancellationToken cancellationToken);
-    Task<UserDetailsResponse> GetAsync(string userId, CancellationToken cancellationToken);
+    Task<UserDetailsResponse> GetByIdAsync(string userId, CancellationToken cancellationToken);
+    Task<ApplicationUser> GetAsync(string userId, CancellationToken cancellationToken);
 
     // Create/ Update
     Task<string> GetOrCreateFromPrincipalAsync(ClaimsPrincipal principal);

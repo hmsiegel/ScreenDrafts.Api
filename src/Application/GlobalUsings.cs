@@ -6,10 +6,10 @@ global using IMDbApiLib.Models;
 
 global using MediatR;
 
-global using Microsoft.AspNetCore.Identity;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.DependencyInjection;
 
+global using ScreenDrafts.Api.Application.Authentication.Users;
 global using ScreenDrafts.Api.Application.Common.Exceptions;
 global using ScreenDrafts.Api.Application.Common.Interfaces.Services;
 global using ScreenDrafts.Api.Application.Common.Messaging;
@@ -20,6 +20,7 @@ global using ScreenDrafts.Api.Contracts.Authentication.Password;
 global using ScreenDrafts.Api.Contracts.Authentication.Roles;
 global using ScreenDrafts.Api.Contracts.Authentication.Tokens;
 global using ScreenDrafts.Api.Contracts.Authentication.Users;
+global using ScreenDrafts.Api.Contracts.Drafters;
 global using ScreenDrafts.Api.Contracts.FileStorage;
 global using ScreenDrafts.Api.Contracts.Mailing;
 global using ScreenDrafts.Api.Domain.DrafterEntity;

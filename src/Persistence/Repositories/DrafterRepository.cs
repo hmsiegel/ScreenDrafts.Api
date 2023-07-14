@@ -13,6 +13,13 @@ internal sealed class DrafterRepository : IDrafterRepository
         _context.Drafters.Add(drafter);
     }
 
+    public async Task<List<Drafter>> GetAllDrafters(CancellationToken cancellationToken = default)
+    {
+        return await _context.Drafters
+            .Include(d => d.User)
+            .ToListAsync(cancellationToken: cancellationToken);
+    }
+
     public async Task<Drafter> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
         return await _context.Drafters

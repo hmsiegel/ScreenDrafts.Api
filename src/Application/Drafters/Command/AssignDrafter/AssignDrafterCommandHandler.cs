@@ -2,19 +2,19 @@
 public class AssignDrafterCommandHandler : ICommandHandler<AssignDrafterCommand, string>
 {
     private readonly IDrafterRepository _drafterRepository;
-    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IUserService _userService;
 
     public AssignDrafterCommandHandler(
         IDrafterRepository drafterRepository,
-        UserManager<ApplicationUser> userManager)
+        IUserService userService)
     {
         _drafterRepository = drafterRepository;
-        _userManager = userManager;
+        _userService = userService;
     }
 
     public async Task<Result<string>> Handle(AssignDrafterCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userManager.FindByIdAsync(request.UserId);
+        var user = await _userService.GetAsync(request.UserId, cancellationToken);
 
         if (user is null)
         {

@@ -20,7 +20,7 @@ public sealed class UsersController : VersionNeutralApiController
     [HasPermission(ScreenDraftsAction.View, ScreenDraftsResource.Users)]
     public Task<UserDetailsResponse> GetAsync(string id, CancellationToken cancellationToken)
     {
-        return _userService.GetAsync(id, cancellationToken);
+        return _userService.GetByIdAsync(id, cancellationToken);
     }
 
     [HttpGet("{id}/roles")]

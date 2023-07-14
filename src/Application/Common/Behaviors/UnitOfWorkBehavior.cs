@@ -1,6 +1,4 @@
-﻿using System.Transactions;
-
-namespace ScreenDrafts.Api.Application.Common.Behaviors;
+﻿namespace ScreenDrafts.Api.Application.Common.Behaviors;
 public sealed class UnitOfWorkBehavior<TRequest, TResponse>
     : IPipelineBehavior<TRequest, TResponse>
     where TRequest : notnull

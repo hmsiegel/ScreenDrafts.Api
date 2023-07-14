@@ -316,6 +316,9 @@ dotnet_diagnostic.S1121.severity = none
 # RCS1170: Use read-only auto-implemented property.
 dotnet_diagnostic.RCS1170.severity = none
 
+# S2094: Classes should not be empty
+dotnet_diagnostic.S2094.severity = none
+
 [*.{cs,vb}]
 dotnet_style_operator_placement_when_wrapping = beginning_of_line
 tab_width = 4

@@ -58,7 +58,7 @@ internal sealed partial class UserService : IUserService
             .FirstOrDefaultAsync(u => u.PhoneNumber == phoneNumber) is ApplicationUser user && user.Id != exceptId;
     }
 
-    public async Task<UserDetailsResponse> GetAsync(string userId, CancellationToken cancellationToken)
+    public async Task<UserDetailsResponse> GetByIdAsync(string userId, CancellationToken cancellationToken)
     {
         var user = await _userManager.Users
             .AsNoTracking()
@@ -68,6 +68,14 @@ internal sealed partial class UserService : IUserService
         _ = user ?? throw new NotFoundException("User not found.");
 
         return user.Adapt<UserDetailsResponse>();
+    }
+
+    public async Task<ApplicationUser> GetAsync(string userId, CancellationToken cancellationToken)
+    {
+        return await _userManager.Users
+            .AsNoTracking()
+            .Where(u => u.Id == userId)
+            .FirstOrDefaultAsync(cancellationToken);
     }
 
     public async Task<List<UserDetailsResponse>> GetListAsync(CancellationToken cancellationToken)
