@@ -1,4 +1,4 @@
-﻿using ScreenDrafts.Api.Application.Drafts.Commands.Create;
+﻿using ScreenDrafts.Api.Contracts.Drafts;
 
 namespace ScreenDrafts.Api.Presentation.Controllers;
 public class DraftsController : VersionedApiController
@@ -7,7 +7,7 @@ public class DraftsController : VersionedApiController
     [HasPermission(ScreenDraftsAction.Create, ScreenDraftsResource.Drafts)]
     [OpenApiOperation("Create Draft", "Create a draft with the basic information.")]
     public async Task<IActionResult> CreateDraft(
-        [FromBody] CreateDraftCommand request,
+        [FromBody] CreateDraftRequest request,
         CancellationToken cancellationToken = default)
     {
         var command = Mapper.Map<CreateDraftCommand>(request);

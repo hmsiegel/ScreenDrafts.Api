@@ -22,6 +22,7 @@ global using ScreenDrafts.Api.Application.Authentication.Users;
 global using ScreenDrafts.Api.Application.Drafters.Command.AssignDrafter;
 global using ScreenDrafts.Api.Application.Drafters.Queries.GetAll;
 global using ScreenDrafts.Api.Application.Drafters.Queries.GetById;
+global using ScreenDrafts.Api.Application.Drafts.Commands.Create;
 global using ScreenDrafts.Api.Contracts.Authentication.Password;
 global using ScreenDrafts.Api.Contracts.Authentication.Roles;
 global using ScreenDrafts.Api.Contracts.Authentication.Tokens;
