@@ -1,5 +1,5 @@
 ﻿namespace ScreenDrafts.Api.Contracts.Drafts;
-public sealed record DraftRequest(
+public sealed record CreateDraftRequest(
     string Name,
-    int DraftType,
+    string DraftType,
     int NumberOfDrafters);

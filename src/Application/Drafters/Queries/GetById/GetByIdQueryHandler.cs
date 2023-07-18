@@ -18,7 +18,7 @@ internal sealed class GetByIdQueryHandler : IQueryHandler<GetByIdQuery, DrafterR
         }
 
         var response = new DrafterResponse(
-            drafter.Id,
+            drafter.Id!.ToString()!,
             drafter.User!.FirstName!,
             drafter.User.LastName!,
             (bool)drafter.HasRolloverVeto!,
