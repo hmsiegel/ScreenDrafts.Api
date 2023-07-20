@@ -1,4 +1,6 @@
-﻿namespace ScreenDrafts.Api.Domain.Repositories;
+﻿using ScreenDrafts.Api.Domain.Identity.Entities;
+
+namespace ScreenDrafts.Api.Domain.Repositories;
 public interface IDrafterRepository
 {
     void Add(Drafter drafter);

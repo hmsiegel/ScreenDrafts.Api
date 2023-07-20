@@ -3,8 +3,14 @@
     "Docker Compose": {
       "commandName": "DockerCompose",
       "commandVersion": "1.0",
+      "composeLaunchAction": "LaunchBrowser",
+      "composeLaunchServiceName": "host",
+      "composeLaunchUrl": "https://localhost:5100",
       "serviceActions": {
-        "host": "StartDebugging"
+        "host": "StartDebugging",
+        "cache": "StartWithoutDebugging",
+        "postgres": "StartWithoutDebugging",
+        "screendrafts.mq": "StartWithoutDebugging"
       }
     }
   }

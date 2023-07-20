@@ -1,32 +1,25 @@
 ﻿namespace ScreenDrafts.Api.Domain.DraftAggregate.Entities;
-public sealed class SelectedMovie : Entity, IAuditableEntity
+public sealed class SelectedMovie : Entity<SelectedMovieId>, IAuditableEntity
 {
+    private readonly List<PickDecision> _pickDecisions = new();
+
     private SelectedMovie(
-        string movieId,
-        int draftPosition,
-        string drafterId)
+        SelectedMovieId id,
+        MovieId movieId,
+        int draftPosition)
+        : base(id)
     {
         MovieId = movieId;
         DraftPosition = draftPosition;
-        DrafterId = drafterId;
     }
 
     private SelectedMovie()
     {
     }
 
-    public string MovieId { get; private set; }
-    public Movie Movie { get; private set; }
+    public MovieId MovieId { get; private set; }
     public int DraftPosition { get; private set; }
-    public string DrafterId { get; private set; }
-    public Drafter Drafter { get; private set; }
-    public bool IsVetoed { get; private set; }
-    public string DrafterWhoPlayedVetoId { get; private set; }
-    public Drafter DrafterWhoPlayedVeto { get; private set; }
-    public bool WasVetoOverride { get; private set; }
-    public string DrafterWhoPlayedVetoOverrideId { get; private set; }
-    public Drafter DrafterWhoPlayedVetoOverride { get; private set; }
-    public bool WasCommissonerOverride { get; private set; }
+    public IReadOnlyList<PickDecision> PickDecisions => _pickDecisions.AsReadOnly();
 
     public DefaultIdType CreatedBy { get; set; }
     public DateTime CreatedOnUtc { get; set; }
@@ -34,31 +27,17 @@ public sealed class SelectedMovie : Entity, IAuditableEntity
     public DateTime? ModifiedOnUtc { get; set; }
 
     public static SelectedMovie Create(
-        string movieId,
-        int draftPosition,
-        string drafterId)
+        MovieId movieId,
+        int draftPosition)
     {
         return new SelectedMovie(
+            SelectedMovieId.CreateUnique(),
             movieId,
-            draftPosition,
-            drafterId);
+            draftPosition);
     }
 
-    public void Veto(string drafterId)
+    public void AddPickDecision(DefaultIdType userId, Decision decision)
     {
-        IsVetoed = true;
-        DrafterWhoPlayedVetoId = drafterId;
-    }
-
-    public void VetoOverride(string drafterId)
-    {
-        WasVetoOverride = true;
-        DrafterWhoPlayedVetoOverrideId = drafterId;
-    }
-
-    public void CommissoerOverride(string drafterId)
-    {
-        WasCommissonerOverride = true;
-        DrafterWhoPlayedVetoOverrideId = drafterId;
+        _pickDecisions.Add(PickDecision.Create(userId, decision));
     }
 }

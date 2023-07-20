@@ -1,4 +1,6 @@
-﻿namespace ScreenDrafts.Api.Persistence.Configuration;
+﻿using static ScreenDrafts.Api.Persistence.Common.DatabaseConstants;
+
+namespace ScreenDrafts.Api.Persistence.Configuration;
 internal sealed class IdentityConfiguration : IEntityTypeConfiguration<ApplicationUser>
 {
     public void Configure(EntityTypeBuilder<ApplicationUser> builder)
@@ -11,16 +13,18 @@ internal sealed class IdentityConfiguration : IEntityTypeConfiguration<Applicati
             .HasMaxLength(256);
 
         builder
-            .HasOne(u => u.Drafter)
-            .WithOne(d => d!.User)
-            .HasForeignKey<Drafter>(d => d.Id)
-            .IsRequired(false);
+            .Property(u => u.DrafterId)
+            .ValueGeneratedNever()
+            .HasConversion(
+            v => v!.Value,
+            v => DrafterId.Create(v));
 
         builder
-            .HasOne(u => u.Host)
-            .WithOne(d => d!.User)
-            .HasForeignKey<Host>(d => d.Id)
-            .IsRequired(false);
+            .Property(u => u.HostId)
+            .ValueGeneratedNever()
+            .HasConversion(
+            v => v!.Value,
+            v => HostId.Create(v));
     }
 }
 

@@ -1,23 +1,15 @@
 ﻿namespace ScreenDrafts.Api.Domain.Primitives;
 
-public abstract class AggregateRoot : Entity
+public abstract class AggregateRoot<TId, TIdType> : Entity<TId>
+    where TId : AggregateRootId<TIdType>
 {
-    private readonly List<IDomainEvent> _domainEvents = new();
-    protected AggregateRoot(string id)
+    protected AggregateRoot(TId id)
     : base(id)
     {
+        Id = id;
     }
 
     protected AggregateRoot()
     {
-    }
-
-    public IReadOnlyCollection<IDomainEvent> GetDomainEvents() => _domainEvents.ToList();
-
-    public void ClearDomainEvents() => _domainEvents.Clear();
-
-    protected void RaiseDomainEvent(IDomainEvent domainEvent)
-    {
-        _domainEvents.Add(domainEvent);
     }
 }

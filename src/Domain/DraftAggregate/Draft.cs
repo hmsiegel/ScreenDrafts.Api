@@ -1,14 +1,16 @@
 ﻿namespace ScreenDrafts.Api.Domain.DraftAggregate;
-public sealed class Draft : AggregateRoot, IAuditableEntity
+public sealed class Draft : AggregateRoot<DraftId, DefaultIdType>, IAuditableEntity
 {
-    private readonly List<Drafter> _drafters = new();
+    private readonly List<DrafterId> _drafters = new();
     private readonly List<SelectedMovie> _selectedMovies = new();
-    private readonly List<Host> _hosts = new();
+    private readonly List<HostId> _hosts = new();
 
     private Draft(
+        DraftId id,
         string name,
         DraftType draftType,
         int numberOfDrafters)
+        : base(id)
     {
         Name = name;
         DraftType = draftType;
@@ -20,16 +22,17 @@ public sealed class Draft : AggregateRoot, IAuditableEntity
     }
 
     public string Name { get; private set; }
+
+    [JsonConverter(typeof(SmartEnumNameConverter<DraftType, int>))]
     public DraftType DraftType { get; private set; }
     public DateTime? ReleaseDate { get; private set; }
     public int? Runtime { get; private set; }
     public string? EpisodeNumber { get; private set; }
     public int? NumberOfDrafters { get; private set; }
-    public string? MainHostId { get; private set; }
-    public string? CoHostId { get; private set; }
+    public int? NumberOfFilms { get; private set; }
 
-    public IReadOnlyList<Host>? Hosts => _hosts.AsReadOnly();
-    public IReadOnlyList<Drafter>? Drafters => _drafters.AsReadOnly();
+    public IReadOnlyList<HostId>? HostIds => _hosts.AsReadOnly();
+    public IReadOnlyList<DrafterId>? DrafterIds => _drafters.AsReadOnly();
     public IReadOnlyList<SelectedMovie>? SelectedMovies => _selectedMovies.AsReadOnly();
 
     public DefaultIdType CreatedBy { get; set; }
@@ -42,29 +45,46 @@ public sealed class Draft : AggregateRoot, IAuditableEntity
         DraftType draftType,
         int numberOfDrafters)
     {
-        var draft = new Draft(name, draftType, numberOfDrafters);
-        draft.RaiseDomainEvent(new DraftCreatedDomainEvent(NewId.NextGuid(), draft.Id));
+        var draft = new Draft(
+            DraftId.CreateUnique(),
+            name,
+            draftType,
+            numberOfDrafters);
+        draft.AddDomainEvent(new DraftCreatedDomainEvent(
+            NewId.NextGuid(),
+            draft.Id!.Value));
         return draft;
     }
 
-    public void AddDrafter(Drafter drafter)
+    public void AddDrafter(DrafterId drafterId)
     {
-        _drafters.Add(drafter);
+        _drafters.Add(drafterId);
     }
 
-    public void AddHost(Host host)
+    public void AddHost(HostId hostId)
     {
-        MainHostId = host.Id;
-    }
-
-    public void AddCoHost(Host host)
-    {
-        CoHostId = host.Id;
+        _hosts.Add(hostId);
     }
 
     public void AddDraftedMovie(SelectedMovie selectedMovie)
     {
         _selectedMovies.Add(selectedMovie);
+    }
+
+    public void UpdateDraft(Draft draft)
+    {
+        Name = draft.Name;
+        DraftType = draft.DraftType;
+        ReleaseDate = draft.ReleaseDate;
+        Runtime = draft.Runtime;
+        EpisodeNumber = draft.EpisodeNumber;
+        NumberOfDrafters = draft.NumberOfDrafters;
+        NumberOfFilms = draft.NumberOfFilms;
+    }
+
+    public void UpdateNumberOfFilms(int numberOfFilms)
+    {
+        NumberOfFilms = numberOfFilms;
     }
 
     public void UpdateReleaseDate(DateTime releaseDate)

@@ -10,8 +10,9 @@
 
 	<ItemGroup>
 	  <PackageReference Include="Ardalis.SmartEnum" Version="7.0.0" />
+	  <PackageReference Include="Ardalis.SmartEnum.JsonNet" Version="7.0.0" />
 	  <PackageReference Include="MediatR" Version="12.1.1" />
-	  <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.8" />
+	  <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.9" />
 	  <PackageReference Include="NewId" Version="4.0.1" />
 	</ItemGroup>
 
@@ -24,6 +25,11 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="CastMemberAggregate\Entities\" />
+	  <Folder Include="CrewMemberAggregate\Entities\" />
 	</ItemGroup>
 
 </Project>

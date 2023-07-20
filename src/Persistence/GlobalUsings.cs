@@ -2,8 +2,6 @@
 
 global using Mapster;
 
-global using MassTransit;
-
 global using Microsoft.AspNetCore.Identity;
 global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 global using Microsoft.AspNetCore.WebUtilities;
@@ -45,16 +43,22 @@ global using ScreenDrafts.Api.Contracts.Authentication.Roles;
 global using ScreenDrafts.Api.Contracts.Authentication.Tokens;
 global using ScreenDrafts.Api.Contracts.Authentication.Users;
 global using ScreenDrafts.Api.Contracts.Mailing;
+global using ScreenDrafts.Api.Domain.CastMemberAggregate;
+global using ScreenDrafts.Api.Domain.CastMemberAggregate.ValueObjects;
+global using ScreenDrafts.Api.Domain.CrewMemberAggregate;
+global using ScreenDrafts.Api.Domain.CrewMemberAggregate.ValueObjects;
 global using ScreenDrafts.Api.Domain.DraftAggregate;
 global using ScreenDrafts.Api.Domain.DraftAggregate.Entities;
 global using ScreenDrafts.Api.Domain.DraftAggregate.Enums;
-global using ScreenDrafts.Api.Domain.DrafterEntity;
+global using ScreenDrafts.Api.Domain.DraftAggregate.ValueObjects;
 global using ScreenDrafts.Api.Domain.Enums;
-global using ScreenDrafts.Api.Domain.Errors;
-global using ScreenDrafts.Api.Domain.HostEntitty;
 global using ScreenDrafts.Api.Domain.Identity;
 global using ScreenDrafts.Api.Domain.Identity.DomainEvents;
+global using ScreenDrafts.Api.Domain.Identity.Entities;
+global using ScreenDrafts.Api.Domain.Identity.ValueObjects;
 global using ScreenDrafts.Api.Domain.MovieAggregate;
+global using ScreenDrafts.Api.Domain.MovieAggregate.Entities;
+global using ScreenDrafts.Api.Domain.MovieAggregate.ValueObjects;
 global using ScreenDrafts.Api.Domain.Primitives;
 global using ScreenDrafts.Api.Domain.Repositories;
 global using ScreenDrafts.Api.Infrastructure.Auth;

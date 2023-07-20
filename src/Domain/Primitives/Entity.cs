@@ -1,7 +1,9 @@
 ﻿namespace ScreenDrafts.Api.Domain.Primitives;
-public abstract class Entity : IEqualityComparer<Entity>
+public abstract class Entity<TId> : IEqualityComparer<Entity<TId>>, IHasDomainEvent
+    where TId : ValueObject
 {
-    protected Entity(string id)
+    private readonly List<IDomainEvent> _domainEvents = new();
+    protected Entity(TId id)
     {
         Id = id;
     }
@@ -10,7 +12,8 @@ public abstract class Entity : IEqualityComparer<Entity>
     {
     }
 
-    public string Id { get; protected init; }
+    public TId? Id { get; protected init; }
+    public IReadOnlyList<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
 
     public override bool Equals(object? obj)
     {
@@ -24,7 +27,7 @@ public abstract class Entity : IEqualityComparer<Entity>
             return false;
         }
 
-        if (obj is not Entity entity)
+        if (obj is not Entity<TId> entity)
         {
             return false;
         }
@@ -34,10 +37,15 @@ public abstract class Entity : IEqualityComparer<Entity>
 
     public override int GetHashCode()
     {
-        return Id.GetHashCode(StringComparison.InvariantCultureIgnoreCase) * 41;
+        return Id!.GetHashCode() * 41;
+    }
+    
+    public int GetHashCode([DisallowNull] Entity<TId> obj)
+    {
+        return obj.Id!.GetHashCode() * 41;
     }
 
-    public bool Equals(Entity? x, Entity? y)
+    public bool Equals(Entity<TId>? x, Entity<TId>? y)
     {
         if (x is null && y is null)
         {
@@ -52,8 +60,13 @@ public abstract class Entity : IEqualityComparer<Entity>
         return x.Equals(y);
     }
 
-    public int GetHashCode([DisallowNull] Entity obj)
+    public void ClearDomainEvents()
     {
-        return obj.Id.GetHashCode(StringComparison.InvariantCultureIgnoreCase) * 41;
+        _domainEvents.Clear();
+    }
+
+    public void AddDomainEvent(IDomainEvent domainEvent)
+    {
+        _domainEvents.Add(domainEvent);
     }
 }

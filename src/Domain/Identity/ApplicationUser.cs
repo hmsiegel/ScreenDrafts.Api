@@ -5,8 +5,8 @@ public class ApplicationUser : IdentityUser
     public string? LastName { get; set; }
     public string? ImageUrl { get; set; }
     public bool IsActive { get; set; }
-    public Drafter? Drafter { get; set; }
-    public Host? Host { get; set; }
+    public DrafterId? DrafterId { get; set; }
+    public HostId? HostId { get; set; }
     public string? RefreshToken { get; set; }
     public DateTime RefreshTokenExpiryTime { get; set; }
     public string? ObjectId { get; set; }

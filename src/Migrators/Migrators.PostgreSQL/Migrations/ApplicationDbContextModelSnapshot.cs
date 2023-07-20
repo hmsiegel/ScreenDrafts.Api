@@ -17,29 +17,10 @@ namespace Migrators.PostgreSQL.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.8")
+                .HasAnnotation("ProductVersion", "7.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("DraftDrafter", b =>
-                {
-                    b.Property<string>("DraftersId")
-                        .HasColumnType("text")
-                        .HasColumnName("drafters_id");
-
-                    b.Property<string>("DraftsId")
-                        .HasColumnType("text")
-                        .HasColumnName("drafts_id");
-
-                    b.HasKey("DraftersId", "DraftsId")
-                        .HasName("pk_draft_drafter");
-
-                    b.HasIndex("DraftsId")
-                        .HasDatabaseName("ix_draft_drafter_drafts_id");
-
-                    b.ToTable("draft_drafter", (string)null);
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
@@ -52,22 +33,22 @@ namespace Migrators.PostgreSQL.Migrations
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("text")
-                        .HasColumnName("claim_type");
+                        .HasColumnName("claimType");
 
                     b.Property<string>("ClaimValue")
                         .HasColumnType("text")
-                        .HasColumnName("claim_value");
+                        .HasColumnName("claimValue");
 
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("user_id");
+                        .HasColumnName("userId");
 
                     b.HasKey("Id")
-                        .HasName("pk_user_claims");
+                        .HasName("pK_UserClaims");
 
                     b.HasIndex("UserId")
-                        .HasDatabaseName("ix_user_claims_user_id");
+                        .HasDatabaseName("iX_UserClaims_userId");
 
                     b.ToTable("UserClaims", (string)null);
                 });
@@ -76,26 +57,26 @@ namespace Migrators.PostgreSQL.Migrations
                 {
                     b.Property<string>("LoginProvider")
                         .HasColumnType("text")
-                        .HasColumnName("login_provider");
+                        .HasColumnName("loginProvider");
 
                     b.Property<string>("ProviderKey")
                         .HasColumnType("text")
-                        .HasColumnName("provider_key");
+                        .HasColumnName("providerKey");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("text")
-                        .HasColumnName("provider_display_name");
+                        .HasColumnName("providerDisplayName");
 
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("user_id");
+                        .HasColumnName("userId");
 
                     b.HasKey("LoginProvider", "ProviderKey")
-                        .HasName("pk_user_logins");
+                        .HasName("pK_UserLogins");
 
                     b.HasIndex("UserId")
-                        .HasDatabaseName("ix_user_logins_user_id");
+                        .HasDatabaseName("iX_UserLogins_userId");
 
                     b.ToTable("UserLogins", (string)null);
                 });
@@ -104,17 +85,17 @@ namespace Migrators.PostgreSQL.Migrations
                 {
                     b.Property<string>("UserId")
                         .HasColumnType("text")
-                        .HasColumnName("user_id");
+                        .HasColumnName("userId");
 
                     b.Property<string>("RoleId")
                         .HasColumnType("text")
-                        .HasColumnName("role_id");
+                        .HasColumnName("roleId");
 
                     b.HasKey("UserId", "RoleId")
-                        .HasName("pk_user_roles");
+                        .HasName("pK_UserRoles");
 
                     b.HasIndex("RoleId")
-                        .HasDatabaseName("ix_user_roles_role_id");
+                        .HasDatabaseName("iX_UserRoles_roleId");
 
                     b.ToTable("UserRoles", (string)null);
                 });
@@ -123,11 +104,11 @@ namespace Migrators.PostgreSQL.Migrations
                 {
                     b.Property<string>("UserId")
                         .HasColumnType("text")
-                        .HasColumnName("user_id");
+                        .HasColumnName("userId");
 
                     b.Property<string>("LoginProvider")
                         .HasColumnType("text")
-                        .HasColumnName("login_provider");
+                        .HasColumnName("loginProvider");
 
                     b.Property<string>("Name")
                         .HasColumnType("text")
@@ -138,244 +119,146 @@ namespace Migrators.PostgreSQL.Migrations
                         .HasColumnName("value");
 
                     b.HasKey("UserId", "LoginProvider", "Name")
-                        .HasName("pk_user_tokens");
+                        .HasName("pK_UserTokens");
 
                     b.ToTable("UserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("ScreenDrafts.Api.Domain.DraftAggregate.Draft", b =>
+            modelBuilder.Entity("ScreenDrafts.Api.Domain.CastMemberAggregate.CastMember", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text")
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
-
-                    b.Property<string>("CoHostId")
-                        .HasColumnType("text")
-                        .HasColumnName("co_host_id");
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uuid")
-                        .HasColumnName("created_by");
+                        .HasColumnName("createdBy");
 
                     b.Property<DateTime>("CreatedOnUtc")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_on_utc");
+                        .HasColumnName("createdOnUtc");
+
+                    b.Property<string>("ImdbId")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("imdbId");
+
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("modifiedBy");
+
+                    b.Property<DateTime?>("ModifiedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("modifiedOnUtc");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pK_CastMembers");
+
+                    b.ToTable("CastMembers", (string)null);
+                });
+
+            modelBuilder.Entity("ScreenDrafts.Api.Domain.CrewMemberAggregate.CrewMember", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("createdBy");
+
+                    b.Property<DateTime>("CreatedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("createdOnUtc");
+
+                    b.Property<string>("ImdbId")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("imdbId");
+
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("modifiedBy");
+
+                    b.Property<DateTime?>("ModifiedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("modifiedOnUtc");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pK_CrewMembers");
+
+                    b.ToTable("CrewMembers", (string)null);
+                });
+
+            modelBuilder.Entity("ScreenDrafts.Api.Domain.DraftAggregate.Draft", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("createdBy");
+
+                    b.Property<DateTime>("CreatedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("createdOnUtc");
 
                     b.Property<string>("DraftType")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("draft_type");
+                        .HasColumnName("draftType");
 
                     b.Property<string>("EpisodeNumber")
                         .HasColumnType("text")
-                        .HasColumnName("episode_number");
-
-                    b.Property<string>("MainHostId")
-                        .HasColumnType("text")
-                        .HasColumnName("main_host_id");
+                        .HasColumnName("episodeNumber");
 
                     b.Property<Guid?>("ModifiedBy")
                         .HasColumnType("uuid")
-                        .HasColumnName("modified_by");
+                        .HasColumnName("modifiedBy");
 
                     b.Property<DateTime?>("ModifiedOnUtc")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("modified_on_utc");
-
-                    b.Property<string>("MovieId")
-                        .HasColumnType("text")
-                        .HasColumnName("movie_id");
+                        .HasColumnName("modifiedOnUtc");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("name");
 
                     b.Property<int?>("NumberOfDrafters")
                         .HasColumnType("integer")
-                        .HasColumnName("number_of_drafters");
+                        .HasColumnName("numberOfDrafters");
+
+                    b.Property<int?>("NumberOfFilms")
+                        .HasColumnType("integer")
+                        .HasColumnName("numberOfFilms");
 
                     b.Property<DateTime?>("ReleaseDate")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("release_date");
+                        .HasColumnName("releaseDate");
 
                     b.Property<int?>("Runtime")
                         .HasColumnType("integer")
                         .HasColumnName("runtime");
 
                     b.HasKey("Id")
-                        .HasName("pk_drafts");
-
-                    b.HasIndex("MovieId")
-                        .HasDatabaseName("ix_drafts_movie_id");
+                        .HasName("pK_Drafts");
 
                     b.ToTable("Drafts", (string)null);
-                });
-
-            modelBuilder.Entity("ScreenDrafts.Api.Domain.DraftAggregate.Entities.SelectedMovie", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text")
-                        .HasColumnName("id");
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid")
-                        .HasColumnName("created_by");
-
-                    b.Property<DateTime>("CreatedOnUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_on_utc");
-
-                    b.Property<string>("DraftId")
-                        .HasColumnType("text")
-                        .HasColumnName("draft_id");
-
-                    b.Property<int>("DraftPosition")
-                        .HasColumnType("integer")
-                        .HasColumnName("draft_position");
-
-                    b.Property<string>("DrafterId")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("drafter_id");
-
-                    b.Property<string>("DrafterWhoPlayedVetoId")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("drafter_who_played_veto_id");
-
-                    b.Property<string>("DrafterWhoPlayedVetoOverrideId")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("drafter_who_played_veto_override_id");
-
-                    b.Property<bool>("IsVetoed")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_vetoed");
-
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uuid")
-                        .HasColumnName("modified_by");
-
-                    b.Property<DateTime?>("ModifiedOnUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("modified_on_utc");
-
-                    b.Property<string>("MovieId")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("movie_id");
-
-                    b.Property<bool>("WasCommissonerOverride")
-                        .HasColumnType("boolean")
-                        .HasColumnName("was_commissoner_override");
-
-                    b.Property<bool>("WasVetoOverride")
-                        .HasColumnType("boolean")
-                        .HasColumnName("was_veto_override");
-
-                    b.HasKey("Id")
-                        .HasName("pk_selected_movies");
-
-                    b.HasIndex("DraftId")
-                        .HasDatabaseName("ix_selected_movies_draft_id");
-
-                    b.HasIndex("DrafterId")
-                        .HasDatabaseName("ix_selected_movies_drafter_id");
-
-                    b.HasIndex("DrafterWhoPlayedVetoId")
-                        .HasDatabaseName("ix_selected_movies_drafter_who_played_veto_id");
-
-                    b.HasIndex("DrafterWhoPlayedVetoOverrideId")
-                        .HasDatabaseName("ix_selected_movies_drafter_who_played_veto_override_id");
-
-                    b.HasIndex("MovieId")
-                        .HasDatabaseName("ix_selected_movies_movie_id");
-
-                    b.ToTable("selected_movies", (string)null);
-                });
-
-            modelBuilder.Entity("ScreenDrafts.Api.Domain.DrafterEntity.Drafter", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text")
-                        .HasColumnName("id");
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid")
-                        .HasColumnName("created_by");
-
-                    b.Property<DateTime>("CreatedOnUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_on_utc");
-
-                    b.Property<bool?>("HasRolloverVeto")
-                        .HasColumnType("boolean")
-                        .HasColumnName("has_rollover_veto");
-
-                    b.Property<bool?>("HasRolloverVetooverride")
-                        .HasColumnType("boolean")
-                        .HasColumnName("has_rollover_vetooverride");
-
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uuid")
-                        .HasColumnName("modified_by");
-
-                    b.Property<DateTime?>("ModifiedOnUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("modified_on_utc");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("text")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_drafters");
-
-                    b.ToTable("Drafters", (string)null);
-                });
-
-            modelBuilder.Entity("ScreenDrafts.Api.Domain.HostEntitty.Host", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text")
-                        .HasColumnName("id");
-
-                    b.Property<Guid>("CreatedBy")
-                        .HasColumnType("uuid")
-                        .HasColumnName("created_by");
-
-                    b.Property<DateTime>("CreatedOnUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_on_utc");
-
-                    b.Property<string>("DraftId")
-                        .HasColumnType("text")
-                        .HasColumnName("draft_id");
-
-                    b.Property<Guid?>("ModifiedBy")
-                        .HasColumnType("uuid")
-                        .HasColumnName("modified_by");
-
-                    b.Property<DateTime?>("ModifiedOnUtc")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("modified_on_utc");
-
-                    b.Property<int?>("PredictionPoints")
-                        .HasColumnType("integer")
-                        .HasColumnName("prediction_points");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("text")
-                        .HasColumnName("user_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_hosts");
-
-                    b.HasIndex("DraftId")
-                        .HasDatabaseName("ix_hosts_draft_id");
-
-                    b.ToTable("Hosts", (string)null);
                 });
 
             modelBuilder.Entity("ScreenDrafts.Api.Domain.Identity.ApplicationRole", b =>
@@ -387,7 +270,7 @@ namespace Migrators.PostgreSQL.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("text")
-                        .HasColumnName("concurrency_stamp");
+                        .HasColumnName("concurrencyStamp");
 
                     b.Property<string>("Description")
                         .HasColumnType("text")
@@ -401,10 +284,10 @@ namespace Migrators.PostgreSQL.Migrations
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
-                        .HasColumnName("normalized_name");
+                        .HasColumnName("normalizedName");
 
                     b.HasKey("Id")
-                        .HasName("pk_roles");
+                        .HasName("pK_Roles");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
@@ -424,30 +307,30 @@ namespace Migrators.PostgreSQL.Migrations
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("text")
-                        .HasColumnName("claim_type");
+                        .HasColumnName("claimType");
 
                     b.Property<string>("ClaimValue")
                         .HasColumnType("text")
-                        .HasColumnName("claim_value");
+                        .HasColumnName("claimValue");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("text")
-                        .HasColumnName("created_by");
+                        .HasColumnName("createdBy");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_date");
+                        .HasColumnName("createdDate");
 
                     b.Property<string>("RoleId")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("role_id");
+                        .HasColumnName("roleId");
 
                     b.HasKey("Id")
-                        .HasName("pk_role_claims");
+                        .HasName("pK_RoleClaims");
 
                     b.HasIndex("RoleId")
-                        .HasDatabaseName("ix_role_claims_role_id");
+                        .HasDatabaseName("iX_RoleClaims_roleId");
 
                     b.ToTable("RoleClaims", (string)null);
                 });
@@ -460,12 +343,16 @@ namespace Migrators.PostgreSQL.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer")
-                        .HasColumnName("access_failed_count");
+                        .HasColumnName("accessFailedCount");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("text")
-                        .HasColumnName("concurrency_stamp");
+                        .HasColumnName("concurrencyStamp");
+
+                    b.Property<Guid?>("DrafterId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("drafterId");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -474,82 +361,86 @@ namespace Migrators.PostgreSQL.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean")
-                        .HasColumnName("email_confirmed");
+                        .HasColumnName("emailConfirmed");
 
                     b.Property<string>("FirstName")
                         .HasColumnType("text")
-                        .HasColumnName("first_name");
+                        .HasColumnName("firstName");
+
+                    b.Property<Guid?>("HostId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("hostId");
 
                     b.Property<string>("ImageUrl")
                         .HasColumnType("text")
-                        .HasColumnName("image_url");
+                        .HasColumnName("imageUrl");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean")
-                        .HasColumnName("is_active");
+                        .HasColumnName("isActive");
 
                     b.Property<string>("LastName")
                         .HasColumnType("text")
-                        .HasColumnName("last_name");
+                        .HasColumnName("lastName");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean")
-                        .HasColumnName("lockout_enabled");
+                        .HasColumnName("lockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("lockout_end");
+                        .HasColumnName("lockoutEnd");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
-                        .HasColumnName("normalized_email");
+                        .HasColumnName("normalizedEmail");
 
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
-                        .HasColumnName("normalized_user_name");
+                        .HasColumnName("normalizedUserName");
 
                     b.Property<string>("ObjectId")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
-                        .HasColumnName("object_id");
+                        .HasColumnName("objectId");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("text")
-                        .HasColumnName("password_hash");
+                        .HasColumnName("passwordHash");
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("text")
-                        .HasColumnName("phone_number");
+                        .HasColumnName("phoneNumber");
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean")
-                        .HasColumnName("phone_number_confirmed");
+                        .HasColumnName("phoneNumberConfirmed");
 
                     b.Property<string>("RefreshToken")
                         .HasColumnType("text")
-                        .HasColumnName("refresh_token");
+                        .HasColumnName("refreshToken");
 
                     b.Property<DateTime>("RefreshTokenExpiryTime")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("refresh_token_expiry_time");
+                        .HasColumnName("refreshTokenExpiryTime");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text")
-                        .HasColumnName("security_stamp");
+                        .HasColumnName("securityStamp");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("boolean")
-                        .HasColumnName("two_factor_enabled");
+                        .HasColumnName("twoFactorEnabled");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
-                        .HasColumnName("user_name");
+                        .HasColumnName("userName");
 
                     b.HasKey("Id")
-                        .HasName("pk_users");
+                        .HasName("pK_Users");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -561,46 +452,128 @@ namespace Migrators.PostgreSQL.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
-            modelBuilder.Entity("ScreenDrafts.Api.Domain.MovieAggregate.Movie", b =>
+            modelBuilder.Entity("ScreenDrafts.Api.Domain.Identity.Entities.Drafter", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text")
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
 
                     b.Property<Guid>("CreatedBy")
                         .HasColumnType("uuid")
-                        .HasColumnName("created_by");
+                        .HasColumnName("createdBy");
 
                     b.Property<DateTime>("CreatedOnUtc")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_on_utc");
+                        .HasColumnName("createdOnUtc");
 
-                    b.Property<string>("Director")
-                        .HasColumnType("text")
-                        .HasColumnName("director");
-
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("text")
-                        .HasColumnName("image_url");
-
-                    b.Property<string>("ImdbUrl")
-                        .HasColumnType("text")
-                        .HasColumnName("imdb_url");
-
-                    b.Property<bool?>("IsInMarqueeOfFame")
+                    b.Property<bool?>("HasRolloverVeto")
                         .HasColumnType("boolean")
-                        .HasColumnName("is_in_marquee_of_fame");
+                        .HasColumnName("hasRolloverVeto");
+
+                    b.Property<bool?>("HasRolloverVetooverride")
+                        .HasColumnType("boolean")
+                        .HasColumnName("hasRolloverVetooverride");
 
                     b.Property<Guid?>("ModifiedBy")
                         .HasColumnType("uuid")
-                        .HasColumnName("modified_by");
+                        .HasColumnName("modifiedBy");
 
                     b.Property<DateTime?>("ModifiedOnUtc")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("modified_on_utc");
+                        .HasColumnName("modifiedOnUtc");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text")
+                        .HasColumnName("userId");
+
+                    b.HasKey("Id")
+                        .HasName("pK_Drafters");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("iX_Drafters_userId");
+
+                    b.ToTable("Drafters", (string)null);
+                });
+
+            modelBuilder.Entity("ScreenDrafts.Api.Domain.Identity.Entities.Host", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("createdBy");
+
+                    b.Property<DateTime>("CreatedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("createdOnUtc");
+
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("modifiedBy");
+
+                    b.Property<DateTime?>("ModifiedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("modifiedOnUtc");
+
+                    b.Property<int?>("PredictionPoints")
+                        .HasColumnType("integer")
+                        .HasColumnName("predictionPoints");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text")
+                        .HasColumnName("userId");
+
+                    b.HasKey("Id")
+                        .HasName("pK_Hosts");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("iX_Hosts_userId");
+
+                    b.ToTable("Hosts", (string)null);
+                });
+
+            modelBuilder.Entity("ScreenDrafts.Api.Domain.MovieAggregate.Movie", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<Guid>("CreatedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("createdBy");
+
+                    b.Property<DateTime>("CreatedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("createdOnUtc");
+
+                    b.Property<string>("ImageUrl")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("imageUrl");
+
+                    b.Property<string>("ImdbUrl")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("imdbUrl");
+
+                    b.Property<bool?>("IsInMarqueeOfFame")
+                        .HasColumnType("boolean")
+                        .HasColumnName("isInMarqueeOfFame");
+
+                    b.Property<Guid?>("ModifiedBy")
+                        .HasColumnType("uuid")
+                        .HasColumnName("modifiedBy");
+
+                    b.Property<DateTime?>("ModifiedOnUtc")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("modifiedOnUtc");
 
                     b.Property<string>("Title")
-                        .HasColumnType("text")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)")
                         .HasColumnName("title");
 
                     b.Property<string>("Year")
@@ -608,7 +581,7 @@ namespace Migrators.PostgreSQL.Migrations
                         .HasColumnName("year");
 
                     b.HasKey("Id")
-                        .HasName("pk_movies");
+                        .HasName("pK_Movies");
 
                     b.ToTable("Movies", (string)null);
                 });
@@ -622,27 +595,27 @@ namespace Migrators.PostgreSQL.Migrations
 
                     b.Property<string>("AffectedColumns")
                         .HasColumnType("text")
-                        .HasColumnName("affected_columns");
+                        .HasColumnName("affectedColumns");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at");
+                        .HasColumnName("createdAt");
 
                     b.Property<string>("NewValues")
                         .HasColumnType("text")
-                        .HasColumnName("new_values");
+                        .HasColumnName("newValues");
 
                     b.Property<string>("OldValues")
                         .HasColumnType("text")
-                        .HasColumnName("old_values");
+                        .HasColumnName("oldValues");
 
                     b.Property<string>("PrimaryKey")
                         .HasColumnType("text")
-                        .HasColumnName("primary_key");
+                        .HasColumnName("primaryKey");
 
                     b.Property<string>("TableName")
                         .HasColumnType("text")
-                        .HasColumnName("table_name");
+                        .HasColumnName("tableName");
 
                     b.Property<string>("Type")
                         .HasColumnType("text")
@@ -650,29 +623,12 @@ namespace Migrators.PostgreSQL.Migrations
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid")
-                        .HasColumnName("user_id");
+                        .HasColumnName("userId");
 
                     b.HasKey("Id")
-                        .HasName("pk_audit_trails");
+                        .HasName("pK_auditTrails");
 
-                    b.ToTable("audit_trails", (string)null);
-                });
-
-            modelBuilder.Entity("DraftDrafter", b =>
-                {
-                    b.HasOne("ScreenDrafts.Api.Domain.DrafterEntity.Drafter", null)
-                        .WithMany()
-                        .HasForeignKey("DraftersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_draft_drafter_drafters_drafters_id");
-
-                    b.HasOne("ScreenDrafts.Api.Domain.DraftAggregate.Draft", null)
-                        .WithMany()
-                        .HasForeignKey("DraftsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_draft_drafter_drafts_drafts_id");
+                    b.ToTable("auditTrails", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -682,7 +638,7 @@ namespace Migrators.PostgreSQL.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_user_claims_users_user_id");
+                        .HasConstraintName("fK_UserClaims_Users_userId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -692,7 +648,7 @@ namespace Migrators.PostgreSQL.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_user_logins_users_user_id");
+                        .HasConstraintName("fK_UserLogins_Users_userId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -702,14 +658,14 @@ namespace Migrators.PostgreSQL.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_user_roles_roles_role_id");
+                        .HasConstraintName("fK_UserRoles_Roles_roleId");
 
                     b.HasOne("ScreenDrafts.Api.Domain.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_user_roles_users_user_id");
+                        .HasConstraintName("fK_UserRoles_Users_userId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -719,86 +675,161 @@ namespace Migrators.PostgreSQL.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_user_tokens_users_user_id");
+                        .HasConstraintName("fK_UserTokens_Users_userId");
                 });
 
             modelBuilder.Entity("ScreenDrafts.Api.Domain.DraftAggregate.Draft", b =>
                 {
-                    b.HasOne("ScreenDrafts.Api.Domain.MovieAggregate.Movie", null)
-                        .WithMany("DraftsSelectedIn")
-                        .HasForeignKey("MovieId")
-                        .HasConstraintName("fk_drafts_movies_movie_id");
-                });
+                    b.OwnsMany("ScreenDrafts.Api.Domain.DraftAggregate.Entities.SelectedMovie", "SelectedMovies", b1 =>
+                        {
+                            b1.Property<Guid>("Id")
+                                .HasColumnType("uuid")
+                                .HasColumnName("SelectedMovieId");
 
-            modelBuilder.Entity("ScreenDrafts.Api.Domain.DraftAggregate.Entities.SelectedMovie", b =>
-                {
-                    b.HasOne("ScreenDrafts.Api.Domain.DraftAggregate.Draft", null)
-                        .WithMany("SelectedMovies")
-                        .HasForeignKey("DraftId")
-                        .HasConstraintName("fk_selected_movies_drafts_draft_id");
+                            b1.Property<Guid>("DraftId")
+                                .HasColumnType("uuid")
+                                .HasColumnName("draftId");
 
-                    b.HasOne("ScreenDrafts.Api.Domain.DrafterEntity.Drafter", "Drafter")
-                        .WithMany()
-                        .HasForeignKey("DrafterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_selected_movies_drafters_drafter_id");
+                            b1.Property<Guid>("CreatedBy")
+                                .HasColumnType("uuid")
+                                .HasColumnName("createdBy");
 
-                    b.HasOne("ScreenDrafts.Api.Domain.DrafterEntity.Drafter", "DrafterWhoPlayedVeto")
-                        .WithMany()
-                        .HasForeignKey("DrafterWhoPlayedVetoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_selected_movies_drafters_drafter_who_played_veto_id");
+                            b1.Property<DateTime>("CreatedOnUtc")
+                                .HasColumnType("timestamp with time zone")
+                                .HasColumnName("createdOnUtc");
 
-                    b.HasOne("ScreenDrafts.Api.Domain.DrafterEntity.Drafter", "DrafterWhoPlayedVetoOverride")
-                        .WithMany()
-                        .HasForeignKey("DrafterWhoPlayedVetoOverrideId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_selected_movies_drafters_drafter_who_played_veto_override_id");
+                            b1.Property<int>("DraftPosition")
+                                .HasColumnType("integer")
+                                .HasColumnName("draftPosition");
 
-                    b.HasOne("ScreenDrafts.Api.Domain.MovieAggregate.Movie", "Movie")
-                        .WithMany()
-                        .HasForeignKey("MovieId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_selected_movies_movies_movie_id");
+                            b1.Property<Guid?>("ModifiedBy")
+                                .HasColumnType("uuid")
+                                .HasColumnName("modifiedBy");
 
-                    b.Navigation("Drafter");
+                            b1.Property<DateTime?>("ModifiedOnUtc")
+                                .HasColumnType("timestamp with time zone")
+                                .HasColumnName("modifiedOnUtc");
 
-                    b.Navigation("DrafterWhoPlayedVeto");
+                            b1.Property<Guid>("MovieId")
+                                .HasColumnType("uuid")
+                                .HasColumnName("MovieId");
 
-                    b.Navigation("DrafterWhoPlayedVetoOverride");
+                            b1.HasKey("Id", "DraftId")
+                                .HasName("pK_SelectedMovies");
 
-                    b.Navigation("Movie");
-                });
+                            b1.HasIndex("DraftId")
+                                .HasDatabaseName("iX_SelectedMovies_draftId");
 
-            modelBuilder.Entity("ScreenDrafts.Api.Domain.DrafterEntity.Drafter", b =>
-                {
-                    b.HasOne("ScreenDrafts.Api.Domain.Identity.ApplicationUser", "User")
-                        .WithOne("Drafter")
-                        .HasForeignKey("ScreenDrafts.Api.Domain.DrafterEntity.Drafter", "Id")
-                        .HasConstraintName("fk_drafters_asp_net_users_user_id");
+                            b1.ToTable("SelectedMovies", (string)null);
 
-                    b.Navigation("User");
-                });
+                            b1.WithOwner()
+                                .HasForeignKey("DraftId")
+                                .HasConstraintName("fK_SelectedMovies_Drafts_draftId");
 
-            modelBuilder.Entity("ScreenDrafts.Api.Domain.HostEntitty.Host", b =>
-                {
-                    b.HasOne("ScreenDrafts.Api.Domain.DraftAggregate.Draft", "Draft")
-                        .WithMany("Hosts")
-                        .HasForeignKey("DraftId")
-                        .HasConstraintName("fk_hosts_drafts_draft_id");
+                            b1.OwnsMany("ScreenDrafts.Api.Domain.DraftAggregate.Entities.PickDecision", "PickDecisions", b2 =>
+                                {
+                                    b2.Property<Guid>("Id")
+                                        .HasColumnType("uuid")
+                                        .HasColumnName("PickDecisionId");
 
-                    b.HasOne("ScreenDrafts.Api.Domain.Identity.ApplicationUser", "User")
-                        .WithOne("Host")
-                        .HasForeignKey("ScreenDrafts.Api.Domain.HostEntitty.Host", "Id")
-                        .HasConstraintName("fk_hosts_asp_net_users_user_id");
+                                    b2.Property<Guid>("DraftId")
+                                        .HasColumnType("uuid")
+                                        .HasColumnName("draftId");
 
-                    b.Navigation("Draft");
+                                    b2.Property<Guid>("SelectedMovieId")
+                                        .HasColumnType("uuid")
+                                        .HasColumnName("selectedMovieId");
 
-                    b.Navigation("User");
+                                    b2.Property<string>("Decision")
+                                        .IsRequired()
+                                        .HasColumnType("text")
+                                        .HasColumnName("decision");
+
+                                    b2.Property<Guid>("UserId")
+                                        .HasColumnType("uuid")
+                                        .HasColumnName("UserId");
+
+                                    b2.HasKey("Id", "DraftId", "SelectedMovieId")
+                                        .HasName("pK_PickDecisions");
+
+                                    b2.HasIndex("SelectedMovieId", "DraftId")
+                                        .HasDatabaseName("iX_PickDecisions_selectedMovieId_draftId");
+
+                                    b2.ToTable("PickDecisions", (string)null);
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("SelectedMovieId", "DraftId")
+                                        .HasConstraintName("fK_PickDecisions_SelectedMovies_selectedMovieId_DraftId");
+                                });
+
+                            b1.Navigation("PickDecisions");
+                        });
+
+                    b.OwnsMany("ScreenDrafts.Api.Domain.Identity.ValueObjects.DrafterId", "DrafterIds", b1 =>
+                        {
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("integer")
+                                .HasColumnName("id");
+
+                            NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
+
+                            b1.Property<Guid>("DraftId")
+                                .HasColumnType("uuid")
+                                .HasColumnName("draftId");
+
+                            b1.Property<Guid>("Value")
+                                .HasColumnType("uuid")
+                                .HasColumnName("DrafterId");
+
+                            b1.HasKey("Id")
+                                .HasName("pK_DraftDrafterIds");
+
+                            b1.HasIndex("DraftId")
+                                .HasDatabaseName("iX_DraftDrafterIds_draftId");
+
+                            b1.ToTable("DraftDrafterIds", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("DraftId")
+                                .HasConstraintName("fK_DraftDrafterIds_Drafts_draftId");
+                        });
+
+                    b.OwnsMany("ScreenDrafts.Api.Domain.Identity.ValueObjects.HostId", "HostIds", b1 =>
+                        {
+                            b1.Property<int>("Id")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("integer")
+                                .HasColumnName("id");
+
+                            NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b1.Property<int>("Id"));
+
+                            b1.Property<Guid>("DraftId")
+                                .HasColumnType("uuid")
+                                .HasColumnName("draftId");
+
+                            b1.Property<Guid>("Value")
+                                .HasColumnType("uuid")
+                                .HasColumnName("HostId");
+
+                            b1.HasKey("Id")
+                                .HasName("pK_DraftHostIds");
+
+                            b1.HasIndex("DraftId")
+                                .HasDatabaseName("iX_DraftHostIds_draftId");
+
+                            b1.ToTable("DraftHostIds", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("DraftId")
+                                .HasConstraintName("fK_DraftHostIds_Drafts_draftId");
+                        });
+
+                    b.Navigation("DrafterIds");
+
+                    b.Navigation("HostIds");
+
+                    b.Navigation("SelectedMovies");
                 });
 
             modelBuilder.Entity("ScreenDrafts.Api.Domain.Identity.ApplicationRoleClaim", b =>
@@ -808,26 +839,162 @@ namespace Migrators.PostgreSQL.Migrations
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_role_claims_asp_net_roles_role_id");
+                        .HasConstraintName("fK_RoleClaims_AspNetRoles_roleId");
                 });
 
-            modelBuilder.Entity("ScreenDrafts.Api.Domain.DraftAggregate.Draft", b =>
+            modelBuilder.Entity("ScreenDrafts.Api.Domain.Identity.Entities.Drafter", b =>
                 {
-                    b.Navigation("Hosts");
+                    b.HasOne("ScreenDrafts.Api.Domain.Identity.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .HasConstraintName("fK_Drafters_AspNetUsers_userId");
 
-                    b.Navigation("SelectedMovies");
+                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ScreenDrafts.Api.Domain.Identity.ApplicationUser", b =>
+            modelBuilder.Entity("ScreenDrafts.Api.Domain.Identity.Entities.Host", b =>
                 {
-                    b.Navigation("Drafter");
+                    b.HasOne("ScreenDrafts.Api.Domain.Identity.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .HasConstraintName("fK_Hosts_AspNetUsers_userId");
 
-                    b.Navigation("Host");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ScreenDrafts.Api.Domain.MovieAggregate.Movie", b =>
                 {
-                    b.Navigation("DraftsSelectedIn");
+                    b.OwnsMany("ScreenDrafts.Api.Domain.MovieAggregate.Entities.MovieCastMember", "Cast", b1 =>
+                        {
+                            b1.Property<Guid>("Id")
+                                .HasColumnType("uuid")
+                                .HasColumnName("MovieCastId");
+
+                            b1.Property<Guid>("MovieId")
+                                .HasColumnType("uuid")
+                                .HasColumnName("movieId");
+
+                            b1.Property<Guid>("CastMemberId")
+                                .HasColumnType("uuid")
+                                .HasColumnName("castMemberId");
+
+                            b1.Property<string>("RoleDescription")
+                                .HasColumnType("text")
+                                .HasColumnName("roleDescription");
+
+                            b1.HasKey("Id", "MovieId")
+                                .HasName("pK_MovieCast");
+
+                            b1.HasIndex("MovieId")
+                                .HasDatabaseName("iX_MovieCast_movieId");
+
+                            b1.ToTable("MovieCast", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("MovieId")
+                                .HasConstraintName("fK_MovieCast_Movies_movieId");
+                        });
+
+                    b.OwnsMany("ScreenDrafts.Api.Domain.MovieAggregate.Entities.MovieCrewMember", "Directors", b1 =>
+                        {
+                            b1.Property<Guid>("Id")
+                                .HasColumnType("uuid")
+                                .HasColumnName("DirectorId");
+
+                            b1.Property<Guid>("MovieId")
+                                .HasColumnType("uuid")
+                                .HasColumnName("movieId");
+
+                            b1.Property<Guid>("CrewMemberId")
+                                .HasColumnType("uuid")
+                                .HasColumnName("crewMemberId");
+
+                            b1.Property<string>("JobDescription")
+                                .HasColumnType("text")
+                                .HasColumnName("jobDescription");
+
+                            b1.HasKey("Id", "MovieId")
+                                .HasName("pK_MovieDirectors");
+
+                            b1.HasIndex("MovieId")
+                                .HasDatabaseName("iX_MovieDirectors_movieId");
+
+                            b1.ToTable("MovieDirectors", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("MovieId")
+                                .HasConstraintName("fK_MovieDirectors_Movies_movieId");
+                        });
+
+                    b.OwnsMany("ScreenDrafts.Api.Domain.MovieAggregate.Entities.MovieCrewMember", "Producers", b1 =>
+                        {
+                            b1.Property<Guid>("Id")
+                                .HasColumnType("uuid")
+                                .HasColumnName("ProducerId");
+
+                            b1.Property<Guid>("MovieId")
+                                .HasColumnType("uuid")
+                                .HasColumnName("movieId");
+
+                            b1.Property<Guid>("CrewMemberId")
+                                .HasColumnType("uuid")
+                                .HasColumnName("crewMemberId");
+
+                            b1.Property<string>("JobDescription")
+                                .HasColumnType("text")
+                                .HasColumnName("jobDescription");
+
+                            b1.HasKey("Id", "MovieId")
+                                .HasName("pK_MovieProducers");
+
+                            b1.HasIndex("MovieId")
+                                .HasDatabaseName("iX_MovieProducers_movieId");
+
+                            b1.ToTable("MovieProducers", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("MovieId")
+                                .HasConstraintName("fK_MovieProducers_Movies_movieId");
+                        });
+
+                    b.OwnsMany("ScreenDrafts.Api.Domain.MovieAggregate.Entities.MovieCrewMember", "Writers", b1 =>
+                        {
+                            b1.Property<Guid>("Id")
+                                .HasColumnType("uuid")
+                                .HasColumnName("WriterId");
+
+                            b1.Property<Guid>("MovieId")
+                                .HasColumnType("uuid")
+                                .HasColumnName("movieId");
+
+                            b1.Property<Guid>("CrewMemberId")
+                                .HasColumnType("uuid")
+                                .HasColumnName("crewMemberId");
+
+                            b1.Property<string>("JobDescription")
+                                .HasColumnType("text")
+                                .HasColumnName("jobDescription");
+
+                            b1.HasKey("Id", "MovieId")
+                                .HasName("pK_MovieWriters");
+
+                            b1.HasIndex("MovieId")
+                                .HasDatabaseName("iX_MovieWriters_movieId");
+
+                            b1.ToTable("MovieWriters", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("MovieId")
+                                .HasConstraintName("fK_MovieWriters_Movies_movieId");
+                        });
+
+                    b.Navigation("Cast");
+
+                    b.Navigation("Directors");
+
+                    b.Navigation("Producers");
+
+                    b.Navigation("Writers");
                 });
 #pragma warning restore 612, 618
         }

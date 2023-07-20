@@ -1,10 +1,8 @@
-﻿namespace ScreenDrafts.Api.Domain.DrafterEntity;
-public sealed class Drafter : Entity, IAuditableEntity
+﻿namespace ScreenDrafts.Api.Domain.Identity.Entities;
+public sealed class Drafter : Entity<DrafterId>, IAuditableEntity
 {
-    private readonly List<Draft> _drafts = new();
-
     private Drafter(
-        string id,
+        DrafterId id,
         ApplicationUser user,
         string userId,
         bool hasRolloverVeto = false,
@@ -25,7 +23,6 @@ public sealed class Drafter : Entity, IAuditableEntity
     public string? UserId { get; set; }
     public bool? HasRolloverVeto { get; private set; }
     public bool? HasRolloverVetooverride { get; private set; }
-    public IReadOnlyList<Draft>? Drafts => _drafts.AsReadOnly();
 
     public DateTime CreatedOnUtc { get; set; }
     public DateTime? ModifiedOnUtc { get; set; }
@@ -34,7 +31,10 @@ public sealed class Drafter : Entity, IAuditableEntity
 
     public static Drafter Create(ApplicationUser user, string userId)
     {
-        return new Drafter(NewId.NextGuid().ToString(),user, userId);
+        return new Drafter(
+            DrafterId.CreateUnique(),
+            user,
+            userId);
     }
 
     public void AddRolloverVeto() => HasRolloverVeto = true;

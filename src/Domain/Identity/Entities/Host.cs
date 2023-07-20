@@ -1,8 +1,8 @@
-﻿namespace ScreenDrafts.Api.Domain.HostEntitty;
-public sealed class Host : Entity, IAuditableEntity
+﻿namespace ScreenDrafts.Api.Domain.Identity.Entities;
+public sealed class Host : Entity<HostId>, IAuditableEntity
 {
     private Host(
-        string id,
+        HostId id,
         ApplicationUser user,
         string userId)
         : base(id)
@@ -18,8 +18,6 @@ public sealed class Host : Entity, IAuditableEntity
     public ApplicationUser? User { get; set; }
     public string? UserId { get; set; }
     public int? PredictionPoints { get; private set; }
-    public string? DraftId { get; private set; }
-    public Draft? Draft { get; private set; }
 
     public DateTime CreatedOnUtc { get; set; }
     public DateTime? ModifiedOnUtc { get; set; }
@@ -28,7 +26,10 @@ public sealed class Host : Entity, IAuditableEntity
 
     public static Host Create(ApplicationUser user, string userId)
     {
-        return new Host(NewId.NextGuid().ToString(), user, userId);
+        return new Host(
+            HostId.CreateUnique(),
+            user,
+            userId);
     }
 
     public void AddPredictionPoints(int predictionPoints) => PredictionPoints += predictionPoints;

@@ -24,7 +24,7 @@ internal sealed class DrafterRepository : IDrafterRepository
     {
         return await _context.Drafters
             .Include(d => d.User)
-            .SingleOrDefaultAsync(d => d.Id == id, cancellationToken: cancellationToken);
+            .SingleOrDefaultAsync(d => d.Id!.ToString()! == id, cancellationToken: cancellationToken);
     }
 
     public async Task<Drafter> GetByUserIdAsync(string userId, CancellationToken cancellationToken = default)

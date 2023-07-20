@@ -52,20 +52,20 @@ public static class Startup
         {
             DbProviderKeys.Npgsql => builder.UseNpgsql(connectionString, e =>
                      e.MigrationsAssembly("Migrators.PostgreSQL"))
-                    .UseSnakeCaseNamingConvention(),
+                    .UseCamelCaseNamingConvention(),
             DbProviderKeys.SqlServer => builder.UseSqlServer(connectionString, e =>
                      e.MigrationsAssembly("Migrators.MSSQL"))
-                    .UseSnakeCaseNamingConvention(),
+                    .UseCamelCaseNamingConvention(),
             DbProviderKeys.MySql => builder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString), e =>
                      e.MigrationsAssembly("Migrators.MySQL")
                       .SchemaBehavior(MySqlSchemaBehavior.Ignore))
-                    .UseSnakeCaseNamingConvention(),
+                    .UseCamelCaseNamingConvention(),
             DbProviderKeys.Oracle => builder.UseOracle(connectionString, e =>
                      e.MigrationsAssembly("Migrators.Oracle"))
-                    .UseSnakeCaseNamingConvention(),
+                    .UseCamelCaseNamingConvention(),
             DbProviderKeys.SqLite => builder.UseSqlite(connectionString, e =>
                      e.MigrationsAssembly("Migrators.SqLite"))
-                    .UseSnakeCaseNamingConvention(),
+                    .UseCamelCaseNamingConvention(),
             _ => throw new InvalidOperationException($"Database Provider {dbProvider} is not supported."),
         };
     }

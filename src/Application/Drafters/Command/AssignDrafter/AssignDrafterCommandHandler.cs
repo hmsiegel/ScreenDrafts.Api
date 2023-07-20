@@ -24,6 +24,6 @@ public class AssignDrafterCommandHandler : ICommandHandler<AssignDrafterCommand,
         var drafter = Drafter.Create(user, user.Id);
 
         _drafterRepository.Add(drafter);
-        return Result.Success(drafter.Id);
+        return Result.Success(drafter.Id!.ToString()!);
     }
 }
