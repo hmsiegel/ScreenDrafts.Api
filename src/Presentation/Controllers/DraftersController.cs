@@ -1,4 +1,7 @@
-﻿namespace ScreenDrafts.Api.Presentation.Controllers;
+﻿using ScreenDrafts.Api.Application.Drafters.Command.UpdateDrafter;
+using ScreenDrafts.Api.Contracts.Drafters;
+
+namespace ScreenDrafts.Api.Presentation.Controllers;
 public sealed class DraftersController : VersionedApiController
 {
     [HttpPost]
@@ -33,6 +36,25 @@ public sealed class DraftersController : VersionedApiController
     {
         var query = new GetAllQuery();
         var result = await Sender.Send(query, cancellationToken);
+        return Ok(result);
+    }
+
+    [HttpPatch("{id}")]
+    [HasPermission(ScreenDraftsAction.Update, ScreenDraftsResource.Drafters)]
+    [OpenApiOperation("Update a drafter", "Update a drafters' rollover veto and rollover veto override")]
+    public async Task<IActionResult> UpdateDrafter(
+        [FromRoute] Guid id,
+        [FromBody] UpdateDrafterRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        var command = new UpdateDrafterCommand(id, request.HasRolloverVeto, request.HasRolloverVetoOverride);
+        var result = await Sender.Send(command, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return HandleFailure(result);
+        }
+
         return Ok(result);
     }
 }

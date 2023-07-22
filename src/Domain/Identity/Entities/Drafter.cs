@@ -3,13 +3,11 @@ public sealed class Drafter : Entity<DrafterId>, IAuditableEntity
 {
     private Drafter(
         DrafterId id,
-        ApplicationUser user,
         string userId,
         bool hasRolloverVeto = false,
         bool hasRolloverVetooverride = false)
         : base(id)
     {
-        User = user;
         UserId = userId;
         HasRolloverVeto = hasRolloverVeto;
         HasRolloverVetooverride = hasRolloverVetooverride;
@@ -29,12 +27,13 @@ public sealed class Drafter : Entity<DrafterId>, IAuditableEntity
     public DefaultIdType CreatedBy { get; set; }
     public DefaultIdType? ModifiedBy { get; set; }
 
-    public static Drafter Create(ApplicationUser user, string userId)
+    public static Drafter Create(string userId)
     {
         return new Drafter(
             DrafterId.CreateUnique(),
-            user,
-            userId);
+            userId,
+            false,
+            false);
     }
 
     public void AddRolloverVeto() => HasRolloverVeto = true;

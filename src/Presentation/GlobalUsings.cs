@@ -27,6 +27,8 @@ global using ScreenDrafts.Api.Contracts.Authentication.Password;
 global using ScreenDrafts.Api.Contracts.Authentication.Roles;
 global using ScreenDrafts.Api.Contracts.Authentication.Tokens;
 global using ScreenDrafts.Api.Contracts.Authentication.Users;
+global using ScreenDrafts.Api.Contracts.Drafts;
+global using ScreenDrafts.Api.Domain.DraftAggregate.Enums;
 global using ScreenDrafts.Api.Domain.Shared;
 global using ScreenDrafts.Api.Infrastructure.Auth.Permissions;
 global using ScreenDrafts.Api.Presentation.Abstractions;

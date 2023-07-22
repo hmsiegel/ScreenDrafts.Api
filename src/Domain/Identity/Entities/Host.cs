@@ -3,12 +3,12 @@ public sealed class Host : Entity<HostId>, IAuditableEntity
 {
     private Host(
         HostId id,
-        ApplicationUser user,
-        string userId)
+        string userId,
+        int predictionPoints = 0)
         : base(id)
     {
-        User = user;
         UserId = userId;
+        PredictionPoints = predictionPoints;
     }
 
     private Host()
@@ -24,12 +24,12 @@ public sealed class Host : Entity<HostId>, IAuditableEntity
     public DefaultIdType CreatedBy { get; set; }
     public DefaultIdType? ModifiedBy { get; set; }
 
-    public static Host Create(ApplicationUser user, string userId)
+    public static Host Create(string userId)
     {
         return new Host(
             HostId.CreateUnique(),
-            user,
-            userId);
+            userId,
+            0);
     }
 
     public void AddPredictionPoints(int predictionPoints) => PredictionPoints += predictionPoints;

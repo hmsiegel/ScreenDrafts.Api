@@ -113,8 +113,15 @@ internal class RoleService : IRoleService
         return role;
     }
 
+    public async Task<RoleResponse> GetByNameAsync(string roleName, CancellationToken cancellationToken)
+    {
+        var role = await _dbContext.Roles.SingleOrDefaultAsync(x => x.Name == roleName, cancellationToken);
+        return role!.Adapt<RoleResponse>();
+    }
+
     public async Task<List<RoleResponse>> GetListAsync(CancellationToken cancellationToken)
     {
+        // TODO: Add permissions to response
         return (await _roleManager.Roles.ToListAsync(cancellationToken)).Adapt<List<RoleResponse>>();
     }
 

@@ -12,14 +12,11 @@ internal sealed class GetAllQueryHandler : IQueryHandler<GetAllQuery, List<Draft
     {
         var drafters = await _drafterRepository.GetAllDrafters(cancellationToken);
 
-        var response = drafters.ConvertAll(d => new DrafterResponse(
-            d.Id!.ToString()!,
+        return drafters.ConvertAll(d => new DrafterResponse(
+            d.Id!.Value,
             d.User!.FirstName!,
             d.User!.LastName!,
             (bool)d.HasRolloverVeto!,
-            (bool)d.HasRolloverVetooverride!))
-;
-
-        return response;
+            (bool)d.HasRolloverVetooverride!));
     }
 }

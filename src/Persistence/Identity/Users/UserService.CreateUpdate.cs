@@ -65,6 +65,29 @@ internal sealed partial class UserService
         return string.Join(Environment.NewLine, messages);
     }
 
+    public async Task<string> CreateAsync(CreateUserRequest request, string origin)
+    {
+        var user = new ApplicationUser
+        {
+            FirstName = request.FirstName,
+            LastName = request.LastName,
+            UserName = request.UserName,
+            Email = "user@screendrafts.com",
+        };
+
+        var result = await _userManager.CreateAsync(user);
+
+        if (!result.Succeeded)
+        {
+            throw new InternalServerException("Validation errors occurred.", result.GetErrors());
+        }
+
+        await _userManager.AddToRoleAsync(user, ScreenDraftsRoles.Basic);
+        await _events.PublishAsync(new ApplicationUserCreatedEvent(DefaultIdType.NewGuid(), DefaultIdType.Parse(user.Id)));
+
+        return user.Id;
+    }
+
     public async Task UpdateAsync(UpdateUserRequest request, string userId)
     {
         var user = await _userManager.FindByIdAsync(userId);
@@ -116,7 +139,7 @@ internal sealed partial class UserService
             throw new ConflictException("Administrator's status cannot be changed.");
         }
 
-        user .IsActive = request.ActivateUser;
+        user.IsActive = request.ActivateUser;
         await _userManager.UpdateAsync(user);
         await _events.PublishAsync(new ApplicationUserUpdatedEvent(DefaultIdType.NewGuid(), DefaultIdType.Parse(user.Id)));
     }

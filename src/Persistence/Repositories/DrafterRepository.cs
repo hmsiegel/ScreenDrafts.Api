@@ -20,17 +20,24 @@ internal sealed class DrafterRepository : IDrafterRepository
             .ToListAsync(cancellationToken: cancellationToken);
     }
 
-    public async Task<Drafter> GetByIdAsync(string id, CancellationToken cancellationToken = default)
+    public async Task<Drafter> GetByDrafterIdAsync(DefaultIdType id, CancellationToken cancellationToken = default)
     {
-        return await _context.Drafters
-            .Include(d => d.User)
-            .SingleOrDefaultAsync(d => d.Id!.ToString()! == id, cancellationToken: cancellationToken);
+        var drafters = await _context.Drafters.ToListAsync(cancellationToken: cancellationToken);
+
+        return drafters.SingleOrDefault(d => d.Id!.Value == id);
     }
 
     public async Task<Drafter> GetByUserIdAsync(string userId, CancellationToken cancellationToken = default)
     {
-        return await _context.Drafters
+        var drafters = await _context.Drafters
             .Include(d => d.User)
-            .SingleOrDefaultAsync(d => d.UserId == userId, cancellationToken: cancellationToken);
+            .ToListAsync(cancellationToken);
+
+        return drafters.SingleOrDefault(d => d.User!.Id == userId);
+    }
+
+    public void UpdateDrafter(Drafter drafter)
+    {
+        _context.Drafters.Update(drafter);
     }
 }

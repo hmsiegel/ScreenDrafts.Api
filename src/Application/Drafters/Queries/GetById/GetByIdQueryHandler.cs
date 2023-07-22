@@ -10,7 +10,7 @@ internal sealed class GetByIdQueryHandler : IQueryHandler<GetByIdQuery, DrafterR
 
     public async Task<Result<DrafterResponse>> Handle(GetByIdQuery request, CancellationToken cancellationToken)
     {
-        var drafter = await _drafterRepository.GetByIdAsync(request.Id, cancellationToken);
+        var drafter = await _drafterRepository.GetByUserIdAsync(request.Id, cancellationToken);
 
         if (drafter is null)
         {
@@ -18,7 +18,7 @@ internal sealed class GetByIdQueryHandler : IQueryHandler<GetByIdQuery, DrafterR
         }
 
         var response = new DrafterResponse(
-            drafter.Id!.ToString()!,
+            drafter.Id!.Value,
             drafter.User!.FirstName!,
             drafter.User.LastName!,
             (bool)drafter.HasRolloverVeto!,

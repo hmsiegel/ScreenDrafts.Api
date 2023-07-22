@@ -73,4 +73,20 @@ public sealed class UsersController : VersionNeutralApiController
     {
         return _userService.ConfirmPhoneNumberAsync(userId, code);
     }
+
+    [HttpPut("{id}/update")]
+    [HasPermission(ScreenDraftsAction.Update, ScreenDraftsResource.Users)]
+    [OpenApiOperation("Update a user's details", "")]
+    [ApiConventionMethod(typeof(ScreenDraftsApiConvention), nameof(ScreenDraftsApiConvention.Search))]
+    public async Task<IActionResult> UpdateUserDetailsAsync(string id, [FromBody] UpdateUserRequest request)
+    {
+        if (id != request.Id)
+        {
+            return BadRequest();
+        }
+
+        await _userService.UpdateAsync(request, id);
+
+        return Ok();
+    }
 }

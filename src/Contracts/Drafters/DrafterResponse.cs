@@ -1,6 +1,6 @@
 ﻿namespace ScreenDrafts.Api.Contracts.Drafters;
 public sealed record DrafterResponse(
-    string Id,
+    DefaultIdType Id,
     string FirstName,
     string LastName,
     bool HasRolloverVeto,

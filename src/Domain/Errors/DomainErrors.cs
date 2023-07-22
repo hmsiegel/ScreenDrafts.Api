@@ -30,4 +30,11 @@ public static class DomainErrors
             "User.InvalidPassword",
             "Invalid password.");
     }
+
+    public static class Roles
+    {
+        public static readonly Error NotFound = new(
+            "Role.NotFound",
+            "Role not found.");
+    }
 }

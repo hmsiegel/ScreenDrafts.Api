@@ -1,6 +1,4 @@
-﻿using ScreenDrafts.Api.Application.Common.Interfaces.Services;
-
-namespace ScreenDrafts.Api.Application.Authentication.Roles;
+﻿namespace ScreenDrafts.Api.Application.Authentication.Roles;
 public interface IRoleService : ITransientService
 {
     Task<List<RoleResponse>> GetListAsync(CancellationToken cancellationToken);
@@ -10,6 +8,8 @@ public interface IRoleService : ITransientService
     Task<RoleResponse> GetByIdAsync(string id);
 
     Task<RoleResponse> GetByIdWithPermissionsAsync(string roleId, CancellationToken cancellationToken);
+
+    Task<RoleResponse> GetByNameAsync(string roleName, CancellationToken cancellationToken);
 
     Task<string> CreateOrUpdateAsync(CreateOrUpdateRoleRequest request);
 

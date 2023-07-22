@@ -5,7 +5,7 @@ internal sealed partial class UserService
     {
         ArgumentNullException.ThrowIfNull(request);
 
-        var user = await _userManager.Users.Where(u => u.Id.ToString() == userId).FirstOrDefaultAsync(cancellationToken)
+        var user = await _userManager.Users.Where(u => u.Id == userId).FirstOrDefaultAsync(cancellationToken)
             ?? throw new NotFoundException("User not found.");
 
         // Check if the user is an admin for which the admin role is getting disabled

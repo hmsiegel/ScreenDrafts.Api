@@ -1,7 +1,4 @@
-﻿using ScreenDrafts.Api.Contracts.Drafts;
-using ScreenDrafts.Api.Domain.DraftAggregate.Enums;
-
-namespace ScreenDrafts.Api.Presentation.Common.Mapping;
+﻿namespace ScreenDrafts.Api.Presentation.Common.Mapping;
 public class DraftMappingConfig : IRegister
 {
     public void Register(TypeAdapterConfig config)
