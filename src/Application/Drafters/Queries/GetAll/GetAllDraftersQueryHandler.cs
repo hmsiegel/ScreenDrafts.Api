@@ -1,14 +1,14 @@
 ﻿namespace ScreenDrafts.Api.Application.Drafters.Queries.GetAll;
-internal sealed class GetAllQueryHandler : IQueryHandler<GetAllQuery, List<DrafterResponse>>
+internal sealed class GetAllDraftersQueryHandler : IQueryHandler<GetAllDraftersQuery, List<DrafterResponse>>
 {
     private readonly IDrafterRepository _drafterRepository;
 
-    public GetAllQueryHandler(IDrafterRepository drafterRepository)
+    public GetAllDraftersQueryHandler(IDrafterRepository drafterRepository)
     {
         _drafterRepository = drafterRepository;
     }
 
-    public async Task<Result<List<DrafterResponse>>> Handle(GetAllQuery request, CancellationToken cancellationToken)
+    public async Task<Result<List<DrafterResponse>>> Handle(GetAllDraftersQuery request, CancellationToken cancellationToken)
     {
         var drafters = await _drafterRepository.GetAllDrafters(cancellationToken);
 

@@ -42,7 +42,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser,
     public DbSet<CrewMember> CrewMember => Set<CrewMember>();
     public DbSet<CastMember> CastMember => Set<CastMember>();
 
-
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         var auditEntries = HandleAuditingBeforeSaveChanges(_currentUser.GetUserId());

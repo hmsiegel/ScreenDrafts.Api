@@ -22,6 +22,7 @@ public static class ScreenDraftsResource
     public const string Drafts = nameof(Drafts);
     public const string Drafters = nameof(Drafters);
     public const string Movies = nameof(Movies);
+    public const string Hosts = nameof(Hosts);
 }
 
 public static class ScreenDraftsPermissions
@@ -29,8 +30,8 @@ public static class ScreenDraftsPermissions
     private static readonly ScreenDraftsPermission[] _all =
     {
         new(Description: "View Hangfire", Action: ScreenDraftsAction.View, Resource: ScreenDraftsResource.Hangfire),
-        new(Description: "View Users", Action: ScreenDraftsAction.View, Resource: ScreenDraftsResource.Users, IsBasic: true, IsDrafter: true, IsHost: true),
-        new(Description: "Search Users", Action: ScreenDraftsAction.Search, Resource: ScreenDraftsResource.Users, IsBasic: true, IsDrafter: true, IsHost: true),
+        new(Description: "View Users", Action: ScreenDraftsAction.View, Resource: ScreenDraftsResource.Users, IsBasic: true, IsHost: true, IsDrafter: true),
+        new(Description: "Search Users", Action: ScreenDraftsAction.Search, Resource: ScreenDraftsResource.Users, IsBasic: true, IsHost: true, IsDrafter: true),
         new(Description: "Create Users", Action: ScreenDraftsAction.Create, Resource: ScreenDraftsResource.Users),
         new(Description: "Update Users", Action: ScreenDraftsAction.Update, Resource: ScreenDraftsResource.Users),
         new(Description: "Delete Users", Action: ScreenDraftsAction.Delete, Resource: ScreenDraftsResource.Users),
@@ -44,13 +45,17 @@ public static class ScreenDraftsPermissions
         new(Description: "View RoleClaims", Action: ScreenDraftsAction.View, Resource: ScreenDraftsResource.RoleClaims),
         new(Description: "Update RoleClaims", Action: ScreenDraftsAction.Update, Resource: ScreenDraftsResource.RoleClaims),
         new(Description: "Create Drafts", Action : ScreenDraftsAction.Create, Resource : ScreenDraftsResource.Drafts, IsHost: true),
-        new(Description: "View Drafts", Action: ScreenDraftsAction.View, Resource: ScreenDraftsResource.Drafts, IsBasic: true, IsDrafter: true, IsHost: true),
+        new(Description: "View Drafts", Action: ScreenDraftsAction.View, Resource: ScreenDraftsResource.Drafts, IsBasic: true, IsHost: true, IsDrafter: true),
         new(Description: "Update Drafts", Action : ScreenDraftsAction.Update, Resource : ScreenDraftsResource.Drafts, IsHost: true),
-        new(Description: "Search Drafts", Action: ScreenDraftsAction.Search, Resource: ScreenDraftsResource.Drafts, IsBasic: true, IsDrafter: true, IsHost: true),
+        new(Description: "Search Drafts", Action: ScreenDraftsAction.Search, Resource: ScreenDraftsResource.Drafts, IsBasic: true, IsHost: true, IsDrafter: true),
         new(Description: "Create Drafters", Action : ScreenDraftsAction.Create, Resource : ScreenDraftsResource.Drafters, IsHost: true),
-        new(Description: "View Drafters", Action: ScreenDraftsAction.View, Resource: ScreenDraftsResource.Drafters, IsBasic: true, IsDrafter: true, IsHost: true),
+        new(Description: "View Drafters", Action: ScreenDraftsAction.View, Resource: ScreenDraftsResource.Drafters, IsBasic: true, IsHost: true, IsDrafter: true),
         new(Description: "Update Drafters", Action : ScreenDraftsAction.Update, Resource : ScreenDraftsResource.Drafters, IsHost: true, IsDrafter: true),
-        new(Description: "Search Drafters", Action: ScreenDraftsAction.Search, Resource: ScreenDraftsResource.Drafters, IsBasic: true, IsDrafter: true, IsHost: true),
+        new(Description: "Search Drafters", Action: ScreenDraftsAction.Search, Resource: ScreenDraftsResource.Drafters, IsBasic: true, IsHost: true, IsDrafter: true),
+        new(Description: "Create Hosts", Action : ScreenDraftsAction.Create, Resource : ScreenDraftsResource.Hosts, IsHost: true),
+        new(Description: "View Hosts", Action: ScreenDraftsAction.View, Resource: ScreenDraftsResource.Hosts, IsBasic: true, IsHost: true, IsDrafter: true),
+        new(Description: "Update Hosts", Action : ScreenDraftsAction.Update, Resource : ScreenDraftsResource.Hosts, IsHost: true, IsDrafter: true),
+        new(Description: "Search Hosts", Action: ScreenDraftsAction.Search, Resource: ScreenDraftsResource.Hosts, IsBasic: true, IsHost: true, IsDrafter: true),
     };
 
     public static IReadOnlyList<ScreenDraftsPermission> All { get; } = new ReadOnlyCollection<ScreenDraftsPermission>(list: _all);

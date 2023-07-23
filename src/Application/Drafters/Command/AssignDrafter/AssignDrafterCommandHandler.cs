@@ -1,7 +1,5 @@
-﻿using ScreenDrafts.Api.Application.Authentication.Roles;
-
-namespace ScreenDrafts.Api.Application.Drafters.Command.AssignDrafter;
-public class AssignDrafterCommandHandler : ICommandHandler<AssignDrafterCommand, string>
+﻿namespace ScreenDrafts.Api.Application.Drafters.Command.AssignDrafter;
+internal sealed class AssignDrafterCommandHandler : ICommandHandler<AssignDrafterCommand, string>
 {
     private const string _drafter = "Drafter";
 

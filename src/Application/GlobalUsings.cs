@@ -9,6 +9,7 @@ global using MediatR;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.DependencyInjection;
 
+global using ScreenDrafts.Api.Application.Authentication.Roles;
 global using ScreenDrafts.Api.Application.Authentication.Users;
 global using ScreenDrafts.Api.Application.Common.Exceptions;
 global using ScreenDrafts.Api.Application.Common.Interfaces.Services;
@@ -21,7 +22,9 @@ global using ScreenDrafts.Api.Contracts.Authentication.Roles;
 global using ScreenDrafts.Api.Contracts.Authentication.Tokens;
 global using ScreenDrafts.Api.Contracts.Authentication.Users;
 global using ScreenDrafts.Api.Contracts.Drafters;
+global using ScreenDrafts.Api.Contracts.Drafts;
 global using ScreenDrafts.Api.Contracts.FileStorage;
+global using ScreenDrafts.Api.Contracts.Hosts;
 global using ScreenDrafts.Api.Contracts.Mailing;
 global using ScreenDrafts.Api.Domain.DraftAggregate;
 global using ScreenDrafts.Api.Domain.DraftAggregate.Enums;

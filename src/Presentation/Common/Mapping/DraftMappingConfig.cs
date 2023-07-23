@@ -1,4 +1,6 @@
-﻿namespace ScreenDrafts.Api.Presentation.Common.Mapping;
+﻿using ScreenDrafts.Api.Contracts.Drafts.Requests;
+
+namespace ScreenDrafts.Api.Presentation.Common.Mapping;
 public class DraftMappingConfig : IRegister
 {
     public void Register(TypeAdapterConfig config)

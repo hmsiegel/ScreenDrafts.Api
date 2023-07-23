@@ -1,9 +1,9 @@
 ﻿namespace ScreenDrafts.Api.Domain.DraftAggregate;
 public sealed class Draft : AggregateRoot<DraftId, DefaultIdType>, IAuditableEntity
 {
-    private readonly List<DrafterId> _drafters = new();
+    private readonly List<DrafterId> _drafterIds = new();
     private readonly List<SelectedMovie> _selectedMovies = new();
-    private readonly List<HostId> _hosts = new();
+    private readonly List<HostId> _hostIds = new();
 
     private Draft(
         DraftId id,
@@ -31,8 +31,8 @@ public sealed class Draft : AggregateRoot<DraftId, DefaultIdType>, IAuditableEnt
     public int? NumberOfDrafters { get; private set; }
     public int? NumberOfFilms { get; private set; }
 
-    public IReadOnlyList<HostId>? HostIds => _hosts.AsReadOnly();
-    public IReadOnlyList<DrafterId>? DrafterIds => _drafters.AsReadOnly();
+    public IReadOnlyList<HostId>? HostIds => _hostIds.AsReadOnly();
+    public IReadOnlyList<DrafterId>? DrafterIds => _drafterIds.AsReadOnly();
     public IReadOnlyList<SelectedMovie>? SelectedMovies => _selectedMovies.AsReadOnly();
 
     public DefaultIdType CreatedBy { get; set; }
@@ -58,12 +58,12 @@ public sealed class Draft : AggregateRoot<DraftId, DefaultIdType>, IAuditableEnt
 
     public void AddDrafter(DrafterId drafterId)
     {
-        _drafters.Add(drafterId);
+        _drafterIds.Add(drafterId);
     }
 
     public void AddHost(HostId hostId)
     {
-        _hosts.Add(hostId);
+        _hostIds.Add(hostId);
     }
 
     public void AddDraftedMovie(SelectedMovie selectedMovie)

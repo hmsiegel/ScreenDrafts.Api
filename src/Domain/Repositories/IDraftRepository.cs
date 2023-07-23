@@ -2,5 +2,8 @@
 public interface IDraftRepository
 {
     void Add(Draft draft);
-    Task<Draft> GetByIdAsync(string id, CancellationToken cancellationToken = default);
+    Task AddDrafterAsync(Draft draft, Drafter drafter);
+    Task AddHostAsync(Draft draft, Host host);
+    Task<List<Draft>> GetAllDrafts(CancellationToken cancellationToken = default);
+    Task<Draft> GetByIdAsync(DefaultIdType id, CancellationToken cancellationToken = default);
 }

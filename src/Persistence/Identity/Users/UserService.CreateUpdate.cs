@@ -1,6 +1,4 @@
-﻿using ScreenDrafts.Api.Contracts.Mailing;
-
-namespace ScreenDrafts.Api.Persistence.Identity.Users;
+﻿namespace ScreenDrafts.Api.Persistence.Identity.Users;
 internal sealed partial class UserService
 {
     public async Task<string> GetOrCreateFromPrincipalAsync(ClaimsPrincipal principal)
@@ -67,12 +65,15 @@ internal sealed partial class UserService
 
     public async Task<string> CreateAsync(CreateUserRequest request, string origin)
     {
+        var userEmail = $"{request.FirstName}.{request.LastName}@screendrafts.com";
+        var userName = $"{request.FirstName}.{request.LastName}";
+
         var user = new ApplicationUser
         {
             FirstName = request.FirstName,
             LastName = request.LastName,
-            UserName = request.UserName,
-            Email = "user@screendrafts.com",
+            UserName = userName,
+            Email = userEmail,
         };
 
         var result = await _userManager.CreateAsync(user);
@@ -83,6 +84,7 @@ internal sealed partial class UserService
         }
 
         await _userManager.AddToRoleAsync(user, ScreenDraftsRoles.Basic);
+        await _userManager.AddToRoleAsync(user, ScreenDraftsRoles.Drafter);
         await _events.PublishAsync(new ApplicationUserCreatedEvent(DefaultIdType.NewGuid(), DefaultIdType.Parse(user.Id)));
 
         return user.Id;

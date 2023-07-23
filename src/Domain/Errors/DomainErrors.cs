@@ -37,4 +37,26 @@ public static class DomainErrors
             "Role.NotFound",
             "Role not found.");
     }
+
+    public static class Draft
+    {
+        public static readonly Error NotFound = new(
+            "Draft.NotFound",
+            "Draft not found.");
+    }
+
+    public static class Host
+    {
+        public static readonly Error UserNotFound = new(
+            "Host.UserNotFound",
+            "User not found.");
+
+        public static readonly Error UserAlreadyAssigned = new(
+            "Host.UserAlreadyAssigned",
+            "User already assigned.");
+
+        public static readonly Error NotFound = new(
+            "Host.NotFound",
+            "Host not found.");
+    }
 }
