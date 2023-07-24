@@ -1,15 +1,18 @@
-﻿using ScreenDrafts.Api.Contracts.Drafts.Responses;
-
-namespace ScreenDrafts.Api.Application.Drafts.Queries.GetAll;
+﻿namespace ScreenDrafts.Api.Application.Drafts.Queries.GetAll;
 internal sealed class GetAllDraftsQueryHandler : IQueryHandler<GetAllDraftsQuery, List<DraftResponse>>
 {
     private readonly IDraftRepository _draftRepository;
     private readonly IDrafterRepository _drafterRepository;
+    private readonly IUserService _userService;
 
-    public GetAllDraftsQueryHandler(IDraftRepository draftRepository, IDrafterRepository drafterRepository)
+    public GetAllDraftsQueryHandler(
+        IDraftRepository draftRepository,
+        IDrafterRepository drafterRepository,
+        IUserService userService)
     {
         _draftRepository = draftRepository;
         _drafterRepository = drafterRepository;
+        _userService = userService;
     }
 
     public async Task<Result<List<DraftResponse>>> Handle(GetAllDraftsQuery request, CancellationToken cancellationToken)
@@ -21,6 +24,8 @@ internal sealed class GetAllDraftsQueryHandler : IQueryHandler<GetAllDraftsQuery
         {
             var drafter = await _drafterRepository.GetByDrafterIdAsync(drafterId.Value, cancellationToken);
 
+            var user = await _userService.GetByIdAsync(drafter!.UserId!, cancellationToken);
+
             if (drafter is null)
             {
                 return Result.Failure<List<DraftResponse>>(DomainErrors.Drafter.NotFound);
@@ -28,8 +33,8 @@ internal sealed class GetAllDraftsQueryHandler : IQueryHandler<GetAllDraftsQuery
 
             drafters.Add(new DrafterResponse(
                 drafter.Id!.Value,
-                drafter.User!.FirstName!,
-                drafter.User.LastName!,
+                user.FirstName,
+                user.LastName,
                 (bool)drafter.HasRolloverVeto!,
                 (bool)drafter.HasRolloverVetooverride!));
         }

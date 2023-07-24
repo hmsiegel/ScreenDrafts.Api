@@ -26,6 +26,7 @@ global using ScreenDrafts.Api.Application.Drafters.Queries.GetById;
 global using ScreenDrafts.Api.Application.Drafts.Commands.AddDrafter;
 global using ScreenDrafts.Api.Application.Drafts.Commands.AddHost;
 global using ScreenDrafts.Api.Application.Drafts.Commands.Create;
+global using ScreenDrafts.Api.Application.Drafts.Commands.UpdateDraft;
 global using ScreenDrafts.Api.Application.Drafts.Queries.GetAll;
 global using ScreenDrafts.Api.Application.Drafts.Queries.GetById;
 global using ScreenDrafts.Api.Application.Hosts.Commands.AssignHost;

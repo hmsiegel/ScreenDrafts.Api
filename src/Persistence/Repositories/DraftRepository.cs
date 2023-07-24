@@ -44,4 +44,9 @@ internal sealed class DraftRepository : IDraftRepository
 
         updateDraft!.AddHost(host.Id!);
     }
+
+    public void UpdateDraft(Draft draft)
+    {
+        _context.Drafts.Update(draft);
+    }
 }

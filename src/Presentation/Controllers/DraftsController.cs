@@ -61,4 +61,18 @@ public class DraftsController : VersionedApiController
         var result = await Sender.Send(query, cancellationToken);
         return Ok(result);
     }
+
+    [HttpPut("{id}")]
+    [HasPermission(ScreenDraftsAction.Update, ScreenDraftsResource.Drafts)]
+    [OpenApiOperation("Update Draft", "Update a draft.")]
+    public async Task<IActionResult> UpdateDraft(
+        [FromRoute] string id,
+        [FromBody] UpdateDraftRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        var command = Mapper.Map<UpdateDraftCommand>((id, request));
+        var result = await Sender.Send(command, cancellationToken);
+
+        return Ok(result);
+    }
 }
