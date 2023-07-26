@@ -59,4 +59,18 @@ public static class DomainErrors
             "Host.NotFound",
             "Host not found.");
     }
+
+    public static class CastMember
+    {
+        public static readonly Error NotFound = new(
+            "CastMember.NotFound",
+            "Cast Member not found.");
+    }
+
+    public static class CrewMember
+    {
+        public static readonly Error NotFound = new(
+            "CrewMember.NotFound",
+            "Crew Member not found.");
+    }
 }

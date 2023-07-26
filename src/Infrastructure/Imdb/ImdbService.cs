@@ -31,9 +31,14 @@ public sealed class ImdbService : IImdbService
         return await ApiLib.SearchSeriesAsync(searchExpression);
     }
 
-    public async Task<TitleData> GetMovieInformation(string id, string options)
+    public async Task<TitleData> GetMovieInformation(string id, TitleOptions? options)
     {
-        return await ApiLib.TitleAsync(id, Language.en, options);
+        return await ApiLib.TitleAsync(id, Language.en, options.ToString());
+    }
+
+    public async Task<TitleData> GetMovieInformation(string id)
+    {
+        return await ApiLib.TitleAsync(id, Language.en);
     }
 
     public async Task<FullCastData> GetFullCast(string id)

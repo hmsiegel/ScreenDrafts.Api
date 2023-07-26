@@ -20,7 +20,7 @@ public sealed class DraftersController : VersionedApiController
         [FromRoute] string id,
         CancellationToken cancellationToken = default)
     {
-        var query = new GetDrafterByIdQuery(id);
+        var query = new GetDraftByIdQuery(id);
         var result = await Sender.Send(query, cancellationToken);
         return Ok(result);
     }

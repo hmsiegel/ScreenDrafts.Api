@@ -23,6 +23,9 @@ public static class ScreenDraftsResource
     public const string Drafters = nameof(Drafters);
     public const string Movies = nameof(Movies);
     public const string Hosts = nameof(Hosts);
+    public const string Imdb = nameof(Imdb);
+    public const string CrewMembers = nameof(CrewMembers);
+    public const string CastMembers = nameof(CastMembers);
 }
 
 public static class ScreenDraftsPermissions
@@ -56,6 +59,19 @@ public static class ScreenDraftsPermissions
         new(Description: "View Hosts", Action: ScreenDraftsAction.View, Resource: ScreenDraftsResource.Hosts, IsBasic: true, IsHost: true, IsDrafter: true),
         new(Description: "Update Hosts", Action : ScreenDraftsAction.Update, Resource : ScreenDraftsResource.Hosts, IsHost: true, IsDrafter: true),
         new(Description: "Search Hosts", Action: ScreenDraftsAction.Search, Resource: ScreenDraftsResource.Hosts, IsBasic: true, IsHost: true, IsDrafter: true),
+        new(Description: "Search IMDB", Action: ScreenDraftsAction.Search, Resource: ScreenDraftsResource.Imdb, IsHost: true, IsDrafter: true),
+        new(Description: "Create Movies", Action : ScreenDraftsAction.Create, Resource : ScreenDraftsResource.Movies, IsHost: true, IsDrafter: true),
+        new(Description: "View Movies", Action: ScreenDraftsAction.View, Resource: ScreenDraftsResource.Movies, IsBasic: true, IsHost: true, IsDrafter: true),
+        new(Description: "Update Movies", Action : ScreenDraftsAction.Update, Resource : ScreenDraftsResource.Movies, IsHost: true, IsDrafter: true),
+        new(Description: "Search Movies", Action: ScreenDraftsAction.Search, Resource: ScreenDraftsResource.Movies, IsBasic: true, IsHost: true, IsDrafter: true),
+        new(Description: "Create Cast Member", Action : ScreenDraftsAction.Create, Resource : ScreenDraftsResource.CastMembers, IsHost: true, IsDrafter: true),
+        new(Description: "View Cast Member", Action: ScreenDraftsAction.View, Resource: ScreenDraftsResource.CastMembers, IsBasic: true, IsHost: true, IsDrafter: true),
+        new(Description: "Update Cast Member", Action : ScreenDraftsAction.Update, Resource : ScreenDraftsResource.CastMembers, IsHost: true, IsDrafter: true),
+        new(Description: "Search Cast Member", Action: ScreenDraftsAction.Search, Resource: ScreenDraftsResource.CastMembers, IsBasic: true, IsHost: true, IsDrafter: true),
+        new(Description: "Create Crew Member", Action : ScreenDraftsAction.Create, Resource : ScreenDraftsResource.CrewMembers, IsHost: true, IsDrafter: true),
+        new(Description: "View Crew Member", Action: ScreenDraftsAction.View, Resource: ScreenDraftsResource.CrewMembers, IsBasic: true, IsHost: true, IsDrafter: true),
+        new(Description: "Update Crew Member", Action : ScreenDraftsAction.Update, Resource : ScreenDraftsResource.CrewMembers, IsHost: true, IsDrafter: true),
+        new(Description: "Search Crew Member", Action: ScreenDraftsAction.Search, Resource: ScreenDraftsResource.CrewMembers, IsBasic: true, IsHost: true, IsDrafter: true),
     };
 
     public static IReadOnlyList<ScreenDraftsPermission> All { get; } = new ReadOnlyCollection<ScreenDraftsPermission>(list: _all);
