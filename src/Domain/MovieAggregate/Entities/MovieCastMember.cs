@@ -2,11 +2,11 @@
 public sealed class MovieCastMember : Entity<MovieCastMemberId>
 {
     private MovieCastMember(
-        CastMemberId crewMemberId,
+        CastMemberId castMemberId,
         string roleDescription)
         : base(MovieCastMemberId.CreateUnique())
     {
-        CastMemberId = crewMemberId;
+        CastMemberId = castMemberId;
         RoleDescription = roleDescription;
     }
 
@@ -18,11 +18,11 @@ public sealed class MovieCastMember : Entity<MovieCastMemberId>
     public string? RoleDescription { get; private set; }
 
     public static MovieCastMember Create(
-        CastMemberId crewMemberId,
+        CastMemberId castMemberId,
         string roleDescription)
     {
         return new MovieCastMember(
-            crewMemberId,
+            castMemberId,
             roleDescription);
     }
 }

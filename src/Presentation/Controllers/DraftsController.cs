@@ -29,7 +29,7 @@ public class DraftsController : VersionedApiController
     [HttpPost("host/{draftId}")]
     [HasPermission(ScreenDraftsAction.Update, ScreenDraftsResource.Drafts)]
     [OpenApiOperation("Update Draft", "Add a host to a draft")]
-    public async Task<IActionResult> AddHostTODraft(
+    public async Task<IActionResult> AddHostToDraft(
         [FromRoute] DefaultIdType draftId,
         [FromBody] AddHostsRequest request,
         CancellationToken cancellationToken = default)

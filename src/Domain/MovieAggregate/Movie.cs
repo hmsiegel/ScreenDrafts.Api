@@ -59,4 +59,44 @@ public sealed class Movie : AggregateRoot<MovieId, DefaultIdType>, IAuditableEnt
             movie.Id!.Value));
         return movie;
     }
+
+    public void AddDirector(
+        CrewMemberId crewMemberId,
+        string jobDescription)
+    {
+        var movieCrewMember = MovieCrewMember.Create(
+            crewMemberId,
+            jobDescription);
+        _directors.Add(movieCrewMember);
+    }
+
+    public void AddWriter(
+        CrewMemberId crewMemberId,
+        string jobDescription)
+    {
+        var movieCrewMember = MovieCrewMember.Create(
+            crewMemberId,
+            jobDescription);
+        _writers.Add(movieCrewMember);
+    }
+
+    public void AddProducer(
+        CrewMemberId crewMemberId,
+        string jobDescription)
+    {
+        var movieCrewMember = MovieCrewMember.Create(
+            crewMemberId,
+            jobDescription);
+        _producers.Add(movieCrewMember);
+    }
+
+    public void AddActor(
+        CastMemberId castMemberId,
+        string roleDescription)
+    {
+        var movieCastMember = MovieCastMember.Create(
+          castMemberId,
+          roleDescription);
+        _cast.Add(movieCastMember);
+    }
 }

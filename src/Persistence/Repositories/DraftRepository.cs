@@ -15,7 +15,7 @@ internal sealed class DraftRepository : IDraftRepository
 
     public async Task AddDrafterAsync(Draft draft, Drafter drafter)
     {
-        var updateDraft =await _context.Drafts
+        var updateDraft = await _context.Drafts
             .Where(d => d.Id == draft.Id)
             .Include(d => d.DrafterIds)
             .FirstOrDefaultAsync();

@@ -73,4 +73,11 @@ public static class DomainErrors
             "CrewMember.NotFound",
             "Crew Member not found.");
     }
+
+    public static class Movie
+    {
+        public static readonly Error NotFound = new(
+            "Movie.NotFound",
+            "Movie not found.");
+    }
 }

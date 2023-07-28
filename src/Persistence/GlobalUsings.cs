@@ -58,6 +58,7 @@ global using ScreenDrafts.Api.Domain.Identity.Entities;
 global using ScreenDrafts.Api.Domain.Identity.ValueObjects;
 global using ScreenDrafts.Api.Domain.MovieAggregate;
 global using ScreenDrafts.Api.Domain.MovieAggregate.Entities;
+global using ScreenDrafts.Api.Domain.MovieAggregate.Enums;
 global using ScreenDrafts.Api.Domain.MovieAggregate.ValueObjects;
 global using ScreenDrafts.Api.Domain.Primitives;
 global using ScreenDrafts.Api.Domain.Repositories;
