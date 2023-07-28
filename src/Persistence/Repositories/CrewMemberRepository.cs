@@ -15,14 +15,18 @@ public sealed class CrewMemberRepository : ICrewMemberRepository
 
     public async Task<List<CrewMember>> GetAllCrewMembers(CancellationToken cancellationToken = default)
     {
-        var crewMembers = await _dbContext.CrewMember.ToListAsync(cancellationToken);
-        return crewMembers;
+        return await _dbContext.CrewMember.ToListAsync(cancellationToken);
     }
 
     public async Task<CrewMember> GetByCrewMemberIdAsync(DefaultIdType id, CancellationToken cancellationToken = default)
     {
         var crewMembers = await _dbContext.CrewMember.ToListAsync(cancellationToken);
         return crewMembers.SingleOrDefault(x => x.Id!.Value == id);
+    }
+
+    public async Task<CrewMember> GetByImdbIdAsync(string imdbId, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.CrewMember.FirstOrDefaultAsync(x => x.ImdbId == imdbId, cancellationToken);
     }
 
     public async Task<CrewMember> GetByName(string name, CancellationToken cancellationToken = default)

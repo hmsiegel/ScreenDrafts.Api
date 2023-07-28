@@ -6,4 +6,5 @@ public interface ICrewMemberRepository
     Task<CrewMember> GetByCrewMemberIdAsync(DefaultIdType id, CancellationToken cancellationToken = default);
     Task<CrewMember> GetByName(string name, CancellationToken cancellationToken = default);
     Task<List<CrewMember>> GetAllCrewMembers(CancellationToken cancellationToken = default);
+    Task<CrewMember> GetByImdbIdAsync(string imdbId, CancellationToken cancellationToken = default);
 }

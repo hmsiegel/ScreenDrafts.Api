@@ -25,6 +25,11 @@ public sealed class CastMemberRepository : ICastMemberRepository
         return castMembers.SingleOrDefault(x => x.Id!.Value == id);
     }
 
+    public async Task<CastMember> GetByImdbIdAsync(string imdbId, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.CastMember.FirstOrDefaultAsync(x => x.ImdbId == imdbId, cancellationToken);
+    }
+
     public async Task<CastMember> GetByName(string name, CancellationToken cancellationToken = default)
     {
         return await _dbContext.CastMember.FirstOrDefaultAsync(x => x.Name == name, cancellationToken);

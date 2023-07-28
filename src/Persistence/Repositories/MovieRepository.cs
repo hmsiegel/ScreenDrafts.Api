@@ -92,4 +92,10 @@ public sealed class MovieRepository : IMovieRepository
 
         return crewList.ToList();
     }
+
+    public async Task<Movie> GetByImdbIdAsync(string imdbId)
+    {
+        var movies = await GetAll();
+        return movies.SingleOrDefault(x => new Uri(x.ImdbUrl!).Segments.Last() == imdbId);
+    }
 }

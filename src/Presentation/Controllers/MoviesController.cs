@@ -15,6 +15,29 @@ public sealed class MoviesController : VersionedApiController
         return Ok(result);
     }
 
+    [HttpPost("imdb/{imdbId}")]
+    [HasPermission(ScreenDraftsAction.Create, ScreenDraftsResource.Movies)]
+    [OpenApiOperation("Create Movie from IMDB", "Create a movie from IMDB.")]
+    public async Task<IActionResult> CreateMovieFromImdb(string imdbId, CancellationToken cancellationToken)
+    {
+        var command = new CreateMovieFromImdbCommand(imdbId);
+        await Sender.Send(command, cancellationToken);
+
+        var castCommand = new CreateMovieCastFromImdbIdCommand(imdbId);
+        await Sender.Send(castCommand, cancellationToken);
+
+        var direcotrsCommand = new CreateMovieDirectorsFromImdbIdCommand(imdbId);
+        await Sender.Send(direcotrsCommand, cancellationToken);
+
+        var writersCommand = new CreateMovieWritersFromImdbIdCommand(imdbId);
+        await Sender.Send(writersCommand, cancellationToken);
+
+        var producersCommand = new CreateMovieProducersFromImdbIdCommand(imdbId);
+        var result = await Sender.Send(producersCommand, cancellationToken);
+
+        return Ok(result);
+    }
+
     [HttpPost("crew/{movieId}")]
     [HasPermission(ScreenDraftsAction.Update, ScreenDraftsResource.Movies)]
     [OpenApiOperation("Add Crew Member", "Add a crew member to a movie.")]

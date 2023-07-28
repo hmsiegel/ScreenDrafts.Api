@@ -6,4 +6,5 @@ public interface ICastMemberRepository
     Task<CastMember> GetByCastMemberIdAsync(DefaultIdType id, CancellationToken cancellationToken = default);
     Task<CastMember> GetByName(string name, CancellationToken cancellationToken = default);
     Task<List<CastMember>> GetAllCastMembers(CancellationToken cancellationToken = default);
+    Task<CastMember> GetByImdbIdAsync(string imdbId, CancellationToken cancellationToken = default);
 }
