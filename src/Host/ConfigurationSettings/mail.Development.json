@@ -1,0 +1,10 @@
+{
+  "MailSettings": {
+    "DisplayName": "Harlan Siegel",
+    "From": "hmsiegel@gmail.com",
+    "Host": "smtp.ethereal.email",
+    "Password": "pJ8Ubqqnd7BPrg75hR",
+    "Port": 587,
+    "UserName": "ramona.kohler@ethereal.email"
+  }
+}

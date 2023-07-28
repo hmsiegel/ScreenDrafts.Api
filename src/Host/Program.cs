@@ -7,7 +7,7 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
-    builder.RegisterSerilog();
+    builder.AddConfigurations().RegisterSerilog();
     builder.Services.AddPersistence();
     builder.Services.AddInfrastructure(builder.Configuration);
     builder.Services.RegisterServices();
