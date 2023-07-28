@@ -1,6 +1,10 @@
 ﻿namespace ScreenDrafts.Api.Presentation.Controllers;
 public sealed class MoviesController : VersionedApiController
 {
+    private readonly IImdbService _imdbService;
+
+    public MoviesController(IImdbService imdbService) => _imdbService = imdbService;
+
     [HttpPost]
     [HasPermission(ScreenDraftsAction.Create, ScreenDraftsResource.Movies)]
     [OpenApiOperation("Create Movie", "Create a movie with the basic information.")]
@@ -20,19 +24,23 @@ public sealed class MoviesController : VersionedApiController
     [OpenApiOperation("Create Movie from IMDB", "Create a movie from IMDB.")]
     public async Task<IActionResult> CreateMovieFromImdb(string imdbId, CancellationToken cancellationToken)
     {
-        var command = new CreateMovieFromImdbCommand(imdbId);
+        var movie = await _imdbService.GetMovieInformation(imdbId);
+
+        var command = new CreateMovieFromImdbCommand(movie);
         await Sender.Send(command, cancellationToken);
 
-        var castCommand = new CreateMovieCastFromImdbIdCommand(imdbId);
+        var castCommand = new CreateMovieCastFromImdbIdCommand(movie);
         await Sender.Send(castCommand, cancellationToken);
 
-        var direcotrsCommand = new CreateMovieDirectorsFromImdbIdCommand(imdbId);
+        var direcotrsCommand = new CreateMovieDirectorsFromImdbIdCommand(movie);
         await Sender.Send(direcotrsCommand, cancellationToken);
 
-        var writersCommand = new CreateMovieWritersFromImdbIdCommand(imdbId);
+        var writersCommand = new CreateMovieWritersFromImdbIdCommand(movie);
         await Sender.Send(writersCommand, cancellationToken);
 
-        var producersCommand = new CreateMovieProducersFromImdbIdCommand(imdbId);
+        movie = await _imdbService.GetMovieInformation(imdbId, TitleOptions.FullCast);
+
+        var producersCommand = new CreateMovieProducersFromImdbIdCommand(movie);
         var result = await Sender.Send(producersCommand, cancellationToken);
 
         return Ok(result);

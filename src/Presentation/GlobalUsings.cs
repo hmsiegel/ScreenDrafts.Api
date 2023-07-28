@@ -1,4 +1,6 @@
-﻿global using Mapster;
+﻿global using IMDbApiLib.Models;
+
+global using Mapster;
 
 global using MapsterMapper;
 
@@ -59,6 +61,7 @@ global using ScreenDrafts.Api.Contracts.CrewMembers.Requests;
 global using ScreenDrafts.Api.Contracts.Drafters;
 global using ScreenDrafts.Api.Contracts.Drafts.Requests;
 global using ScreenDrafts.Api.Contracts.Hosts;
+global using ScreenDrafts.Api.Contracts.Imdb;
 global using ScreenDrafts.Api.Contracts.Movies.Requests;
 global using ScreenDrafts.Api.Domain.DraftAggregate.Enums;
 global using ScreenDrafts.Api.Domain.Enums;

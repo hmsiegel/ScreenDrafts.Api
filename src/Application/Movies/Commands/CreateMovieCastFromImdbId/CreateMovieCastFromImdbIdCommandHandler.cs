@@ -2,24 +2,21 @@
 internal sealed class CreateMovieCastFromImdbIdCommandHandler
     : ICommandHandler<CreateMovieCastFromImdbIdCommand>
 {
-    private readonly IImdbService _imdbService;
     private readonly IMovieRepository _movieRepository;
     private readonly ICastMemberRepository _castMemberRepository;
 
     public CreateMovieCastFromImdbIdCommandHandler(
-        IImdbService imdbService,
         IMovieRepository movieRepository,
         ICastMemberRepository castMemberRepository)
     {
-        _imdbService = imdbService;
         _movieRepository = movieRepository;
         _castMemberRepository = castMemberRepository;
     }
 
     public async Task<Result> Handle(CreateMovieCastFromImdbIdCommand request, CancellationToken cancellationToken)
     {
-        var imdbTitle = await _imdbService.GetMovieInformation(request.ImdbId, TitleOptions.FullCast);
-        var movie = await _movieRepository.GetByImdbIdAsync(request.ImdbId);
+        var imdbTitle = request.TitleData;
+        var movie = await _movieRepository.GetByImdbIdAsync(imdbTitle.Id);
 
         foreach (var castMember in imdbTitle.ActorList)
         {

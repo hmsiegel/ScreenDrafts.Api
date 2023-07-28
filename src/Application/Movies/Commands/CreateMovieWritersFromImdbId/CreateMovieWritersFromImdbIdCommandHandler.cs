@@ -18,8 +18,8 @@ internal sealed class CreateMovieWritersFromImdbIdCommandHandler
 
     public async Task<Result> Handle(CreateMovieWritersFromImdbIdCommand request, CancellationToken cancellationToken)
     {
-        var imdbTitle = await _imdbService.GetMovieInformation(request.ImdbId, TitleOptions.FullCast);
-        var movie = await _movieRepository.GetByImdbIdAsync(request.ImdbId);
+        var imdbTitle = request.TitleData;
+        var movie = await _movieRepository.GetByImdbIdAsync(imdbTitle.Id);
 
         foreach (var crewMember in imdbTitle.WriterList)
         {

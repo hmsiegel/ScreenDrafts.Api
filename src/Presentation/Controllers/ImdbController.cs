@@ -1,8 +1,4 @@
-﻿using IMDbApiLib.Models;
-
-using ScreenDrafts.Api.Contracts.Imdb;
-
-namespace ScreenDrafts.Api.Presentation.Controllers;
+﻿namespace ScreenDrafts.Api.Presentation.Controllers;
 public class ImdbController : VersionedApiController
 {
     private readonly IImdbService _imdbService;

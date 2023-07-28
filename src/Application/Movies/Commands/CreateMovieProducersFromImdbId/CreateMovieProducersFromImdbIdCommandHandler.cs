@@ -18,8 +18,8 @@ internal sealed class CreateMovieProducersFromImdbIdCommandHandler
 
     public async Task<Result> Handle(CreateMovieProducersFromImdbIdCommand request, CancellationToken cancellationToken)
     {
-        var imdbTitle = await _imdbService.GetMovieInformation(request.ImdbId, TitleOptions.FullCast);
-        var movie = await _movieRepository.GetByImdbIdAsync(request.ImdbId);
+        var imdbTitle = request.TitleData;
+        var movie = await _movieRepository.GetByImdbIdAsync(imdbTitle.Id);
 
         foreach (var crewMember in imdbTitle.FullCast.Others.Where(x => x.Job.Contains("Produced", StringComparison.InvariantCultureIgnoreCase)))
         {
