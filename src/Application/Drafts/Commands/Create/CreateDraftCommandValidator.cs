@@ -7,9 +7,6 @@ public sealed class CreateDraftCommandValidator : AbstractValidator<CreateDraftC
             .NotEmpty()
             .MaximumLength(100);
 
-        RuleFor(x => x.DraftType)
-            .IsInEnum();
-
         RuleFor(x => x.NumberOfDrafters)
             .GreaterThan(0);
     }

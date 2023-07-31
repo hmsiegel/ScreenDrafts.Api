@@ -51,11 +51,9 @@ public static class Startup
         return dbProvider.ToLowerInvariant() switch
         {
             DbProviderKeys.Npgsql => builder.UseNpgsql(connectionString, e =>
-                     e.MigrationsAssembly("Migrators.PostgreSQL"))
-                    .UseCamelCaseNamingConvention(),
+                     e.MigrationsAssembly("Migrators.PostgreSQL")),
             DbProviderKeys.SqlServer => builder.UseSqlServer(connectionString, e =>
-                     e.MigrationsAssembly("Migrators.MSSQL"))
-                    .UseCamelCaseNamingConvention(),
+                     e.MigrationsAssembly("Migrators.MSSQL")),
             DbProviderKeys.MySql => builder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString), e =>
                      e.MigrationsAssembly("Migrators.MySQL")
                       .SchemaBehavior(MySqlSchemaBehavior.Ignore))

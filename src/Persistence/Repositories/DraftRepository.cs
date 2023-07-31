@@ -49,4 +49,26 @@ internal sealed class DraftRepository : IDraftRepository
     {
         _context.Drafts.Update(draft);
     }
+
+    public void AddSelectedMovie(Draft draft, SelectedMovie selectedMovie)
+    {
+        var updateDraft = _context.Drafts
+            .Where(d => d.Id == draft.Id)
+            .Include(d => d.SelectedMovies)
+            .FirstOrDefault();
+
+        updateDraft!.AddSelectedMovie(selectedMovie);
+    }
+
+    public List<SelectedMovie> GetSelectedMoviesForDraft(DefaultIdType draftId)
+    {
+        var draft = _context.Drafts
+            .Where(d => d.Id!.Value == draftId)
+            .Include(d => d.SelectedMovies)
+            .FirstOrDefault();
+
+        var selectedMovies = draft!.SelectedMovies!.ToList();
+
+        return selectedMovies;
+    }
 }

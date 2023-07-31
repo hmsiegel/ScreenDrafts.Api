@@ -116,4 +116,21 @@ public sealed class Draft : AggregateRoot<DraftId, DefaultIdType>, IAuditableEnt
     {
         Name = name;
     }
+
+    public void UpdateHosts(List<HostId> hostIds)
+    {
+        _hostIds.Clear();
+        _hostIds.AddRange(hostIds);
+    }
+
+    public void UpdateDrafters(List<DrafterId> drafterIds)
+    {
+        _drafterIds.Clear();
+        _drafterIds.AddRange(drafterIds);
+    }
+
+    public void AddSelectedMovie(SelectedMovie selectedMovie)
+    {
+        _selectedMovies.Add(selectedMovie);
+    }
 }

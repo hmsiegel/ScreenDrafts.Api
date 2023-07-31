@@ -2,16 +2,13 @@
 internal sealed class CreateMovieProducersFromImdbIdCommandHandler
     : ICommandHandler<CreateMovieProducersFromImdbIdCommand>
 {
-    private readonly IImdbService _imdbService;
     private readonly IMovieRepository _movieRepository;
     private readonly ICrewMemberRepository _crewMemberRepository;
 
     public CreateMovieProducersFromImdbIdCommandHandler(
-        IImdbService imdbService,
         IMovieRepository movieRepository,
         ICrewMemberRepository crewMemberRepository)
     {
-        _imdbService = imdbService;
         _movieRepository = movieRepository;
         _crewMemberRepository = crewMemberRepository;
     }

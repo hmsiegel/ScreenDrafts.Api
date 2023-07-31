@@ -35,10 +35,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser,
     public DbSet<Draft> Drafts => Set<Draft>();
     public DbSet<Movie> Movies => Set<Movie>();
     public DbSet<Drafter> Drafters => Set<Drafter>();
-    public DbSet<SelectedMovie> SelectedMovies => Set<SelectedMovie>();
     public DbSet<MovieCastMember> MovieCastMembers => Set<MovieCastMember>();
     public DbSet<MovieCrewMember> MovieCrewMembers => Set<MovieCrewMember>();
-    public DbSet<PickDecision> PickDecision => Set<PickDecision>();
     public DbSet<CrewMember> CrewMember => Set<CrewMember>();
     public DbSet<CastMember> CastMember => Set<CastMember>();
 

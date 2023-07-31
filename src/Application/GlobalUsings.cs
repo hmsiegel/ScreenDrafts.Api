@@ -34,6 +34,7 @@ global using ScreenDrafts.Api.Domain.CastMemberAggregate.ValueObjects;
 global using ScreenDrafts.Api.Domain.CrewMemberAggregate;
 global using ScreenDrafts.Api.Domain.CrewMemberAggregate.ValueObjects;
 global using ScreenDrafts.Api.Domain.DraftAggregate;
+global using ScreenDrafts.Api.Domain.DraftAggregate.Entities;
 global using ScreenDrafts.Api.Domain.DraftAggregate.Enums;
 global using ScreenDrafts.Api.Domain.Enums;
 global using ScreenDrafts.Api.Domain.Errors;

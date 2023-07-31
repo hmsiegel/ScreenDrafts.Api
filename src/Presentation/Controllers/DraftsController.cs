@@ -51,11 +51,30 @@ public class DraftsController : VersionedApiController
         return Ok(result);
     }
 
+    [HttpGet("basic")]
+    [HasPermission(ScreenDraftsAction.View, ScreenDraftsResource.Drafts)]
+    [OpenApiOperation("Get drafts", "Get all drafts with basic information.")]
+    public async Task<IActionResult> GetAllDrafts(CancellationToken cancellationToken = default)
+    {
+        var query = new GetAllDraftsBasicQuery();
+        var result = await Sender.Send(query, cancellationToken);
+        return Ok(result);
+    }
+
     [HttpGet]
     [HasPermission(ScreenDraftsAction.View, ScreenDraftsResource.Drafts)]
-    [OpenApiOperation("Get drafts", "Get all drafts.")]
-    public async Task<IActionResult> GetDrafs(
-               CancellationToken cancellationToken = default)
+    [OpenApiOperation("Get drafts", "Get all drafts with draftes and hosts.")]
+    public async Task<IActionResult> GetAllDraftsWithDraftersAndHosts(CancellationToken cancellationToken = default)
+    {
+        var query = new GetAllDraftsWithDraftersAndHostsQuery();
+        var result = await Sender.Send(query, cancellationToken);
+        return Ok(result);
+    }
+
+    [HttpGet("advanced")]
+    [HasPermission(ScreenDraftsAction.View, ScreenDraftsResource.Drafts)]
+    [OpenApiOperation("Get drafts", "Get all drafts with all information")]
+    public async Task<IActionResult> GetAllDraftsFull(CancellationToken cancellationToken = default)
     {
         var query = new GetAllDraftsQuery();
         var result = await Sender.Send(query, cancellationToken);
@@ -71,6 +90,20 @@ public class DraftsController : VersionedApiController
         CancellationToken cancellationToken = default)
     {
         var command = Mapper.Map<UpdateDraftCommand>((id, request));
+        var result = await Sender.Send(command, cancellationToken);
+
+        return Ok(result);
+    }
+
+    [HttpPut("{draftId}/movie")]
+    [HasPermission(ScreenDraftsAction.Update, ScreenDraftsResource.Drafts)]
+    [OpenApiOperation("Add Movies", "Add drafted movies to a draft")]
+    public async Task<IActionResult> AddMovieToDraft(
+        [FromRoute] string draftId,
+        [FromBody] AddMovieRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        var command = Mapper.Map<AddMovieCommand>((draftId, request));
         var result = await Sender.Send(command, cancellationToken);
 
         return Ok(result);

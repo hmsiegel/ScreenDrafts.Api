@@ -1,6 +1,4 @@
-﻿using static ScreenDrafts.Api.Persistence.Common.DatabaseConstants;
-
-namespace ScreenDrafts.Api.Persistence.Configuration;
+﻿namespace ScreenDrafts.Api.Persistence.Configuration;
 internal sealed class DraftConfiguation : IEntityTypeConfiguration<Draft>
 {
     public void Configure(EntityTypeBuilder<Draft> builder)
@@ -105,7 +103,7 @@ internal sealed class DraftConfiguation : IEntityTypeConfiguration<Draft>
                 pd.Property(x => x.Decision)
                                    .HasConversion(
                     d => d.Name,
-                    d => Decision.FromName(d, false));
+                    d => Decision.FromName(d, true));
 
                 pd.Property(x => x.UserId)
                     .HasColumnName(ObjectNames.UserId)

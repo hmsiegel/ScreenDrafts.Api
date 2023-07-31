@@ -7,4 +7,5 @@ public interface IDraftRepository
     Task AddHostAsync(Draft draft, Host host);
     Task<List<Draft>> GetAllDrafts(CancellationToken cancellationToken = default);
     Task<Draft> GetByIdAsync(DefaultIdType id, CancellationToken cancellationToken = default);
+    List<SelectedMovie> GetSelectedMoviesForDraft(DefaultIdType draftId);
 }

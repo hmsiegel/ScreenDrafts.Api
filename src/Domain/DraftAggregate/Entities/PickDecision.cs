@@ -2,8 +2,10 @@
 public sealed class PickDecision : Entity<PickDecisionId>
 {
     private PickDecision(
+        PickDecisionId id,
         DefaultIdType userId,
         Decision decision)
+        : base(id)
     {
         UserId = userId;
         Decision = decision;
@@ -21,6 +23,7 @@ public sealed class PickDecision : Entity<PickDecisionId>
         Decision decision)
     {
         return new PickDecision(
+            PickDecisionId.CreateUnique(),
             userId,
             decision);
     }
