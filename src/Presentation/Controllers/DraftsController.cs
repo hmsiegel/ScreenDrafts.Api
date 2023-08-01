@@ -13,7 +13,7 @@ public class DraftsController : VersionedApiController
         return Ok(result);
     }
 
-    [HttpPost("drafter/{draftId}")]
+    [HttpPost("{draftId}/drafter")]
     [HasPermission(ScreenDraftsAction.Update, ScreenDraftsResource.Drafts)]
     [OpenApiOperation("Update Draft", "Add a drafter to a draft.")]
     public async Task<IActionResult> AddDrafterToDraft(
@@ -26,7 +26,7 @@ public class DraftsController : VersionedApiController
         return Ok(result);
     }
 
-    [HttpPost("host/{draftId}")]
+    [HttpPost("{draftId}/host")]
     [HasPermission(ScreenDraftsAction.Update, ScreenDraftsResource.Drafts)]
     [OpenApiOperation("Update Draft", "Add a host to a draft")]
     public async Task<IActionResult> AddHostToDraft(
@@ -95,15 +95,15 @@ public class DraftsController : VersionedApiController
         return Ok(result);
     }
 
-    [HttpPut("{draftId}/movie")]
+    [HttpPut("{draftId}/pick")]
     [HasPermission(ScreenDraftsAction.Update, ScreenDraftsResource.Drafts)]
-    [OpenApiOperation("Add Movies", "Add drafted movies to a draft")]
-    public async Task<IActionResult> AddMovieToDraft(
+    [OpenApiOperation("Add Draft Pick", "Add a draft pick to the draft.")]
+    public async Task<IActionResult> AddDraftPic(
         [FromRoute] string draftId,
-        [FromBody] AddMovieRequest request,
+        [FromBody] AddDraftPickRequest request,
         CancellationToken cancellationToken = default)
     {
-        var command = Mapper.Map<AddMovieCommand>((draftId, request));
+        var command = Mapper.Map<AddDraftPickCommand>((draftId, request));
         var result = await Sender.Send(command, cancellationToken);
 
         return Ok(result);

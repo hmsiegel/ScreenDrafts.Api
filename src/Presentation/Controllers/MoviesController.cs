@@ -19,7 +19,7 @@ public sealed class MoviesController : VersionedApiController
         return Ok(result);
     }
 
-    [HttpPost("imdb/{imdbId}")]
+    [HttpPost("{imdbId}/imdb")]
     [HasPermission(ScreenDraftsAction.Create, ScreenDraftsResource.Movies)]
     [OpenApiOperation("Create Movie from IMDB", "Create a movie from IMDB.")]
     public async Task<IActionResult> CreateMovieFromImdb(string imdbId, CancellationToken cancellationToken)
@@ -46,7 +46,7 @@ public sealed class MoviesController : VersionedApiController
         return Ok(result);
     }
 
-    [HttpPost("crew/{movieId}")]
+    [HttpPost("{movieId}/crew")]
     [HasPermission(ScreenDraftsAction.Update, ScreenDraftsResource.Movies)]
     [OpenApiOperation("Add Crew Member", "Add a crew member to a movie.")]
     public async Task<IActionResult> AddCrewMember(
@@ -59,7 +59,7 @@ public sealed class MoviesController : VersionedApiController
         return Ok(result);
     }
 
-    [HttpPost("cast/{movieId}")]
+    [HttpPost("{movieId}/cast")]
     [HasPermission(ScreenDraftsAction.Update, ScreenDraftsResource.Movies)]
     [OpenApiOperation("Add Cast Member", "Add a cast member to a movie.")]
     public async Task<IActionResult> AddCastMember(

@@ -6,7 +6,7 @@ internal sealed class DraftConfiguation : IEntityTypeConfiguration<Draft>
         ConfigueDraftsTable(builder);
         ConfigureDraftHostIdsTable(builder);
         ConfigureDraftDrafterIdsTable(builder);
-        ConfigureSelectedMoviesTable(builder);
+        ConfigurePicksTable(builder);
     }
 
     private static void ConfigueDraftsTable(EntityTypeBuilder<Draft> builder)
@@ -61,37 +61,30 @@ internal sealed class DraftConfiguation : IEntityTypeConfiguration<Draft>
         });
     }
 
-    private static void ConfigureSelectedMoviesTable(EntityTypeBuilder<Draft> builder)
+    private static void ConfigurePicksTable(EntityTypeBuilder<Draft> builder)
     {
-        builder.OwnsMany(d => d.SelectedMovies, sm =>
+        builder.OwnsMany(d => d.Picks, sm =>
         {
-            sm.ToTable(TableNames.SelectedMovies);
+            sm.ToTable(TableNames.Picks);
 
             sm.WithOwner().HasForeignKey(ObjectNames.DraftId);
 
             sm.HasKey(Id, ObjectNames.DraftId);
 
             sm.Property(x => x.Id)
-                .HasColumnName(ObjectNames.SelectedMovieId)
+                .HasColumnName(ObjectNames.PickId)
                 .ValueGeneratedNever()
                 .HasConversion(
                 id => id!.Value,
-                value => SelectedMovieId.Create(value));
-
-            sm.Property(m => m.MovieId)
-                .HasColumnName(ObjectNames.MovieId)
-                .ValueGeneratedNever()
-                .HasConversion(
-                id => id!.Value,
-                value => MovieId.Create(value));
+                value => PickId.Create(value));
 
             sm.OwnsMany(m => m.PickDecisions, pd =>
             {
                 pd.ToTable(TableNames.PickDecisions);
 
-                pd.WithOwner().HasForeignKey(ObjectNames.SelectedMovieId, ObjectNames.DraftId);
+                pd.WithOwner().HasForeignKey(ObjectNames.PickId, ObjectNames.DraftId);
 
-                pd.HasKey(Id, ObjectNames.DraftId, ObjectNames.SelectedMovieId);
+                pd.HasKey(Id, ObjectNames.DraftId, ObjectNames.PickId);
 
                 pd.Property(pd => pd.Id)
                     .HasColumnName(ObjectNames.PickDecisionId)
@@ -100,21 +93,57 @@ internal sealed class DraftConfiguation : IEntityTypeConfiguration<Draft>
                     id => id!.Value,
                     value => PickDecisionId.Create(value));
 
-                pd.Property(x => x.Decision)
-                                   .HasConversion(
-                    d => d.Name,
-                    d => Decision.FromName(d, true));
+                pd.Property(m => m.MovieId)
+                    .HasColumnName(ObjectNames.MovieId)
+                    .ValueGeneratedNever()
+                    .HasConversion(
+                    id => id!.Value,
+                    value => MovieId.Create(value));
 
-                pd.Property(x => x.UserId)
-                    .HasColumnName(ObjectNames.UserId)
-                    .ValueGeneratedNever();
+                pd.Property(x => x.DrafterId)
+                    .HasColumnName(ObjectNames.DrafterId)
+                    .ValueGeneratedNever()
+                    .HasConversion(
+                    id => id!.Value,
+                    value => DrafterId.Create(value));
+
+                pd.OwnsMany(pd => pd.BlessingDecisions, bd =>
+                {
+                    bd.ToTable(TableNames.BlessingDecisions);
+
+                    bd.WithOwner().HasForeignKey(ObjectNames.PickDecisionId, ObjectNames.DraftId, ObjectNames.PickId);
+
+                    bd.HasKey(Id, ObjectNames.DraftId, ObjectNames.PickDecisionId, ObjectNames.PickId);
+
+                    bd.Property(pd => pd.Id)
+                        .HasColumnName(ObjectNames.BlessingDecisionId)
+                        .ValueGeneratedNever()
+                        .HasConversion(
+                        id => id!.Value,
+                        value => BlessingDecisionId.Create(value));
+
+                    bd.Property(x => x.DrafterId)
+                        .HasColumnName(ObjectNames.DrafterId)
+                        .ValueGeneratedNever()
+                        .HasConversion(
+                        id => id!.Value,
+                        value => DrafterId.Create(value));
+
+                    bd.Property(x => x.BlessingUsed)
+                        .HasConversion(
+                        bu => bu.Name,
+                        bu => BlessingUsed.FromName(bu, false));
+                });
+
+                pd.Navigation(x => x.BlessingDecisions).Metadata.SetField(ObjectNames._blessingDecisions);
+                pd.Navigation(x => x.BlessingDecisions).UsePropertyAccessMode(PropertyAccessMode.Field);
             });
 
             sm.Navigation(x => x.PickDecisions).Metadata.SetField(ObjectNames._pickDecisions);
             sm.Navigation(x => x.PickDecisions).UsePropertyAccessMode(PropertyAccessMode.Field);
         });
 
-        builder.Metadata.FindNavigation(nameof(Draft.SelectedMovies))!
+        builder.Metadata.FindNavigation(nameof(Draft.Picks))!
             .SetPropertyAccessMode(PropertyAccessMode.Field);
     }
 }

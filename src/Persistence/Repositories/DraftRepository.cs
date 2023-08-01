@@ -50,25 +50,18 @@ internal sealed class DraftRepository : IDraftRepository
         _context.Drafts.Update(draft);
     }
 
-    public void AddSelectedMovie(Draft draft, SelectedMovie selectedMovie)
+    public void AddDraftPick(Draft draft, Pick pick)
     {
-        var updateDraft = _context.Drafts
+        var updatedDraft = _context.Drafts
             .Where(d => d.Id == draft.Id)
-            .Include(d => d.SelectedMovies)
+            .Include(d => d.Picks)
             .FirstOrDefault();
 
-        updateDraft!.AddSelectedMovie(selectedMovie);
+        updatedDraft!.AddPick(pick);
     }
 
-    public List<SelectedMovie> GetSelectedMoviesForDraft(DefaultIdType draftId)
+    public Task<Pick> GetPickByIdAsync(DefaultIdType id, CancellationToken cancellationToken = default)
     {
-        var draft = _context.Drafts
-            .Where(d => d.Id!.Value == draftId)
-            .Include(d => d.SelectedMovies)
-            .FirstOrDefault();
-
-        var selectedMovies = draft!.SelectedMovies!.ToList();
-
-        return selectedMovies;
+        throw new NotImplementedException();
     }
 }

@@ -8,4 +8,4 @@ public sealed record FullDraftResponse(
     string EpisodeNumber,
     List<HostResponse> Hosts,
     List<DrafterResponse> Drafters,
-    List<SelectedMovieResponse> SelectedMovies);
+    List<PickResponse> DraftPicks);

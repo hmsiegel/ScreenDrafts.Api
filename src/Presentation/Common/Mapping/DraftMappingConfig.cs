@@ -12,11 +12,10 @@ public class DraftMappingConfig : IRegister
             .Map(dest => dest.DraftType, src => DraftType.FromName(src.Request.DraftType, true))
             .Map(dest => dest, src => src.Request);
 
-        config.NewConfig<(string DraftId, AddMovieRequest Request), AddMovieCommand>()
+        config.NewConfig<(string DraftId, AddDraftPickRequest Request), AddDraftPickCommand>()
             .Map(dest => dest.DraftId, src => src.DraftId)
+            .Map(dest => dest.DrafterId, src => src.Request.DrafterId)
             .Map(dest => dest.MovieId, src => src.Request.MovieId)
-            .Map(dest => dest.PickDecision.UserId, src => src.Request.PickDecision.UserId)
-            .Map(dest => dest.PickDecision.Decision, src => Decision.FromName(src.Request.PickDecision.Decision, true))
             .Map(dest => dest, src => src.Request);
     }
 }

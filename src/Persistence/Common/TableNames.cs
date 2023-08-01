@@ -29,6 +29,8 @@ internal static class DatabaseConstants
         public const string CrewMembers =  "CrewMembers";
         public const string MovieCrewMembers = "MovieCrewMembers";
         public const string MovieCastMembers = "MovieCastMembers";
+        public const string Picks = "Picks";
+        public const string BlessingDecisions = "BlessingDecisions";
     }
 
     internal static class ObjectNames
@@ -39,6 +41,7 @@ internal static class DatabaseConstants
         public const string MovieId = "MovieId";
         public const string UserId = "UserId";
         public const string SelectedMovieId = "SelectedMovieId";
+        public const string PickId = "PickId";
         public const string PickDecisionId = "PickDecisionId";
         public const string DirectorId = "DirectorId";
         public const string WriterId = "WriterId";
@@ -46,10 +49,12 @@ internal static class DatabaseConstants
         public const string MovieCastId = "MovieCastId";
         public const string CrewMemberId = "CrewMemberId";
         public const string CastMemberId = "CastMemberId";
+        public const string BlessingDecisionId = "BlessingDecisionId";
         public const string _directors = "_directors";
         public const string _writers = "_writers";
         public const string _producers = "_producers";
         public const string _cast = "_cast";
         public const string _pickDecisions = "_pickDecisions";
+        public const string _blessingDecisions = "_blessingDecisions";
     }
 }

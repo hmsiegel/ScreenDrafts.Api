@@ -546,39 +546,23 @@ namespace Migrators.PostgreSQL.Migrations
 
             modelBuilder.Entity("ScreenDrafts.Api.Domain.DraftAggregate.Draft", b =>
                 {
-                    b.OwnsMany("ScreenDrafts.Api.Domain.DraftAggregate.Entities.SelectedMovie", "SelectedMovies", b1 =>
+                    b.OwnsMany("ScreenDrafts.Api.Domain.DraftAggregate.Entities.Pick", "Picks", b1 =>
                         {
                             b1.Property<Guid>("Id")
                                 .HasColumnType("uuid")
-                                .HasColumnName("SelectedMovieId");
+                                .HasColumnName("PickId");
 
                             b1.Property<Guid>("DraftId")
                                 .HasColumnType("uuid");
 
-                            b1.Property<Guid>("CreatedBy")
-                                .HasColumnType("uuid");
-
-                            b1.Property<DateTime>("CreatedOnUtc")
-                                .HasColumnType("timestamp with time zone");
-
                             b1.Property<int>("DraftPosition")
                                 .HasColumnType("integer");
-
-                            b1.Property<Guid?>("ModifiedBy")
-                                .HasColumnType("uuid");
-
-                            b1.Property<DateTime?>("ModifiedOnUtc")
-                                .HasColumnType("timestamp with time zone");
-
-                            b1.Property<Guid>("MovieId")
-                                .HasColumnType("uuid")
-                                .HasColumnName("MovieId");
 
                             b1.HasKey("Id", "DraftId");
 
                             b1.HasIndex("DraftId");
 
-                            b1.ToTable("SelectedMovies", (string)null);
+                            b1.ToTable("Picks", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("DraftId");
@@ -592,25 +576,60 @@ namespace Migrators.PostgreSQL.Migrations
                                     b2.Property<Guid>("DraftId")
                                         .HasColumnType("uuid");
 
-                                    b2.Property<Guid>("SelectedMovieId")
+                                    b2.Property<Guid>("PickId")
                                         .HasColumnType("uuid");
 
-                                    b2.Property<string>("Decision")
-                                        .IsRequired()
-                                        .HasColumnType("text");
-
-                                    b2.Property<Guid>("UserId")
+                                    b2.Property<Guid>("DrafterId")
                                         .HasColumnType("uuid")
-                                        .HasColumnName("UserId");
+                                        .HasColumnName("DrafterId");
 
-                                    b2.HasKey("Id", "DraftId", "SelectedMovieId");
+                                    b2.Property<Guid>("MovieId")
+                                        .HasColumnType("uuid")
+                                        .HasColumnName("MovieId");
 
-                                    b2.HasIndex("SelectedMovieId", "DraftId");
+                                    b2.HasKey("Id", "DraftId", "PickId");
+
+                                    b2.HasIndex("PickId", "DraftId");
 
                                     b2.ToTable("PickDecisions", (string)null);
 
                                     b2.WithOwner()
-                                        .HasForeignKey("SelectedMovieId", "DraftId");
+                                        .HasForeignKey("PickId", "DraftId");
+
+                                    b2.OwnsMany("ScreenDrafts.Api.Domain.DraftAggregate.Entities.BlessingDecision", "BlessingDecisions", b3 =>
+                                        {
+                                            b3.Property<Guid>("Id")
+                                                .HasColumnType("uuid")
+                                                .HasColumnName("BlessingDecisionId");
+
+                                            b3.Property<Guid>("DraftId")
+                                                .HasColumnType("uuid");
+
+                                            b3.Property<Guid>("PickDecisionId")
+                                                .HasColumnType("uuid");
+
+                                            b3.Property<Guid>("PickId")
+                                                .HasColumnType("uuid");
+
+                                            b3.Property<string>("BlessingUsed")
+                                                .IsRequired()
+                                                .HasColumnType("text");
+
+                                            b3.Property<Guid>("DrafterId")
+                                                .HasColumnType("uuid")
+                                                .HasColumnName("DrafterId");
+
+                                            b3.HasKey("Id", "DraftId", "PickDecisionId", "PickId");
+
+                                            b3.HasIndex("PickDecisionId", "DraftId", "PickId");
+
+                                            b3.ToTable("BlessingDecisions", (string)null);
+
+                                            b3.WithOwner()
+                                                .HasForeignKey("PickDecisionId", "DraftId", "PickId");
+                                        });
+
+                                    b2.Navigation("BlessingDecisions");
                                 });
 
                             b1.Navigation("PickDecisions");
@@ -670,7 +689,7 @@ namespace Migrators.PostgreSQL.Migrations
 
                     b.Navigation("HostIds");
 
-                    b.Navigation("SelectedMovies");
+                    b.Navigation("Picks");
                 });
 
             modelBuilder.Entity("ScreenDrafts.Api.Domain.Identity.ApplicationRoleClaim", b =>

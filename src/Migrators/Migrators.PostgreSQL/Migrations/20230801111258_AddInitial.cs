@@ -197,23 +197,18 @@ namespace Migrators.PostgreSQL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "SelectedMovies",
+                name: "Picks",
                 columns: table => new
                 {
-                    SelectedMovieId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PickId = table.Column<Guid>(type: "uuid", nullable: false),
                     DraftId = table.Column<Guid>(type: "uuid", nullable: false),
-                    MovieId = table.Column<Guid>(type: "uuid", nullable: false),
-                    DraftPosition = table.Column<int>(type: "integer", nullable: false),
-                    CreatedBy = table.Column<Guid>(type: "uuid", nullable: false),
-                    CreatedOnUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ModifiedBy = table.Column<Guid>(type: "uuid", nullable: true),
-                    ModifiedOnUtc = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    DraftPosition = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SelectedMovies", x => new { x.SelectedMovieId, x.DraftId });
+                    table.PrimaryKey("PK_Picks", x => new { x.PickId, x.DraftId });
                     table.ForeignKey(
-                        name: "FK_SelectedMovies_Drafts_DraftId",
+                        name: "FK_Picks_Drafts_DraftId",
                         column: x => x.DraftId,
                         principalTable: "Drafts",
                         principalColumn: "Id",
@@ -459,20 +454,47 @@ namespace Migrators.PostgreSQL.Migrations
                 {
                     PickDecisionId = table.Column<Guid>(type: "uuid", nullable: false),
                     DraftId = table.Column<Guid>(type: "uuid", nullable: false),
-                    SelectedMovieId = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Decision = table.Column<string>(type: "text", nullable: false)
+                    PickId = table.Column<Guid>(type: "uuid", nullable: false),
+                    DrafterId = table.Column<Guid>(type: "uuid", nullable: false),
+                    MovieId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PickDecisions", x => new { x.PickDecisionId, x.DraftId, x.SelectedMovieId });
+                    table.PrimaryKey("PK_PickDecisions", x => new { x.PickDecisionId, x.DraftId, x.PickId });
                     table.ForeignKey(
-                        name: "FK_PickDecisions_SelectedMovies_SelectedMovieId_DraftId",
-                        columns: x => new { x.SelectedMovieId, x.DraftId },
-                        principalTable: "SelectedMovies",
-                        principalColumns: new[] { "SelectedMovieId", "DraftId" },
+                        name: "FK_PickDecisions_Picks_PickId_DraftId",
+                        columns: x => new { x.PickId, x.DraftId },
+                        principalTable: "Picks",
+                        principalColumns: new[] { "PickId", "DraftId" },
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "BlessingDecisions",
+                columns: table => new
+                {
+                    BlessingDecisionId = table.Column<Guid>(type: "uuid", nullable: false),
+                    DraftId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PickDecisionId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PickId = table.Column<Guid>(type: "uuid", nullable: false),
+                    DrafterId = table.Column<Guid>(type: "uuid", nullable: false),
+                    BlessingUsed = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BlessingDecisions", x => new { x.BlessingDecisionId, x.DraftId, x.PickDecisionId, x.PickId });
+                    table.ForeignKey(
+                        name: "FK_BlessingDecisions_PickDecisions_PickDecisionId_DraftId_Pick~",
+                        columns: x => new { x.PickDecisionId, x.DraftId, x.PickId },
+                        principalTable: "PickDecisions",
+                        principalColumns: new[] { "PickDecisionId", "DraftId", "PickId" },
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BlessingDecisions_PickDecisionId_DraftId_PickId",
+                table: "BlessingDecisions",
+                columns: new[] { "PickDecisionId", "DraftId", "PickId" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_DraftDrafterIds_DraftId",
@@ -515,9 +537,14 @@ namespace Migrators.PostgreSQL.Migrations
                 column: "MovieId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PickDecisions_SelectedMovieId_DraftId",
+                name: "IX_PickDecisions_PickId_DraftId",
                 table: "PickDecisions",
-                columns: new[] { "SelectedMovieId", "DraftId" });
+                columns: new[] { "PickId", "DraftId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Picks_DraftId",
+                table: "Picks",
+                column: "DraftId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RoleClaims_RoleId",
@@ -529,11 +556,6 @@ namespace Migrators.PostgreSQL.Migrations
                 table: "Roles",
                 column: "NormalizedName",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_SelectedMovies_DraftId",
-                table: "SelectedMovies",
-                column: "DraftId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserClaims_UserId",
@@ -569,6 +591,9 @@ namespace Migrators.PostgreSQL.Migrations
                 name: "AuditTrails");
 
             migrationBuilder.DropTable(
+                name: "BlessingDecisions");
+
+            migrationBuilder.DropTable(
                 name: "CastMembers");
 
             migrationBuilder.DropTable(
@@ -599,9 +624,6 @@ namespace Migrators.PostgreSQL.Migrations
                 name: "MovieWriters");
 
             migrationBuilder.DropTable(
-                name: "PickDecisions");
-
-            migrationBuilder.DropTable(
                 name: "RoleClaims");
 
             migrationBuilder.DropTable(
@@ -617,16 +639,19 @@ namespace Migrators.PostgreSQL.Migrations
                 name: "UserTokens");
 
             migrationBuilder.DropTable(
-                name: "Movies");
+                name: "PickDecisions");
 
             migrationBuilder.DropTable(
-                name: "SelectedMovies");
+                name: "Movies");
 
             migrationBuilder.DropTable(
                 name: "Roles");
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "Picks");
 
             migrationBuilder.DropTable(
                 name: "Drafts");

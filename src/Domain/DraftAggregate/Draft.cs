@@ -2,7 +2,7 @@
 public sealed class Draft : AggregateRoot<DraftId, DefaultIdType>, IAuditableEntity
 {
     private readonly List<DrafterId> _drafterIds = new();
-    private readonly List<SelectedMovie> _selectedMovies = new();
+    private readonly List<Pick> _picks = new();
     private readonly List<HostId> _hostIds = new();
 
     private Draft(
@@ -33,7 +33,7 @@ public sealed class Draft : AggregateRoot<DraftId, DefaultIdType>, IAuditableEnt
 
     public IReadOnlyList<HostId>? HostIds => _hostIds.AsReadOnly();
     public IReadOnlyList<DrafterId>? DrafterIds => _drafterIds.AsReadOnly();
-    public IReadOnlyList<SelectedMovie>? SelectedMovies => _selectedMovies.AsReadOnly();
+    public IReadOnlyList<Pick>? Picks => _picks.AsReadOnly();
 
     public DefaultIdType CreatedBy { get; set; }
     public DateTime CreatedOnUtc { get; set; }
@@ -58,7 +58,12 @@ public sealed class Draft : AggregateRoot<DraftId, DefaultIdType>, IAuditableEnt
 
     public void AddDrafter(DrafterId drafterId)
     {
-        _drafterIds.Add(drafterId);
+        var numberOfDrafters = _drafterIds.Count;
+
+        if (numberOfDrafters <= NumberOfDrafters)
+        {
+            _drafterIds.Add(drafterId);
+        }
     }
 
     public void AddHost(HostId hostId)
@@ -66,9 +71,14 @@ public sealed class Draft : AggregateRoot<DraftId, DefaultIdType>, IAuditableEnt
         _hostIds.Add(hostId);
     }
 
-    public void AddDraftedMovie(SelectedMovie selectedMovie)
+    public void AddPick(Pick pick)
     {
-        _selectedMovies.Add(selectedMovie);
+        var numberOfPicks = _picks.Count;
+
+        if (numberOfPicks <= NumberOfFilms)
+        {
+            _picks.Add(pick);
+        }
     }
 
     public void UpdateDraft(Draft draft)
@@ -127,10 +137,5 @@ public sealed class Draft : AggregateRoot<DraftId, DefaultIdType>, IAuditableEnt
     {
         _drafterIds.Clear();
         _drafterIds.AddRange(drafterIds);
-    }
-
-    public void AddSelectedMovie(SelectedMovie selectedMovie)
-    {
-        _selectedMovies.Add(selectedMovie);
     }
 }

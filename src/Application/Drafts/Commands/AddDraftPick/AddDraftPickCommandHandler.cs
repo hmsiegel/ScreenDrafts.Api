@@ -1,10 +1,10 @@
 ﻿namespace ScreenDrafts.Api.Application.Drafts.Commands.AddMovie;
-internal sealed class AddMovieCommandHandler : ICommandHandler<AddMovieCommand>
+internal sealed class AddDraftPickCommandHandler : ICommandHandler<AddDraftPickCommand>
 {
     private readonly IDraftRepository _draftRepository;
     private readonly IMovieRepository _movieRepository;
 
-    public AddMovieCommandHandler(
+    public AddDraftPickCommandHandler(
         IDraftRepository draftRepository,
         IMovieRepository movieRepository)
     {
@@ -12,7 +12,7 @@ internal sealed class AddMovieCommandHandler : ICommandHandler<AddMovieCommand>
         _movieRepository = movieRepository;
     }
 
-    public async Task<Result> Handle(AddMovieCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(AddDraftPickCommand request, CancellationToken cancellationToken)
     {
         // Get the draft
         var draft = await _draftRepository.GetByIdAsync(request.DraftId, cancellationToken);
@@ -30,16 +30,22 @@ internal sealed class AddMovieCommandHandler : ICommandHandler<AddMovieCommand>
             return Result.Failure<Movie>(DomainErrors.Movie.NotFound);
         }
 
-        // Create the selected movie
-        var selectedMovie = SelectedMovie.Create(
-            movie.Id!,
-            request.DraftPosition);
+        // Create the pick
+        var pick = Pick.Create(request.DraftPosition);
 
-        selectedMovie.AddPickDecision(
-            request.PickDecision.UserId,
-            request.PickDecision.Decision);
+        var drafterId = draft.DrafterIds!
+            .Where(d => d.Value == request.DrafterId)!
+            .FirstOrDefault();
 
-        draft.AddSelectedMovie(selectedMovie);
+        // Create the pick decision
+        var pickDecision = PickDecision.Create(
+            drafterId!,
+            movie.Id!);
+
+        // Add Pick Decision
+        pick.AddPickDecision(pickDecision);
+
+        draft.AddPick(pick);
 
         return Result.Success();
     }
