@@ -108,4 +108,19 @@ public class DraftsController : VersionedApiController
 
         return Ok(result);
     }
+
+    [HttpPut("{draftId}/{pickId}/blessing")]
+    [HasPermission(ScreenDraftsAction.Update, ScreenDraftsResource.Drafts)]
+    [OpenApiOperation("Add Pick Blessing", "Add a blessing decision to a pick")]
+    public async Task<IActionResult> AddBlessingDecision(
+        [FromRoute] string draftId,
+        [FromRoute] string pickId,
+        [FromBody] AddBlessingDecisionRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        var command = Mapper.Map<AddBlessingDecisionCommand>((draftId, pickId, request));
+        var result = await Sender.Send(command, cancellationToken);
+
+        return Ok(result);
+    }
 }

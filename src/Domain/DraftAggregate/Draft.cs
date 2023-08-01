@@ -1,4 +1,6 @@
-﻿namespace ScreenDrafts.Api.Domain.DraftAggregate;
+﻿using ScreenDrafts.Api.Domain.DraftAggregate.Entities;
+
+namespace ScreenDrafts.Api.Domain.DraftAggregate;
 public sealed class Draft : AggregateRoot<DraftId, DefaultIdType>, IAuditableEntity
 {
     private readonly List<DrafterId> _drafterIds = new();
@@ -78,6 +80,25 @@ public sealed class Draft : AggregateRoot<DraftId, DefaultIdType>, IAuditableEnt
         if (numberOfPicks <= NumberOfFilms)
         {
             _picks.Add(pick);
+        }
+    }
+
+    public void UpdatePick(Pick pick, PickDecision pickDecision, BlessingDecision blessingDecision)
+    {
+        var existingPick = _picks
+            .Find(p => p.Id!.Value == pick.Id!.Value);
+
+        if (existingPick is not null)
+        {
+            existingPick.AddPickDecision(pickDecision);
+
+            var existingPickDecision = existingPick.PickDecisions
+                .FirstOrDefault(p => p.Id!.Value == pickDecision.Id!.Value);
+;
+            if (blessingDecision is not null)
+            {
+                existingPickDecision!.AddBlessingDecision(blessingDecision);
+            }
         }
     }
 

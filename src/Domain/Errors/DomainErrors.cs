@@ -45,6 +45,13 @@ public static class DomainErrors
             "Draft not found.");
     }
 
+    public static class Pick
+    {
+        public static readonly Error NotFound = new(
+            "Pick.NotFound",
+            "Pick not found.");
+    }
+
     public static class Host
     {
         public static readonly Error UserNotFound = new(

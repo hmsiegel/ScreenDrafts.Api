@@ -31,6 +31,7 @@ global using ScreenDrafts.Api.Application.CrewMembers.Queries.GetById;
 global using ScreenDrafts.Api.Application.Drafters.Command.AssignDrafter;
 global using ScreenDrafts.Api.Application.Drafters.Command.UpdateDrafter;
 global using ScreenDrafts.Api.Application.Drafters.Queries.GetAll;
+global using ScreenDrafts.Api.Application.Drafts.Commands.AddBlessingDecision;
 global using ScreenDrafts.Api.Application.Drafts.Commands.AddDrafter;
 global using ScreenDrafts.Api.Application.Drafts.Commands.AddHost;
 global using ScreenDrafts.Api.Application.Drafts.Commands.AddMovie;

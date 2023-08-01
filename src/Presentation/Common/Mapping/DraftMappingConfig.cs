@@ -17,5 +17,12 @@ public class DraftMappingConfig : IRegister
             .Map(dest => dest.DrafterId, src => src.Request.DrafterId)
             .Map(dest => dest.MovieId, src => src.Request.MovieId)
             .Map(dest => dest, src => src.Request);
+
+        config.NewConfig<(string DraftId, string PickId, AddBlessingDecisionRequest Request), AddBlessingDecisionCommand>()
+            .Map(dest => dest.DraftId, src => src.DraftId)
+            .Map(dest => dest.PickId, src => src.PickId)
+            .Map(dest => dest.DrafterId, src => src.Request.DrafterId)
+            .Map(dest => dest.MovieId, src => src.Request.MovieId)
+            .Map(dest => dest.BlessingUsed, src => BlessingUsed.FromName(src.Request.BlessingUsed, true));
     }
 }

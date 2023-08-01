@@ -1,5 +1,6 @@
 ﻿namespace ScreenDrafts.Api.Contracts.Drafts.Requests;
 
-public sealed record BlessingDecisionRequest(
+public sealed record AddBlessingDecisionRequest(
        string DrafterId,
+       string MovieId,
        string BlessingUsed);
