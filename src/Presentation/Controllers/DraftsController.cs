@@ -41,7 +41,7 @@ public class DraftsController : VersionedApiController
 
     [HttpGet("{id}")]
     [HasPermission(ScreenDraftsAction.View, ScreenDraftsResource.Drafts)]
-    [OpenApiOperation("Get Drafts", "Get a draft by id.")]
+    [OpenApiOperation("Get Draft", "Get a draft by id.")]
     public async Task<IActionResult> GetDrafts(
         [FromRoute] string id,
         CancellationToken cancellationToken = default)
@@ -51,30 +51,10 @@ public class DraftsController : VersionedApiController
         return Ok(result);
     }
 
-    [HttpGet("basic")]
-    [HasPermission(ScreenDraftsAction.View, ScreenDraftsResource.Drafts)]
-    [OpenApiOperation("Get drafts", "Get all drafts with basic information.")]
-    public async Task<IActionResult> GetAllDrafts(CancellationToken cancellationToken = default)
-    {
-        var query = new GetAllDraftsBasicQuery();
-        var result = await Sender.Send(query, cancellationToken);
-        return Ok(result);
-    }
-
     [HttpGet]
     [HasPermission(ScreenDraftsAction.View, ScreenDraftsResource.Drafts)]
-    [OpenApiOperation("Get drafts", "Get all drafts with draftes and hosts.")]
-    public async Task<IActionResult> GetAllDraftsWithDraftersAndHosts(CancellationToken cancellationToken = default)
-    {
-        var query = new GetAllDraftsWithDraftersAndHostsQuery();
-        var result = await Sender.Send(query, cancellationToken);
-        return Ok(result);
-    }
-
-    [HttpGet("advanced")]
-    [HasPermission(ScreenDraftsAction.View, ScreenDraftsResource.Drafts)]
-    [OpenApiOperation("Get drafts", "Get all drafts with all information")]
-    public async Task<IActionResult> GetAllDraftsFull(CancellationToken cancellationToken = default)
+    [OpenApiOperation("Get drafts", "Get all drafts.")]
+    public async Task<IActionResult> GetAllDrafts(CancellationToken cancellationToken = default)
     {
         var query = new GetAllDraftsQuery();
         var result = await Sender.Send(query, cancellationToken);

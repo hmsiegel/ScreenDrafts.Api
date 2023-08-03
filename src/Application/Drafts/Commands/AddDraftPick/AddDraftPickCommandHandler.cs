@@ -23,7 +23,7 @@ internal sealed class AddDraftPickCommandHandler : ICommandHandler<AddDraftPickC
         }
 
         // Get the movie
-        var movie = await _movieRepository.GetByIdAsync(request.MovieId);
+        var movie = await _movieRepository.GetByIdAsync(request.MovieId, cancellationToken);
 
         if (movie is null)
         {

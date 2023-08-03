@@ -1,6 +1,7 @@
 ﻿namespace ScreenDrafts.Api.Contracts.Drafts.Responses;
 
 public sealed record PickDecisionResponse(
-    DefaultIdType Id,
+    string Id,
+    DrafterResponse Drafter,
     MovieResponse Movie,
     List<BlessingDecisionResponse>? BlessingDecisions);

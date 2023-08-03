@@ -13,12 +13,12 @@ internal sealed class DraftRepository : IDraftRepository
         _context.Drafts.Add(draft);
     }
 
-    public async Task AddDrafterAsync(Draft draft, Drafter drafter)
+    public async Task AddDrafterAsync(Draft draft, Drafter drafter, CancellationToken cancellationToken = default)
     {
         var updateDraft = await _context.Drafts
             .Where(d => d.Id == draft.Id)
             .Include(d => d.DrafterIds)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
 
         updateDraft!.AddDrafter(drafter.Id!);
     }
@@ -35,12 +35,12 @@ internal sealed class DraftRepository : IDraftRepository
             .ToListAsync(cancellationToken: cancellationToken);
     }
 
-    public async Task AddHostAsync(Draft draft, Host host)
+    public async Task AddHostAsync(Draft draft, Host host, CancellationToken cancellationToken = default)
     {
-        var updateDraft =await _context.Drafts
+        var updateDraft = await _context.Drafts
             .Where(d => d.Id == draft.Id)
             .Include(d => d.HostIds)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
 
         updateDraft!.AddHost(host.Id!);
     }
@@ -63,5 +63,25 @@ internal sealed class DraftRepository : IDraftRepository
     public Task<Pick> GetPickByIdAsync(DefaultIdType id, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<List<BlessingDecision>> GetBlessingDecisionsAsync(
+        Draft draft,
+        Pick pick,
+        PickDecision pickDecision,
+        CancellationToken cancellationToken = default)
+    {
+        var currentDraft = await _context.Drafts
+            .Where(d => d.Id == draft.Id)
+            .Include(d => d.Picks)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        var currentPick = currentDraft!.Picks!
+            .FirstOrDefault(p => p.Id == pick.Id);
+
+        var currentPickDecision = currentPick!.PickDecisions!
+            .FirstOrDefault(pd => pd.Id == pickDecision.Id);
+
+        return currentPickDecision!.BlessingDecisions!.ToList();
     }
 }

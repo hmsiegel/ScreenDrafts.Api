@@ -2,22 +2,19 @@
 internal sealed class GetByMovieIdQueryHandler : IQueryHandler<GetByMovieIdQuery, MovieResponse>
 {
     private readonly IMovieRepository _movieRepository;
-    private readonly ICrewMemberRepository _crewMemberRepository;
-    private readonly ICastMemberRepository _castMemberRepository;
+    private readonly ICastAndCrewService _castAndCrewService;
 
     public GetByMovieIdQueryHandler(
         IMovieRepository movieRepository,
-        ICrewMemberRepository crewMemberRepository,
-        ICastMemberRepository castMemberRepository)
+        ICastAndCrewService castAndCrewService)
     {
         _movieRepository = movieRepository;
-        _crewMemberRepository = crewMemberRepository;
-        _castMemberRepository = castMemberRepository;
+        _castAndCrewService = castAndCrewService;
     }
 
     public async Task<Result<MovieResponse>> Handle(GetByMovieIdQuery request, CancellationToken cancellationToken)
     {
-        var movies = await _movieRepository.GetAll();
+        var movies = await _movieRepository.GetAll(cancellationToken);
 
         var movie = movies.SingleOrDefault(x => x.Id!.Value == request.Id);
 
@@ -32,31 +29,9 @@ internal sealed class GetByMovieIdQueryHandler : IQueryHandler<GetByMovieIdQuery
             movie.Year!,
             movie.ImageUrl!,
             movie.ImdbUrl!,
-            GetCrewMembers(movie),
-            GetCastMembers(movie));
+            _castAndCrewService.GetCrewMembers(movie),
+            _castAndCrewService.GetCastMembers(movie));
 
         return Result.Success(response);
-    }
-
-    private List<MovieCastMemberResponse> GetCastMembers(Movie? movie)
-    {
-        return _movieRepository.GetAllMovieCastMembers(movie!.Id!.Value)
-                        .Result
-                        .ConvertAll(x => new MovieCastMemberResponse(
-                            x.CastMemberId.Value,
-                            _castMemberRepository.GetByCastMemberIdAsync(x.CastMemberId.Value).Result.Name!,
-                            _castMemberRepository.GetByCastMemberIdAsync(x.CastMemberId.Value).Result.ImdbId!,
-                            x.RoleDescription!));
-    }
-
-    private List<MovieCrewMemberResponse> GetCrewMembers(Movie? movie)
-    {
-        return _movieRepository.GetAllMovieCrewMembers(movie!.Id!.Value)
-                        .Result
-                        .ConvertAll(x => new MovieCrewMemberResponse(
-                        x.CrewMemberId.Value,
-                        _crewMemberRepository.GetByCrewMemberIdAsync(x.CrewMemberId.Value).Result.Name!,
-                        _crewMemberRepository.GetByCrewMemberIdAsync(x.CrewMemberId.Value).Result.ImdbId!,
-                        x.JobDescription!));
     }
 }

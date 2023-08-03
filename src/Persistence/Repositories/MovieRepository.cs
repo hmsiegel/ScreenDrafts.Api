@@ -13,17 +13,17 @@ public sealed class MovieRepository : IMovieRepository
         _dbContext.Movies.Add(movie);
     }
 
-    public async Task AddCastMemberAsync(Movie movie, CastMember castMember, string roleDescription)
+    public async Task AddCastMemberAsync(Movie movie, CastMember castMember, string roleDescription, CancellationToken cancellationToken = default)
     {
         var movieToUpdate = await _dbContext.Movies
             .Where(x => x.Id == movie.Id)
             .Include(movie => movie.Cast)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(cancellationToken);
 
         movieToUpdate!.AddActor(castMember.Id!, roleDescription);
     }
 
-    public async Task AddCrewMemberAsync(Movie movie, CrewMember crewMember, string jobDescription)
+    public async Task AddCrewMemberAsync(Movie movie, CrewMember crewMember, string jobDescription, CancellationToken cancellationToken = default)
     {
         Movie? movieToUpdate;
         switch (CrewType.FromName(jobDescription).Name.ToLower())
@@ -32,7 +32,7 @@ public sealed class MovieRepository : IMovieRepository
                 movieToUpdate = await _dbContext.Movies
                     .Where(x => x.Id == movie.Id)
                     .Include(movie => movie.Directors)
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefaultAsync(cancellationToken);
 
                 movieToUpdate!.AddDirector(crewMember.Id!, jobDescription.ToLower());
                 break;
@@ -41,7 +41,7 @@ public sealed class MovieRepository : IMovieRepository
                 movieToUpdate = await _dbContext.Movies
                     .Where(x => x.Id == movie.Id)
                     .Include(movie => movie.Writers)
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefaultAsync(cancellationToken);
 
                 movieToUpdate!.AddWriter(crewMember.Id!, jobDescription.ToLower());
                 break;
@@ -50,7 +50,7 @@ public sealed class MovieRepository : IMovieRepository
                 movieToUpdate = await _dbContext.Movies
                      .Where(x => x.Id == movie.Id)
                      .Include(movie => movie.Producers)
-                     .FirstOrDefaultAsync();
+                     .FirstOrDefaultAsync(cancellationToken);
 
                 movieToUpdate!.AddProducer(crewMember.Id!, jobDescription.ToLower());
                 break;
@@ -60,27 +60,27 @@ public sealed class MovieRepository : IMovieRepository
         }
     }
 
-    public async Task<List<Movie>> GetAll() =>
+    public async Task<List<Movie>> GetAll(CancellationToken cancellationToken = default) =>
         await _dbContext.Movies
-            .ToListAsync();
+            .ToListAsync(cancellationToken);
 
-    public async Task<Movie> GetByIdAsync(DefaultIdType id)
+    public async Task<Movie> GetByIdAsync(DefaultIdType id, CancellationToken cancellationToken = default)
     {
-        var movies = await GetAll();
+        var movies = await GetAll(cancellationToken);
         return movies.SingleOrDefault(x => x.Id!.Value == id);
     }
 
-    public async Task<List<MovieCastMember>> GetAllMovieCastMembers(DefaultIdType id)
+    public async Task<List<MovieCastMember>> GetAllMovieCastMembers(DefaultIdType id, CancellationToken cancellationToken = default)
     {
-        var movies = await GetAll();
+        var movies = await GetAll(cancellationToken);
         var castList = movies.Where(movie => movie.Id!.Value == id)
             .SelectMany(movie => movie.Cast);
         return castList.ToList();
     }
 
-    public async Task<List<MovieCrewMember>> GetAllMovieCrewMembers(DefaultIdType id)
+    public async Task<List<MovieCrewMember>> GetAllMovieCrewMembers(DefaultIdType id, CancellationToken cancellationToken = default)
     {
-        var movies = await GetAll();
+        var movies = await GetAll(cancellationToken);
         var writers = movies.Where(movie => movie.Id!.Value == id)
             .SelectMany(movie => movie.Writers);
         var producers = movies.Where(movie => movie.Id!.Value == id)
@@ -93,9 +93,9 @@ public sealed class MovieRepository : IMovieRepository
         return crewList.ToList();
     }
 
-    public async Task<Movie> GetByImdbIdAsync(string imdbId)
+    public async Task<Movie> GetByImdbIdAsync(string imdbId, CancellationToken cancellationToken = default)
     {
-        var movies = await GetAll();
+        var movies = await GetAll(cancellationToken);
         return movies.SingleOrDefault(x => new Uri(x.ImdbUrl!).Segments.Last() == imdbId);
     }
 }

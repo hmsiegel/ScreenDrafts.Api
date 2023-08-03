@@ -75,12 +75,9 @@ public sealed class Draft : AggregateRoot<DraftId, DefaultIdType>, IAuditableEnt
 
     public void AddPick(Pick pick)
     {
-        var numberOfPicks = _picks.Count;
-
-        if (numberOfPicks <= NumberOfFilms)
-        {
-            _picks.Add(pick);
-        }
+        // TODO: Figure out of to limit the number of picks
+        // Have to take into account the blessings used
+        _picks.Add(pick);
     }
 
     public void UpdatePick(Pick pick, PickDecision pickDecision, BlessingDecision blessingDecision)
@@ -94,7 +91,7 @@ public sealed class Draft : AggregateRoot<DraftId, DefaultIdType>, IAuditableEnt
 
             var existingPickDecision = existingPick.PickDecisions
                 .FirstOrDefault(p => p.Id!.Value == pickDecision.Id!.Value);
-;
+
             if (blessingDecision is not null)
             {
                 existingPickDecision!.AddBlessingDecision(blessingDecision);

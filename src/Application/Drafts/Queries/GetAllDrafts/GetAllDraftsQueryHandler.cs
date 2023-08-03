@@ -1,137 +1,192 @@
 ﻿namespace ScreenDrafts.Api.Application.Drafts.Queries.GetAllDrafts;
-internal sealed class GetAllDraftsQueryHandler : IQueryHandler<GetAllDraftsQuery, List<FullDraftResponse>>
+internal sealed class GetAllDraftsQueryHandler : IQueryHandler<GetAllDraftsQuery, List<DraftResponse>>
 {
     private readonly IDraftRepository _draftRepository;
     private readonly IDrafterRepository _drafterRepository;
-    private readonly IUserService _userService;
     private readonly IHostRepository _hostRepository;
+    private readonly IUserService _userService;
     private readonly IMovieRepository _movieRepository;
-    private readonly ICrewMemberRepository _crewMemberRepository;
-    private readonly ICastMemberRepository _castMemberRepository;
+    private readonly ICastAndCrewService _castAndCrewService;
 
     public GetAllDraftsQueryHandler(
         IDraftRepository draftRepository,
         IDrafterRepository drafterRepository,
-        IUserService userService,
         IHostRepository hostRepository,
+        IUserService userService,
         IMovieRepository movieRepository,
-        ICrewMemberRepository crewMemberRepository,
-        ICastMemberRepository castMemberRepository)
+        ICastAndCrewService castAndCrewService)
     {
         _draftRepository = draftRepository;
         _drafterRepository = drafterRepository;
-        _userService = userService;
         _hostRepository = hostRepository;
+        _userService = userService;
         _movieRepository = movieRepository;
-        _crewMemberRepository = crewMemberRepository;
-        _castMemberRepository = castMemberRepository;
+        _castAndCrewService = castAndCrewService;
     }
 
-    public async Task<Result<List<FullDraftResponse>>> Handle(GetAllDraftsQuery request, CancellationToken cancellationToken)
+    public async Task<Result<List<DraftResponse>>> Handle(GetAllDraftsQuery request, CancellationToken cancellationToken)
     {
-        var result = new List<FullDraftResponse>();
+        var result = new List<DraftResponse>();
         var drafts = await _draftRepository.GetAllDrafts(cancellationToken);
 
         foreach (var draft in drafts)
         {
-            var drafters = new List<DrafterResponse>();
             var hosts = new List<HostResponse>();
-            var draftPicks = new List<PickResponse>();
-            var pickDecisions = new List<PickDecisionResponse>();
-            var blessingDecisions = new List<BlessingDecisionResponse>();
-
-            foreach (var drafterId in draft.DrafterIds!)
-            {
-                var drafter = await _drafterRepository.GetByDrafterIdAsync(drafterId.Value, cancellationToken);
-
-                var user = await _userService.GetByIdAsync(drafter!.UserId!, cancellationToken);
-
-                if (drafter is null)
-                {
-                    return Result.Failure<List<FullDraftResponse>>(DomainErrors.Drafter.NotFound);
-                }
-
-                drafters.Add(new DrafterResponse(
-                    drafter.Id!.Value,
-                    user.FirstName,
-                    user.LastName,
-                    (bool)drafter.HasRolloverVeto!,
-                    (bool)drafter.HasRolloverVetooverride!));
-            }
 
             foreach (var hostId in draft.HostIds!)
             {
                 var host = await _hostRepository.GetByHostIdAsync(hostId.Value, cancellationToken);
 
-                var user = await _userService.GetByIdAsync(host!.UserId!, cancellationToken);
-
                 if (host is null)
                 {
-                    return Result.Failure<List<FullDraftResponse>>(DomainErrors.Drafter.NotFound);
+                    return Result.Failure<List<DraftResponse>>(DomainErrors.Host.NotFound);
                 }
+
+                var user = await _userService.GetByIdAsync(host.UserId!, cancellationToken);
 
                 hosts.Add(new HostResponse(
                     host.Id!.Value,
                     user.FirstName,
                     user.LastName,
-                    host.PredictionPoints!.Value));
+                    (int)host.PredictionPoints!));
             }
 
-            foreach (var draftPick in draft.Picks!)
+            var draftPicks = new List<PickResponse>();
+            var currentPicks = draft.Picks!.OrderByDescending(p => p.DraftPosition).ToList();
+            var duplicatePicks = DuplicatedPicks(currentPicks);
+
+            foreach (var draftPick in currentPicks.Except(duplicatePicks).ToList())
             {
-                foreach (var pickDecision in draftPick.PickDecisions)
-                {
-                    foreach (var blessingDecision in pickDecision.BlessingDecisions!)
-                    {
-                        var blessingDrafter = await _drafterRepository.GetByDrafterIdAsync(blessingDecision.DrafterId!.Value, cancellationToken);
+                var pickDecisions = new List<PickDecisionResponse>();
+                var pickedMovie = await _movieRepository.GetByIdAsync(draftPick.PickDecisions[0].MovieId.Value, cancellationToken);
 
-                        var blessingUser = await _userService.GetByIdAsync(blessingDrafter!.UserId!, cancellationToken);
+                List<MovieCrewMemberResponse> movieCrewMembers = _castAndCrewService.GetCrewMembers(pickedMovie);
+                List<MovieCastMemberResponse> movieCastMembers = _castAndCrewService.GetCastMembers(pickedMovie);
+                var drafter = await _drafterRepository.GetByDrafterIdAsync(draftPick.PickDecisions[0].DrafterId!.Value, cancellationToken);
+                var drafterUser = await _userService.GetByIdAsync(drafter.UserId!, cancellationToken);
 
-                        blessingDecisions.Add(new BlessingDecisionResponse(
-                            new DrafterResponse(
-                                blessingDrafter.Id!.Value,
-                                blessingUser.FirstName,
-                                blessingUser.LastName,
-                                (bool)blessingDrafter.HasRolloverVeto!,
-                                (bool)blessingDrafter.HasRolloverVetooverride!),
-                            blessingDecision.BlessingUsed!.Name));
-                    }
+                var pickDecision = new PickDecisionResponse(
+                    draftPick.PickDecisions[0].Id!.Value!.ToString(),
+                    new DrafterResponse(
+                        drafter.Id!.Value,
+                        drafterUser.FirstName,
+                        drafterUser.LastName,
+                        (bool)drafter.HasRolloverVeto!,
+                        (bool)drafter.HasRolloverVetooverride!),
+                    new MovieResponse(
+                        pickedMovie.Id!.Value,
+                        pickedMovie.Title!,
+                        pickedMovie.Year!,
+                        pickedMovie.ImageUrl!,
+                        pickedMovie.ImdbUrl!,
+                        movieCrewMembers,
+                        movieCastMembers),
+                    null);
 
-                    var pickedMovie = await _movieRepository.GetByIdAsync(pickDecision.MovieId!.Value);
-
-                    List<MovieCrewMemberResponse> movieCrewMembers = GetCrewMembers(pickedMovie);
-
-                    List<MovieCastMemberResponse> movieCastMembers = GetCastMembers(pickedMovie);
-
-                    pickDecisions.Add(new PickDecisionResponse(
-                        pickDecision.Id!.Value,
-                        new MovieResponse(
-                            pickedMovie.Id!.Value,
-                            pickedMovie.Title!,
-                            pickedMovie.Year!,
-                            pickedMovie.ImageUrl!,
-                            pickedMovie.ImdbUrl!,
-                            movieCrewMembers,
-                            movieCastMembers),
-                        blessingDecisions));
-                }
+                pickDecisions.Add(pickDecision);
 
                 draftPicks.Add(new PickResponse(
-                    draftPick.Id!.Value,
-                    draftPick.DraftPosition!,
+                    draftPick.Id!.Value.ToString(),
+                    draftPick.DraftPosition,
                     pickDecisions));
             }
 
-            var fullDraft = new FullDraftResponse(
-                draft.Id!.Value,
-                draft.Name!,
-                draft.DraftType!.Name!,
-                (DateTime)draft.ReleaseDate!,
-                (int)draft.Runtime!,
-                draft.EpisodeNumber!,
+            foreach (var pickBatch in duplicatePicks.GroupBy(x => x.DraftPosition).Chunk(3))
+            {
+                var pickDecisions = new List<PickDecisionResponse>();
+
+                foreach (IGrouping<int, Pick>? similarPicks in pickBatch)
+                {
+                    var newPick = Pick.Create(similarPicks.Key);
+
+                    foreach (var pick in similarPicks)
+                    {
+                        var drafterId = pick.PickDecisions[0].DrafterId;
+
+                        var pickDecision = PickDecision.Create(
+                            drafterId,
+                            pick.PickDecisions[0].MovieId);
+
+                        newPick.AddPickDecision(pickDecision);
+
+                        if (pick.PickDecisions[0].BlessingDecisions!.Count != 0)
+                        {
+                            var blessingDecision = BlessingDecision.Create(
+                                pick.PickDecisions[0].BlessingDecisions![0].DrafterId,
+                                pick.PickDecisions[0].BlessingDecisions![0].BlessingUsed);
+
+                            pickDecision.AddBlessingDecision(blessingDecision);
+                        }
+                    }
+
+                    var newDraftPick = new PickResponse(
+                        newPick.Id!.Value.ToString(),
+                        newPick.DraftPosition,
+                        pickDecisions);
+
+                    foreach (var pickDecision in newPick.PickDecisions)
+                    {
+                        var pickedMovie = await _movieRepository.GetByIdAsync(pickDecision.MovieId.Value, cancellationToken);
+
+                        var movieCrewMembers = _castAndCrewService.GetCrewMembers(pickedMovie);
+                        var movieCastMembers = _castAndCrewService.GetCastMembers(pickedMovie);
+                        var pickBlessings = new List<BlessingDecisionResponse>();
+
+                        if (pickDecision.BlessingDecisions!.Count != 0)
+                        {
+                            foreach (var blessing in pickDecision.BlessingDecisions!)
+                            {
+                                var blessingDrafter = await _drafterRepository.GetByDrafterIdAsync(blessing.DrafterId!.Value, cancellationToken);
+                                var blessingUser = await _userService.GetByIdAsync(blessingDrafter.UserId!, cancellationToken);
+
+                                pickBlessings.Add(new BlessingDecisionResponse(
+                                    new DrafterResponse(
+                                        blessingDrafter.Id!.Value,
+                                        blessingUser.FirstName,
+                                        blessingUser.LastName,
+                                        (bool)blessingDrafter.HasRolloverVeto!,
+                                        (bool)blessingDrafter.HasRolloverVetooverride!),
+                                    blessing.BlessingUsed!.Name));
+                            }
+                        }
+
+                        var drafter = await _drafterRepository.GetByDrafterIdAsync(pickDecision.DrafterId!.Value, cancellationToken);
+                        var drafterUser = await _userService.GetByIdAsync(drafter.UserId!, cancellationToken);
+
+                        var newPickDecision = new PickDecisionResponse(
+                            pickDecision.Id!.Value.ToString(),
+                            new DrafterResponse(
+                                drafter.Id!.Value,
+                                drafterUser.FirstName,
+                                drafterUser.LastName,
+                                (bool)drafter.HasRolloverVeto!,
+                                (bool)drafter.HasRolloverVetooverride!),
+                            new MovieResponse(
+                                pickedMovie.Id!.Value,
+                                pickedMovie.Title!,
+                                pickedMovie.Year!,
+                                pickedMovie.ImageUrl!,
+                                pickedMovie.ImdbUrl!,
+                                movieCrewMembers,
+                                movieCastMembers),
+                            pickBlessings);
+
+                        newDraftPick.PickDecisions.Add(newPickDecision);
+                    }
+
+                    draftPicks.Add(newDraftPick);
+                }
+            }
+
+            var fullDraft = new DraftResponse(
+                draft.Id!.Value.ToString(),
+                draft.Name,
+                draft.DraftType.ToString(),
+                draft.ReleaseDate!.Value.ToString("d"),
+                draft.Runtime.ToString()!,
+                int.Parse(draft.EpisodeNumber!),
                 hosts,
-                drafters,
-                draftPicks);
+                draftPicks.OrderByDescending(x => x.DraftPosition).ToList());
 
             result.Add(fullDraft);
         }
@@ -139,25 +194,18 @@ internal sealed class GetAllDraftsQueryHandler : IQueryHandler<GetAllDraftsQuery
         return Result.Success(result);
     }
 
-    private List<MovieCastMemberResponse> GetCastMembers(Movie? movie)
+    private static List<Pick> DuplicatedPicks(List<Pick> picks)
     {
-        return _movieRepository.GetAllMovieCastMembers(movie!.Id!.Value)
-                        .Result
-                        .ConvertAll(x => new MovieCastMemberResponse(
-                            x.CastMemberId.Value,
-                            _castMemberRepository.GetByCastMemberIdAsync(x.CastMemberId.Value).Result.Name!,
-                            _castMemberRepository.GetByCastMemberIdAsync(x.CastMemberId.Value).Result.ImdbId!,
-                            x.RoleDescription!));
-    }
+        var orderedListOfPicks = picks
+            .OrderBy(o => o.DraftPosition).ToList();
 
-    private List<MovieCrewMemberResponse> GetCrewMembers(Movie? movie)
-    {
-        return _movieRepository.GetAllMovieCrewMembers(movie!.Id!.Value)
-                        .Result
-                        .ConvertAll(x => new MovieCrewMemberResponse(
-                        x.CrewMemberId.Value,
-                        _crewMemberRepository.GetByCrewMemberIdAsync(x.CrewMemberId.Value).Result.Name!,
-                        _crewMemberRepository.GetByCrewMemberIdAsync(x.CrewMemberId.Value).Result.ImdbId!,
-                        x.JobDescription!));
+        var picksWhereBlessingsWereUsed = orderedListOfPicks
+            .GroupBy(i => i.DraftPosition)
+            .Where(g => g.Count() > 1)
+            .Select(g => g.Key);
+
+        return picks
+            .Where(x => picksWhereBlessingsWereUsed.Contains(x.DraftPosition))
+            .ToList();
     }
 }
