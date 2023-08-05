@@ -1,6 +1,4 @@
-﻿using static ScreenDrafts.Api.Persistence.Common.DatabaseConstants;
-
-namespace ScreenDrafts.Api.Persistence.Configuration;
+﻿namespace ScreenDrafts.Api.Persistence.Configuration;
 internal sealed class HostConfiguration : IEntityTypeConfiguration<Host>
 {
     public void Configure(EntityTypeBuilder<Host> builder)

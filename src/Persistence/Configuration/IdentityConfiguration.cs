@@ -1,6 +1,4 @@
-﻿using static ScreenDrafts.Api.Persistence.Common.DatabaseConstants;
-
-namespace ScreenDrafts.Api.Persistence.Configuration;
+﻿namespace ScreenDrafts.Api.Persistence.Configuration;
 internal sealed class IdentityConfiguration : IEntityTypeConfiguration<ApplicationUser>
 {
     public void Configure(EntityTypeBuilder<ApplicationUser> builder)
@@ -11,6 +9,10 @@ internal sealed class IdentityConfiguration : IEntityTypeConfiguration<Applicati
         builder
             .Property(u => u.ObjectId)
             .HasMaxLength(256);
+
+        builder
+            .HasIndex(u => new { u.FirstName, u.LastName })
+            .IsUnique();
 
         builder
             .Property(u => u.DrafterId)

@@ -100,4 +100,18 @@ internal sealed partial class UserService : IUserService
 
         return new PaginationResponse<UserDetailsResponse>(users, count, filter.PageNumber, filter.PageSize);
     }
+
+    public async Task<ApplicationUser> GetByFirstAndLastNameAsync(string firstName, string lastName, CancellationToken cancellationToken)
+    {
+        string formattedFirstName = firstName.Replace(".", string.Empty, StringComparison.InvariantCultureIgnoreCase);
+        string formattedLastName = lastName.Replace(".", string.Empty, StringComparison.InvariantCultureIgnoreCase);
+
+        var users = await _userManager.Users.ToListAsync(cancellationToken);
+
+        return users.Find(u => u.FirstName!.Replace(
+            ".",
+            string.Empty,
+            StringComparison.InvariantCultureIgnoreCase) == formattedFirstName
+        && u.LastName == formattedLastName);
+    }
 }

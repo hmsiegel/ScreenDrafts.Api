@@ -20,6 +20,15 @@ internal sealed class HostRepository : IHostRepository
             .ToListAsync(cancellationToken: cancellationToken);
     }
 
+    public async Task<Host> GetByFirstAndLastNameAsync(string firstName, string lastName, CancellationToken cancellationToken = default)
+    {
+        var hosts = await _context.Hosts
+            .Include(d => d.User)
+            .ToListAsync(cancellationToken: cancellationToken);
+
+        return hosts.SingleOrDefault(d => d.User!.FirstName == firstName && d.User.LastName == lastName);
+    }
+
     public async Task<Host> GetByHostIdAsync(DefaultIdType id, CancellationToken cancellationToken = default)
     {
         var hosts = await _context.Hosts.ToListAsync(cancellationToken: cancellationToken);

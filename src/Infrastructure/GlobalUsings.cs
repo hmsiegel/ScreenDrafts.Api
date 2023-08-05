@@ -1,4 +1,6 @@
-﻿global using Figgle;
+﻿global using CsvHelper;
+
+global using Figgle;
 
 global using FluentValidation;
 
@@ -102,6 +104,7 @@ global using Serilog.Exceptions;
 global using Serilog.Formatting.Compact;
 
 global using System.ComponentModel.DataAnnotations;
+global using System.Globalization;
 global using System.Linq.Expressions;
 global using System.Net;
 global using System.Net.Http.Headers;

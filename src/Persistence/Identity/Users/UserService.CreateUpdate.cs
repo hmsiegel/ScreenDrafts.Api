@@ -22,11 +22,14 @@ internal sealed partial class UserService
 
     public async Task<string> CreateAsync(RegisterRequest request, string origin)
     {
+        var firstName = GetFormattedName(request.FirstName);
+        var lastName = GetFormattedName(request.LastName);
+
         var user = new ApplicationUser
         {
             Email = request.Email,
-            FirstName = request.FirstName,
-            LastName = request.LastName,
+            FirstName = firstName,
+            LastName = lastName,
             UserName = request.UserName,
             PhoneNumber = request.PhoneNumber,
             IsActive = true,
@@ -65,8 +68,41 @@ internal sealed partial class UserService
 
     public async Task<string> CreateAsync(CreateUserRequest request, string origin)
     {
-        var userEmail = $"{request.FirstName}.{request.LastName}@screendrafts.com";
-        var userName = $"{request.FirstName}.{request.LastName}";
+        var firstName = GetFormattedName(request.FirstName);
+        var lastName = GetFormattedName(request.LastName);
+
+        var userEmail = $"{firstName}.{lastName}@screendrafts.com";
+        var userName = $"{firstName}.{lastName}";
+
+        var user = new ApplicationUser
+        {
+            FirstName = request.FirstName,
+            LastName = request.LastName,
+            UserName = userName,
+            Email = userEmail,
+        };
+
+        var result = await _userManager.CreateAsync(user);
+
+        if (!result.Succeeded)
+        {
+            throw new InternalServerException("Validation errors occurred.", result.GetErrors());
+        }
+
+        await _userManager.AddToRoleAsync(user, ScreenDraftsRoles.Basic);
+        await _userManager.AddToRoleAsync(user, ScreenDraftsRoles.Drafter);
+        await _events.PublishAsync(new ApplicationUserCreatedEvent(DefaultIdType.NewGuid(), DefaultIdType.Parse(user.Id)));
+
+        return user.Id;
+    }
+
+    public async Task<string> CreateAsync(CreateUserRequest request)
+    {
+        var firstName = GetFormattedName(request.FirstName);
+        var lastName = GetFormattedName(request.LastName);
+
+        var userEmail = $"{firstName}.{lastName}@screendrafts.com";
+        var userName = $"{firstName}.{lastName}";
 
         var user = new ApplicationUser
         {
@@ -144,6 +180,28 @@ internal sealed partial class UserService
         user.IsActive = request.ActivateUser;
         await _userManager.UpdateAsync(user);
         await _events.PublishAsync(new ApplicationUserUpdatedEvent(DefaultIdType.NewGuid(), DefaultIdType.Parse(user.Id)));
+    }
+
+    [GeneratedRegex("\\s")]
+    private static partial Regex SpaceRegex();
+
+    [GeneratedRegex("[^a-zA-Z0-9\\.\\-_]")]
+    private static partial Regex DisallowedEmailCharacters();
+
+    private static string GetFormattedName(string name)
+    {
+        bool hasSpaces = SpaceRegex().IsMatch(name);
+        bool hasDisallowedChars = DisallowedEmailCharacters().IsMatch(name);
+
+        if (hasSpaces || hasDisallowedChars)
+        {
+            // Remove spaces and disallowed email characters
+            Regex regex = DisallowedEmailCharacters();
+            string noSpacesOrDisallowedChars = name.Replace(" ", string.Empty, StringComparison.InvariantCultureIgnoreCase);
+            return regex.Replace(noSpacesOrDisallowedChars, string.Empty);
+        }
+
+        return name;
     }
 
     private async Task<ApplicationUser> CreateOrUpdateFromPrincipalAsync(ClaimsPrincipal principal)

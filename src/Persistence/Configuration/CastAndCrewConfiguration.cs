@@ -1,6 +1,4 @@
-﻿using static ScreenDrafts.Api.Persistence.Common.DatabaseConstants;
-
-namespace ScreenDrafts.Api.Persistence.Configuration;
+﻿namespace ScreenDrafts.Api.Persistence.Configuration;
 internal sealed class CastConfiguration : IEntityTypeConfiguration<CastMember>
 {
     public void Configure(EntityTypeBuilder<CastMember> builder)

@@ -5,5 +5,6 @@ public interface IHostRepository
     void UpdateHost(Host host);
     Task<Host> GetByHostIdAsync(DefaultIdType id, CancellationToken cancellationToken = default);
     Task<Host> GetByUserIdAsync(string userId, CancellationToken cancellationToken = default);
+    Task<Host> GetByFirstAndLastNameAsync(string firstName, string lastName, CancellationToken cancellationToken = default);
     Task<List<Host>> GetAllHosts(CancellationToken cancellationToken = default);
 }
