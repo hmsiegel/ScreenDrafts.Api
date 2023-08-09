@@ -14,7 +14,7 @@ internal sealed class GetAllMoviesQueryHandler : IQueryHandler<GetAllMoviesQuery
 
     public async Task<Result<List<MovieResponse>>> Handle(GetAllMoviesQuery request, CancellationToken cancellationToken)
     {
-        var movies = await _movieRepository.GetAll();
+        var movies = await _movieRepository.GetAll(cancellationToken);
 
         var response = movies.ConvertAll(movie => new MovieResponse(
             movie.Id!.Value,

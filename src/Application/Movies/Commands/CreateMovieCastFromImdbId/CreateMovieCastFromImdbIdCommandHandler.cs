@@ -16,7 +16,7 @@ internal sealed class CreateMovieCastFromImdbIdCommandHandler
     public async Task<Result> Handle(CreateMovieCastFromImdbIdCommand request, CancellationToken cancellationToken)
     {
         var imdbTitle = request.TitleData;
-        var movie = await _movieRepository.GetByImdbIdAsync(imdbTitle.Id);
+        var movie = await _movieRepository.GetByImdbIdAsync(imdbTitle.Id, cancellationToken);
 
         foreach (var castMember in imdbTitle.ActorList)
         {
@@ -31,7 +31,7 @@ internal sealed class CreateMovieCastFromImdbIdCommandHandler
                 _castMemberRepository.Add(existingCastMember);
             }
 
-            await _movieRepository.AddCastMemberAsync(movie, existingCastMember, castMember.AsCharacter);
+            await _movieRepository.AddCastMemberAsync(movie, existingCastMember, castMember.AsCharacter, cancellationToken);
         }
 
         return Result.Success();

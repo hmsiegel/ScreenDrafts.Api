@@ -1,5 +1,7 @@
 ﻿global using Ardalis.Specification.EntityFrameworkCore;
 
+global using IMDbApiLib.Models;
+
 global using Mapster;
 
 global using Microsoft.AspNetCore.Identity;
@@ -43,6 +45,7 @@ global using ScreenDrafts.Api.Contracts.Authentication.Roles;
 global using ScreenDrafts.Api.Contracts.Authentication.Tokens;
 global using ScreenDrafts.Api.Contracts.Authentication.Users;
 global using ScreenDrafts.Api.Contracts.Mailing;
+global using ScreenDrafts.Api.Contracts.Movies.Requests;
 global using ScreenDrafts.Api.Domain.CastMemberAggregate;
 global using ScreenDrafts.Api.Domain.CastMemberAggregate.ValueObjects;
 global using ScreenDrafts.Api.Domain.CrewMemberAggregate;
@@ -78,6 +81,7 @@ global using Serilog;
 global using SmartEnum.EFCore;
 
 global using System.ComponentModel.DataAnnotations;
+global using System.Globalization;
 global using System.IdentityModel.Tokens.Jwt;
 global using System.Reflection;
 global using System.Security.Claims;

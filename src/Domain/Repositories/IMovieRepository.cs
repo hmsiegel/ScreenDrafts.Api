@@ -9,4 +9,7 @@ public interface IMovieRepository
     Task<List<Movie>> GetAll(CancellationToken cancellationToken = default);
     Task<List<MovieCastMember>> GetAllMovieCastMembers(DefaultIdType id, CancellationToken cancellationToken = default);
     Task<List<MovieCrewMember>> GetAllMovieCrewMembers(DefaultIdType id, CancellationToken cancellationToken = default);
+    Task<bool> DoesMovieExist(string title, string year, CancellationToken cancellationToken = default);
+    Task<List<Movie>> GetMoviesWithCastMember(DefaultIdType Id, CancellationToken cancellationToken = default);
+    Task<List<Movie>> GetMoviesByYearAsync(string year, CancellationToken cancellationToken = default);
 }

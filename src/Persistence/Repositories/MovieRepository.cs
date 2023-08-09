@@ -98,4 +98,30 @@ public sealed class MovieRepository : IMovieRepository
         var movies = await GetAll(cancellationToken);
         return movies.SingleOrDefault(x => new Uri(x.ImdbUrl!).Segments.Last() == imdbId);
     }
+
+    public async Task<bool> DoesMovieExist(string title, string year, CancellationToken cancellationToken = default)
+    {
+        var movies = await GetAll(cancellationToken);
+        return movies.Exists(x => x.Title == title && x.Year == year);
+    }
+
+    public async Task<List<Movie>> GetMoviesWithCastMember(DefaultIdType Id, CancellationToken cancellationToken = default)
+    {
+        var movies = await _dbContext.Movies
+            .Include(x => x.Cast)
+            .ToListAsync(cancellationToken);
+
+        var moviesWithCastMember = movies
+            .Where(movie => movie.Cast.Any(castMember => castMember.CastMemberId.Value == Id))
+            .ToList();
+
+        return moviesWithCastMember;
+    }
+
+    public async Task<List<Movie>> GetMoviesByYearAsync(string year, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Movies
+            .Where(x => x.Year == year)
+            .ToListAsync(cancellationToken);
+    }
 }

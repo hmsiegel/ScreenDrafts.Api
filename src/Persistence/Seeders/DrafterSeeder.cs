@@ -17,7 +17,7 @@ internal sealed class DrafterSeeder : ICustomSeeder
 
     public async Task InitializeAsync(CancellationToken cancellationToken = default)
     {
-        if (_context.Users is not null)
+        if (!_context.Users.Any())
         {
             var existingDrafters = await _drafterRepository.GetAllDrafters(cancellationToken);
             var existingDrafterUserIds = existingDrafters.ConvertAll(d => d.UserId);

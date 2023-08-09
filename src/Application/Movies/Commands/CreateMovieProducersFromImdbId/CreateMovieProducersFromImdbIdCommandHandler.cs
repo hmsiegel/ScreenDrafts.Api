@@ -16,7 +16,7 @@ internal sealed class CreateMovieProducersFromImdbIdCommandHandler
     public async Task<Result> Handle(CreateMovieProducersFromImdbIdCommand request, CancellationToken cancellationToken)
     {
         var imdbTitle = request.TitleData;
-        var movie = await _movieRepository.GetByImdbIdAsync(imdbTitle.Id);
+        var movie = await _movieRepository.GetByImdbIdAsync(imdbTitle.Id, cancellationToken);
 
         foreach (var crewMember in imdbTitle.FullCast.Others.Where(x => x.Job.Contains("Produced", StringComparison.InvariantCultureIgnoreCase)))
         {
@@ -35,7 +35,7 @@ internal sealed class CreateMovieProducersFromImdbIdCommandHandler
                 _crewMemberRepository.Add(existingCrewMember);
             }
 
-            await _movieRepository.AddCrewMemberAsync(movie, existingCrewMember, "Producer");
+            await _movieRepository.AddCrewMemberAsync(movie, existingCrewMember, "Producer", cancellationToken);
         }
 
         return Result.Success();

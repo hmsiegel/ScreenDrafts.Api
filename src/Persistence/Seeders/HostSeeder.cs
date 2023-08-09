@@ -23,7 +23,7 @@ internal sealed class HostSeeder : ICustomSeeder
 
     public async Task InitializeAsync(CancellationToken cancellationToken = default)
     {
-        if (_context.Users is not null)
+        if (!_context.Users.Any())
         {
             string path = ProjectSourcePath.Value;
             var records = _csv.ReadCsvFile<CreateUserRequest>(path + "Seeders\\Files\\hosts.csv");

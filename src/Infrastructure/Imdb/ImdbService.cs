@@ -45,4 +45,9 @@ public sealed class ImdbService : IImdbService
     {
         return await ApiLib.FullCastDataAsync(id);
     }
+
+    public async Task<AdvancedSearchData> AdvancedSearch(AdvancedSearchInput advancedSearchQuery)
+    {
+        return await ApiLib.AdvancedSearchAsync(advancedSearchQuery);
+    }
 }

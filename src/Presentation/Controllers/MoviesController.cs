@@ -1,4 +1,7 @@
-﻿namespace ScreenDrafts.Api.Presentation.Controllers;
+﻿using ScreenDrafts.Api.Application.Movies.Queries.GetByYear;
+using ScreenDrafts.Api.Application.Movies.Queries.GetListByCastMember;
+
+namespace ScreenDrafts.Api.Presentation.Controllers;
 public sealed class MoviesController : VersionedApiController
 {
     private readonly IImdbService _imdbService;
@@ -98,6 +101,26 @@ public sealed class MoviesController : VersionedApiController
     public async Task<IActionResult> GetByImdbId(string imdbid, CancellationToken cancellationToken)
     {
         var query = new GetMovieByImdbIdQuery(imdbid);
+        var result = await Sender.Send(query, cancellationToken);
+        return Ok(result);
+    }
+
+    [HttpGet("{imdbid}/actor")]
+    [HasPermission(ScreenDraftsAction.View, ScreenDraftsResource.Movies)]
+    [OpenApiOperation("Get Movies By Cast Member", "Get a list of movies that a cast member has appreared in.")]
+    public async Task<IActionResult> GetMoviesByCastMember(string imdbid, CancellationToken cancellationToken)
+    {
+        var query = new GetListByCastMemberQuery(imdbid);
+        var result = await Sender.Send(query, cancellationToken);
+        return Ok(result);
+    }
+
+    [HttpGet("year")]
+    [HasPermission(ScreenDraftsAction.View, ScreenDraftsResource.Movies)]
+    [OpenApiOperation("Get Movies By Year", "Get a list of movies by release year.")]
+    public async Task<IActionResult> GetMoviesByYear([FromQuery]string year, CancellationToken cancellationToken)
+    {
+        var query = new GetByYearQuery(year);
         var result = await Sender.Send(query, cancellationToken);
         return Ok(result);
     }

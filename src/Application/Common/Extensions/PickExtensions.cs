@@ -5,7 +5,7 @@ public static class PickExtensions
     {
         var list = source.ToList();
         var result = list
-            .GroupBy(x => x.DraftPosition, (key, g) => g.OrderBy(e => e.DraftPosition)
+            .GroupBy(x => x.DraftPosition, (_, g) => g.OrderBy(e => e.DraftPosition)
             .First()).ToList();
 
         if (result.Count  != list.Count)
@@ -14,7 +14,7 @@ public static class PickExtensions
             {
                 list.RemoveAll(p => result.Contains(p));
                 yield return result;
-                result = list.GroupBy(p => p.DraftPosition, (key, g) => g.OrderBy(e => e.DraftPosition)
+                result = list.GroupBy(p => p.DraftPosition, (_, g) => g.OrderBy(e => e.DraftPosition)
                 .First()).ToList();
             }
         }

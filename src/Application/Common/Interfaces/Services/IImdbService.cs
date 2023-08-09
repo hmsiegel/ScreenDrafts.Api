@@ -1,6 +1,7 @@
 ﻿namespace ScreenDrafts.Api.Application.Common.Interfaces.Services;
 public interface IImdbService
 {
+    Task<AdvancedSearchData> AdvancedSearch(AdvancedSearchInput advancedSearchQuery);
     Task<FullCastData> GetFullCast(string id);
     Task<TitleData> GetMovieInformation(string id, TitleOptions? options);
     Task<TitleData> GetMovieInformation(string id);
